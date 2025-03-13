@@ -1,0 +1,22 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "username": "gorrieri-4-life",
+            "password": "chefigolinguaggi",
+            "email": "non ho voglia di scrivere l'email"
+        },
+        {
+            "id": 2,
+            "username": "bononi-4-life",
+            "password": "chefigolinguaggi",
+            "email": "non ho voglia di scrivere l'email"
+        },
+        {
+            "id": 3,
+            "username": "Max",
+            "password": "chefigolinguaggi",
+            "email": "non ho voglia di scrivere l'email"
+        }
+    ]
+}
