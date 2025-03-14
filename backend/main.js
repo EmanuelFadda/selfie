@@ -17,10 +17,8 @@ app.listen(port, () => {
 //login 
 app.get('/login/:username/:password', async (req, res) => functions.login(client,req,res))
 
-
-
-
-// create account
+// create account, use this function after checking if there is another user with the same username 
+app.post('/register/:username/:password/:name/:surname/:email/:image', async(req,res)=> functions.register(client,req,res))
 
 // modify account
 
