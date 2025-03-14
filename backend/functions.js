@@ -1,5 +1,6 @@
 // file with all the functions called in the main.js
 
+// il codice necessita di refactoring... 
 
 async function login(client,req,res) {
   try{
@@ -94,6 +95,22 @@ async function register(client,req,res){
 }
 
 
-module.exports={login,register}
+
+async function delete_account(client,req,res){
+    try{
+      await client.connect()
+      const db=client.db("user")
+      const collection=db.collection('user')
+      
+      collection.deleteOne({username:req.params.username})
+      // TODO :controllare nel caso in cui l'utente non esiste
+      res.send("User was deleted")
+    }catch(error){
+      res.send(error)
+    }
+    
+}
+
+module.exports={login,register,delete_account}
 
 

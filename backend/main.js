@@ -21,8 +21,11 @@ app.get('/login/:username/:password', async (req, res) => functions.login(client
 app.post('/register/:username/:password/:name/:surname/:email/:image', async(req,res)=> functions.register(client,req,res))
 
 // modify account
+app.put("/modify_account/:username/:password/:name/:surname/:email/:image",async(req,res)=> {
 
+})
 // delete an account
+app.delete("/delete_account/:username", async(req,res)=>functions.delete_account(client,req,res))
 
 // create note
 
