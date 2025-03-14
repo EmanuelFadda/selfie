@@ -14,5 +14,35 @@ app.listen(port, () => {
   console.log(`listening on port ${port}`)
 })
 
-//getting the data of user 
-app.get('/login/:email/:password', async (req, res) => functions.login(client,req,res))
+//login 
+app.get('/login/:username/:password', async (req, res) => functions.login(client,req,res))
+
+
+
+
+// create account
+
+// modify account
+
+// delete an account
+
+// create note
+
+// modify a note
+
+// delete a note
+
+// create a tag
+
+// modify a tag
+
+// delete a tag
+
+// create an activity
+
+// modify an activity
+
+// delete an activity
+
+// pensare al pomodoro e agli eventi
+

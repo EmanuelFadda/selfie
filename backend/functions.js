@@ -5,7 +5,7 @@ async function login(client,req,res) {
   try{
     // getting credentials in the login form 
     let user_credentials={
-        email: req.params.email,
+        username: req.params.username,
         password:req.params.password  
     }
 
@@ -17,7 +17,7 @@ async function login(client,req,res) {
     //creating a query
     let query={
       $and:[
-        {email:user_credentials.email},
+        {username:user_credentials.username},
         {password:user_credentials.password}
       ]
     }
@@ -37,6 +37,10 @@ async function login(client,req,res) {
     res.send(error)
   }
 }
+
+
+
+
 
 
 
