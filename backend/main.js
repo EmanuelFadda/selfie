@@ -1,4 +1,4 @@
-const {MongoClient}=require("mongodb")
+const {MongoClient, ObjectId}=require("mongodb")
 const express = require('express')
 const functions=require('./functions')
 
@@ -8,12 +8,14 @@ url_db="mongodb://localhost:27017/"
 const client=new MongoClient(url_db)
 
 // all api actions 
-
-
 app.listen(port, () => {
   console.log(`listening on port ${port}`)
 })
 
+// checks if exist an account with the same username
+app.get('exist/:username/', async (req, res) => {
+  //fai la query
+})
 //login 
 app.get('/login/:username/:password', async (req, res) => functions.login(client,req,res))
 
@@ -24,15 +26,38 @@ app.post('/register/:username/:password/:name/:surname/:email/:image', async(req
 app.put("/modify_account/:username/:password/:name/:surname/:email/:image",async(req,res)=> {
 
 })
+
 // delete an account
 app.delete("/delete_account/:username", async(req,res)=>functions.delete_account(client,req,res))
 
 // create note
+app.post("/create_note/:username/:title/:content/:id_tag", async(req,res)=>functions.create_note(client,req,res))
+
+
 
 // modify a note
 
-// delete a note
 
+
+// delete a note
+app.delete("/delete_note/:username/:id_note", async(req,res)=>{
+  /*
+  try{
+    await client.connect()
+    const db=client.db("user")
+    const collection=db.collection('user')
+    
+    collection.updateOne(
+      {username:req.params.username},
+      {$pull: { notes : { id: ObjectId(req.params.id_note)} }},
+      {multi:false,upsert:false}
+    )
+
+    res.send("Notes was deleted")
+  }catch(error){
+    res.send(error)
+  }*/
+})
 // create a tag
 
 // modify a tag
