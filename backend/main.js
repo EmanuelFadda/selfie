@@ -61,8 +61,9 @@ app.delete("/delete_note/:username/:id_note", async(req,res)=>{
 app.post("/create_tag/:username/:name_tag", async(req,res)=>functions.create_tag(client,req,res))
 
 // modify a tag
-
+app.post("/modify_tag/:username/:old_name/:new_name", async(req,res)=>functions.modify_tag(client,req,res))
 // delete a tag
+
 
 // create an activity
 

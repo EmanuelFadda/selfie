@@ -150,7 +150,22 @@ async function create_tag(client,req,res){
   }
 }
 
+async function modify_tag(client,req,res){
+  try{
+    await client.connect()
+    const db=client.db("user")
+    const collection=db.collection('user')
 
+    collection.updateOne(
+      { username: req.params.username, tags: req.params.old_name},
+      { $set: { "tags.$" : req.params.new_name }}
+   )
+
+    res.send("Tag was modified")
+  }catch(error){
+    res.send("error")
+  }
+}
 
 
 module.exports={
@@ -158,7 +173,8 @@ module.exports={
   register,
   delete_account,
   create_note,
-  create_tag
+  create_tag,
+  modify_tag
 }
 
 
