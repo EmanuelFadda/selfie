@@ -42,10 +42,6 @@ async function login(client,req,res) {
     res.send(error)
   }
 }
-
-
-
-
 async function register(client,req,res){
   try{
     
@@ -97,9 +93,6 @@ async function register(client,req,res){
 
 
 }
-
-
-
 async function delete_account(client,req,res){
     try{
       await client.connect()
@@ -114,7 +107,6 @@ async function delete_account(client,req,res){
     }
     
 }
-
 async function create_note(client,req,res){
   try{
     const timeElapsed = Date.now();
@@ -141,12 +133,32 @@ async function create_note(client,req,res){
   }
 }
 
+async function create_tag(client,req,res){
+  try{
+    await client.connect()
+    const db=client.db("user")
+    const collection=db.collection('user')
+
+    collection.updateOne(
+      { username: req.params.username },
+      { $push: { tags: req.params.name_tag } }
+   )
+
+    res.send("Tag was created")
+  }catch(error){
+    res.send("error")
+  }
+}
+
+
+
 
 module.exports={
   login,
   register,
   delete_account,
-  create_note
+  create_note,
+  create_tag
 }
 
 

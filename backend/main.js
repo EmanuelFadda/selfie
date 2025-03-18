@@ -31,7 +31,7 @@ app.put("/modify_account/:username/:password/:name/:surname/:email/:image",async
 app.delete("/delete_account/:username", async(req,res)=>functions.delete_account(client,req,res))
 
 // create note
-app.post("/create_note/:username/:title/:content/:id_tag", async(req,res)=>functions.create_note(client,req,res))
+app.post("/create_note/:username/:title/:content/:tags", async(req,res)=>functions.create_note(client,req,res))
 
 
 
@@ -39,26 +39,26 @@ app.post("/create_note/:username/:title/:content/:id_tag", async(req,res)=>funct
 
 
 
-// delete a note
-app.delete("/delete_note/:username/:id_note", async(req,res)=>{
-  /*
+// delete a note (da finire)
+app.delete("/delete_note/:username/:id_note", async(req,res)=>{ 
   try{
     await client.connect()
     const db=client.db("user")
     const collection=db.collection('user')
-    
+    console.log(req.params.id_note)
     collection.updateOne(
-      {username:req.params.username},
-      {$pull: { notes : { id: ObjectId(req.params.id_note)} }},
-      {multi:false,upsert:false}
+      {username: req.params.username},
+      {$pull: { notes : { _id: ObjectId(req.params.id_note)} }}
     )
 
     res.send("Notes was deleted")
   }catch(error){
-    res.send(error)
-  }*/
+    res.send("error")
+  }
 })
+
 // create a tag
+app.post("/create_tag/:username/:name_tag", async(req,res)=>functions.create_tag(client,req,res))
 
 // modify a tag
 
