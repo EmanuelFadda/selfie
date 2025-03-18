@@ -1,71 +1,30 @@
 // file with all the functions called in the main.js
-
+const DB_NAME='user'
+const COLLECTION_NAME='user'
+const DEFAULT_FIRST_NOTE_TITLE="Benvenuto"
+const DEFAULT_FIRST_NOTE_CONTENT="Heylaaaa!!! Qui puoi organizzare la tua vita universitaria facilmente! \nScrivi una nota, inserisci al calendario eventi o attività, oppure usa il timer pomodoro. \n Have fun and keep working :)\n\n... dagli sviluppatori di Selfie"
+const DEFAULT_TAGS=["Hobby","Gym","Study"]
 const { ObjectId } = require("mongodb")
 
-
-
-// il codice necessita di refactoring... 
-
-async function login(client,req,res) {
-  try{
-    // getting credentials in the login form 
-    let user_credentials={
-        username: req.params.username,
-        password:req.params.password  
-    }
-
-    // connecting with db
-    await client.connect()
-    const db=client.db("user")
-    const collection=db.collection('user')
-    
-    //creating a query
-    let query={
-      $and:[
-        {username:user_credentials.username},
-        {password:user_credentials.password}
-      ]
-    }
-
-    let options={
-      projection:{
-        _id:0,
-        password:0
-      }
-    }
-
-    //searching for result
-    const result= await collection.find(query,options).toArray()
-
-    res.send(result)
-  } catch(error){
-    res.send(error)
-  }
+function db_connection(client){
+  client.connect()
+  const db=client.db(DB_NAME)
+  let collection=db.collection(COLLECTION_NAME)
+  return collection
 }
-async function register(client,req,res){
-  try{
-    
-    const timeElapsed = Date.now();
-    const today = new Date(timeElapsed);
-    let new_user={
-      name:req.params.name,
-      surname:req.params.surname,
-      username:req.params.username,
-      email: req.params.email,
-      image:req.params.image,
-      password:req.params.password,
-      notes:[
-        {
-          title: "Benvenuto !!!",
-          date_creation:today,
-          date_last_modify:today,
-          content:'Heylaaaa!!! Qui puoi organizzare la tua vita universitaria facilmente! \nScrivi una nota, inserisci al calendario eventi o attività, oppure usa il timer pomodoro. \n Have fun and keep working :)\n\n... dagli sviluppatori di Selfie',
-          tags: []
-      }
-    ],
+
+function get_new_user(name,surname,username,email,image,password){
+  let new_user={
+    name:name,
+    surname:surname,
+    username:username,
+    email: email,
+    image:image,
+    password:password,
+    notes:[get_new_note( DEFAULT_FIRST_NOTE_TITLE , DEFAULT_FIRST_NOTE_CONTENT , "Study" )],
       activities:[],
       events:[],
-      tags:["Hobby","Gym","Study"],
+      tags:DEFAULT_TAGS,
       tomatoes:[
         { 
           name:"tomato1",
@@ -77,14 +36,55 @@ async function register(client,req,res){
         }
       ]
    }
-   new_user.notes.forEach(e=>e["_id"]=new ObjectId())
    new_user.tomatoes.forEach(e=>e["_id"]=new ObjectId())
+   return new_user 
+}
 
+function get_time_now(){ return new Date(Date.now())}
+
+function get_new_note(title,content,id_tag){
+
+  today=get_time_now()
+
+  let new_note={
+    _id:new ObjectId(),
+    title:title,
+    date_creation: today,
+    date_last_modifiy:today,
+    content:content,
+    id_tag:id_tag
+  }
+  return new_note
+}
+// il codice necessita di refactoring... 
+
+async function login(client,req,res) {
+  try{
     // connecting with db
-    await client.connect()
-    const db=client.db("user")
-    const collection=db.collection('user')
+    collection=await db_connection(client)
     
+    //creating a query
+    let query={
+      $and:[
+        {username: req.params.username},
+        {password:req.params.password}
+      ]
+    }
+
+    //searching for result
+    const result= await collection.find(query).toArray()
+
+    res.send(result)
+  } catch(error){
+    res.send(error)
+  }
+}
+
+async function register(client,req,res){
+  try{
+    // connecting with db
+    collection=await db_connection(client)
+    new_user=get_new_user(req.params.name,req.params.surname,req.params.username,req.params.email,req.params.image,req.params.password)
     collection.insertOne(new_user)
     res.send("User created")
   }catch(error){
@@ -93,13 +93,12 @@ async function register(client,req,res){
 
 
 }
+
 async function delete_account(client,req,res){
     try{
-      await client.connect()
-      const db=client.db("user")
-      const collection=db.collection('user')
+      collection=await db_connection(client)
       
-      collection.deleteOne({username:req.params.username})
+      collection.deleteOne({username:req.params.username,password:req.params.password})
       // TODO :controllare nel caso in cui l'utente non esista
       res.send("User was deleted")
     }catch(error){
@@ -107,21 +106,12 @@ async function delete_account(client,req,res){
     }
     
 }
+
 async function create_note(client,req,res){
   try{
-    const timeElapsed = Date.now();
-    const today = new Date(timeElapsed)
-    let new_note={
-      _id:new ObjectId(),
-      title:req.params.title,
-      date_creation: today,
-      date_last_modifiy:today,
-      content:req.params.content,
-      id_tag:req.params.id_tag
-    }
-    await client.connect()
-    const db=client.db("user")
-    const collection=db.collection('user')
+    new_note=get_new_note(req.params.title,req.params.content,req.params.id_tag)
+
+    collection=await db_connection(client)
 
     collection.updateOne(
       { username: req.params.username },
@@ -135,9 +125,7 @@ async function create_note(client,req,res){
 
 async function create_tag(client,req,res){
   try{
-    await client.connect()
-    const db=client.db("user")
-    const collection=db.collection('user')
+    collection=await db_connection(client)
 
     collection.updateOne(
       { username: req.params.username },
@@ -152,9 +140,7 @@ async function create_tag(client,req,res){
 
 async function modify_tag(client,req,res){
   try{
-    await client.connect()
-    const db=client.db("user")
-    const collection=db.collection('user')
+    collection=await db_connection(client)
 
     collection.updateOne(
       { username: req.params.username, tags: req.params.old_name},
@@ -167,6 +153,24 @@ async function modify_tag(client,req,res){
   }
 }
 
+async function delete_tag(client,req,res){
+  /*
+  try{
+
+    collection=await db_connection(client)
+
+    collection.One(
+      { username: req.params.username, tags: req.params.old_name},
+      { $set: { "tags.$" : req.params.new_name }}
+   )
+
+    res.send("Tag was modified")
+  }catch(error){
+    res.send("error")
+  }
+    */
+}
+
 
 module.exports={
   login,
@@ -174,7 +178,8 @@ module.exports={
   delete_account,
   create_note,
   create_tag,
-  modify_tag
+  modify_tag,
+  delete_tag
 }
 
 

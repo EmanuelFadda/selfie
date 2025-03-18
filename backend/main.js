@@ -22,22 +22,24 @@ app.get('/login/:username/:password', async (req, res) => functions.login(client
 // create account, use this function after checking if there is another user with the same username 
 app.post('/register/:username/:password/:name/:surname/:email/:image', async(req,res)=> functions.register(client,req,res))
 
-// modify account
-app.put("/modify_account/:username/:password/:name/:surname/:email/:image",async(req,res)=> {
-
-})
-
 // delete an account
-app.delete("/delete_account/:username", async(req,res)=>functions.delete_account(client,req,res))
+app.delete("/delete_account/:username/:password", async(req,res)=>functions.delete_account(client,req,res))
 
 // create note
 app.post("/create_note/:username/:title/:content/:tags", async(req,res)=>functions.create_note(client,req,res))
 
+// create a tag
+app.post("/create_tag/:username/:name_tag", async(req,res)=>functions.create_tag(client,req,res))
 
+// modify a tag
+app.post("/modify_tag/:username/:old_name/:new_name", async(req,res)=>functions.modify_tag(client,req,res))
+// delete a tag
+app.delete("/delete_tag/:username/:name_tag", async(req,res)=>functions.delete_tag(client,req,res))
 
-// modify a note
+// modify account (da finire)
+app.put("/modify_account/:username/:password/:name/:surname/:email/:image",async(req,res)=> {
 
-
+})
 
 // delete a note (da finire)
 app.delete("/delete_note/:username/:id_note", async(req,res)=>{ 
@@ -56,14 +58,6 @@ app.delete("/delete_note/:username/:id_note", async(req,res)=>{
     res.send("error")
   }
 })
-
-// create a tag
-app.post("/create_tag/:username/:name_tag", async(req,res)=>functions.create_tag(client,req,res))
-
-// modify a tag
-app.post("/modify_tag/:username/:old_name/:new_name", async(req,res)=>functions.modify_tag(client,req,res))
-// delete a tag
-
 
 // create an activity
 
