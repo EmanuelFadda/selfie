@@ -154,21 +154,18 @@ async function modify_tag(client,req,res){
 }
 
 async function delete_tag(client,req,res){
-  /*
   try{
-
     collection=await db_connection(client)
-
-    collection.One(
-      { username: req.params.username, tags: req.params.old_name},
-      { $set: { "tags.$" : req.params.new_name }}
+    collection.updateOne(
+      { username: req.params.username},
+      { $pull: { tags : req.params.name_tag  }}
    )
 
     res.send("Tag was modified")
   }catch(error){
     res.send("error")
   }
-    */
+    
 }
 
 
