@@ -4,6 +4,7 @@ import LoginView from "../views/LoginView.vue"
 import CalendarView from "../views/CalendarView.vue"
 import CreditsView from "../views/CreditsView.vue"
 import ModifyLayoutView from "../views/ModifyLayoutView.vue"
+import CalendarNotificationsView from "../views/CalendarNotificationsView.vue"
 
 const routes = [
   {
@@ -28,8 +29,13 @@ const routes = [
   },
   {
     path: "/modifylayout",
-    name: "modifylayout",
+    name: "modifyLayout",
     component: ModifyLayoutView
+  },
+  {
+    path: "/calendar/notifications",
+    name: "calendarNotifications",
+    component: CalendarNotificationsView
   },
 ]
 
