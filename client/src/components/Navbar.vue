@@ -12,7 +12,7 @@
   <div v-if="settings" @click="settings = false" class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300"></div>
 
   <!-- Menu impostazioni scorrevole -->
-  <div :class="settings ? 'translate-x-0' : 'translate-x-full'" class="fixed right-0 top-0 h-full w-[82%] bg-slate-100 shadow-lg transition-transform duration-300 dark:bg-neutral-800">
+  <div :class="settings ? 'translate-x-0' : 'translate-x-full'" class="fixed right-0 top-0 h-full w-[85%] bg-slate-100 shadow-lg transition-transform duration-300 dark:bg-neutral-800">
     <!-- Contenuto del menu -->
     <div class="mt-6 flex items-center space-x-2 pl-2">
       <img src="" alt="Immagine profilo" class="h-14 w-14 rounded-full border-2 border-slate-200 dark:border-neutral-600" />
@@ -24,24 +24,12 @@
 
     <!-- Elenco opzioni (disposizione, riconoscimenti, logout) -->
     <div class="mt-3 pl-1">
-      <div class="flex items-center border-b border-slate-300 py-3 pl-4 text-lg dark:border-neutral-600">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
+      <RouterLink v-for="(setting, index) in settingsArray" :key="index" :to="setting.route" class="flex items-center border-b border-slate-300 py-3 pl-4 text-lg dark:border-neutral-600">
+        <svg v-if="setting.icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 size-6">
+          <path :d="setting.icon" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-        Disposizione
-      </div>
-      <div class="flex items-center border-b border-slate-300 py-3 pl-4 text-lg dark:border-neutral-600">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-        </svg>
-        Riconoscimenti
-      </div>
-      <div class="flex items-center py-3 pl-4 text-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-        </svg>
-        Logout
-      </div>
+        {{ setting.label }}
+      </RouterLink>
     </div>
   </div>
 </template>
@@ -51,6 +39,10 @@ defineProps({
   name: String,
   surname: String,
   viewName: String,
+  settingsArray: {
+    type: Array,
+    required: true,
+  }
 });
 </script>
 
