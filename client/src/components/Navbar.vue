@@ -48,6 +48,7 @@ defineProps({
 
 <script>
 export default {
+  name: "Navbar",
   data() {
     return {
       settings: false,
