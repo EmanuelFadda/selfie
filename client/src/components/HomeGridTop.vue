@@ -1,5 +1,5 @@
 <template>
-  <component :is="componentType" :to="route" :class="lightBgColor,darkBgColor" class="mb-4 ml-5 mr-5 h-full rounded-3xl pl-[14px] pt-[10px] text-xl lg:text-2xl font-semibold">
+  <component :is="componentType" :to="route" :class="lightBgColor,darkBgColor" class="mb-4 h-full rounded-3xl pl-[14px] pt-[10px] text-xl lg:text-2xl font-semibold">
     <h1 class="mb-1">{{ title }}</h1>
 
     <!-- Contenitore oggetti calendario -->

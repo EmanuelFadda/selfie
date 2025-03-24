@@ -5,7 +5,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
       </svg>
       <h1 class="text-3xl font-semibold" ref="pageTitle">Modifica layout</h1>
-      <svg @click="save" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="absolute right-5 size-6" :class="modified ? '' : 'hidden'">
+      <svg @click="save" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="absolute right-5 size-6" ref="save" :class="modified ? '' : 'hidden'">
         <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
       </svg>
     </div>
@@ -51,11 +51,12 @@ export default {
     const store = useMainStore()
     const back = ref(null)
     const pageTitle = ref(null)
+    const save = ref(null)
 
     const topItem = store.topItem
     const bottomItems = store.bottomItems
 
-    return { store, topItem, bottomItems, back, pageTitle }
+    return { store, topItem, bottomItems, back, pageTitle, save }
   },
   data() {
     return {
@@ -107,6 +108,8 @@ export default {
 
       this.back.classList.add("animate-arrow")
       this.pageTitle.classList.add("animate-page-title")
+      this.save.classList.add("stroke-green-500")
+      this.save.setAttribute("stroke-width", "3")
 
       setTimeout(() => {
         router.go(-1)

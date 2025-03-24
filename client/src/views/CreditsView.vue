@@ -33,8 +33,8 @@ export default {
 
     const animate = (element, speedX, speedY) => {
       let rect = element.getBoundingClientRect()
-      let x = rect.x + (element.innerHTML.length > 17 ? 10 : 0)
-      let y = rect.y + (element.innerHTML.length > 17 ? 0 : 32)
+      let x = window.innerWidth/2 - element.innerHTML.length*3
+      let y = rect.y + (element.innerHTML.length > 17 ? 0 : 32) - 20
 
       element.style.position = "absolute"
       element.style.left = `${x}px`
