@@ -36,28 +36,22 @@ app.post("/modify_tag/:username/:old_name/:new_name", async(req,res)=>functions.
 // delete a tag
 app.delete("/delete_tag/:username/:name_tag", async(req,res)=>functions.delete_tag(client,req,res))
 
+
+
+
+
+
+
+
+
+
 // modify account (da finire)
 app.put("/modify_account/:username/:password/:name/:surname/:email/:image",async(req,res)=> {
 
 })
 
 // delete a note (da finire)
-app.delete("/delete_note/:username/:id_note", async(req,res)=>{ 
-  try{
-    await client.connect()
-    const db=client.db("user")
-    const collection=db.collection('user')
-    console.log(req.params.id_note)
-    collection.updateOne(
-      {username: req.params.username},
-      {$pull: { notes : { _id: ObjectId(req.params.id_note)} }}
-    )
-
-    res.send("Notes was deleted")
-  }catch(error){
-    res.send("error")
-  }
-})
+app.delete("/delete_note/:username/:id_note", async(req,res)=>functions.delete_note(client,req,res))
 
 // create an activity
 

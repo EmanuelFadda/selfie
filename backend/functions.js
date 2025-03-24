@@ -22,37 +22,39 @@ function get_new_user(name,surname,username,email,image,password){
     image:image,
     password:password,
     notes:[get_new_note( DEFAULT_FIRST_NOTE_TITLE , DEFAULT_FIRST_NOTE_CONTENT , "Study" )],
-      activities:[],
-      events:[],
-      tags:DEFAULT_TAGS,
-      tomatoes:[
-        { 
-          name:"tomato1",
-          time:{
-              work:15,
-              short_break:5,
-              long_break:15
+    activities:[],
+    events:[],
+    tags:DEFAULT_TAGS,
+    tomato_sessions:[
+      { 
+        id:new ObjectId().toString(),
+        name:"tomato1",
+        tomato_rep:3,
+        time:{
+            work:15,
+            short_break:5,
+            long_break:15
           }
         }
       ]
    }
-   new_user.tomatoes.forEach(e=>e["_id"]=new ObjectId())
+   //new_user.tomato_sessions.forEach(e=>e["id"]=new ObjectId().toString())
    return new_user 
 }
 
 function get_time_now(){ return new Date(Date.now())}
 
-function get_new_note(title,content,id_tag){
+function get_new_note(title,content,tag){
 
   today=get_time_now()
 
   let new_note={
-    _id:new ObjectId(),
+    id: new ObjectId().toString(),
     title:title,
     date_creation: today,
     date_last_modifiy:today,
     content:content,
-    id_tag:id_tag
+    tag:tag
   }
   return new_note
 }
@@ -107,6 +109,7 @@ async function delete_account(client,req,res){
     
 }
 
+// gestire parametri facoltativi, come i tag
 async function create_note(client,req,res){
   try{
     new_note=get_new_note(req.params.title,req.params.content,req.params.id_tag)
@@ -167,6 +170,22 @@ async function delete_tag(client,req,res){
   }
     
 }
+// :username/:id_note
+async function delete_note(client,req,res){
+
+  try{
+    collection=await db_connection(client)
+    collection.updateOne(
+      { username: req.params.username},
+      { $pull: { notes: { id : req.params.id_note}}}
+    )
+
+    res.send("Note was deleted")
+  }catch(error){
+    res.send("error")
+  }
+    
+}
 
 
 module.exports={
@@ -176,7 +195,8 @@ module.exports={
   create_note,
   create_tag,
   modify_tag,
-  delete_tag
+  delete_tag,
+  delete_note
 }
 
 
