@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-screen overflow-hidden">
+  <div class="relative min-h-screen overflow-hidden" @click="goBack">
     <div ref="name1" class="absolute whitespace-nowrap text-2xl font-bold text-white" style="left: 0px; top: 0px; user-select: none">Crediti:</div>
     <div ref="name2" class="absolute whitespace-nowrap text-2xl font-bold text-white" style="left: 100px; top: 100px; user-select: none">Massimiliano Prandi</div>
     <div ref="name3" class="absolute whitespace-nowrap text-2xl font-bold text-white" style="left: 200px; top: 200px; user-select: none">Emanuel Fadda</div>
@@ -8,6 +8,7 @@
 
 <script>
 import { ref, onMounted } from "vue";
+import router from "../router/index.js";
 
 export default {
   name: "CreditsView",
@@ -43,6 +44,11 @@ export default {
     });
 
     return { name1, name2, name3 }
+  },
+  methods: {
+    goBack() {
+      router.go(-1)
+    },
   },
 };
 </script>

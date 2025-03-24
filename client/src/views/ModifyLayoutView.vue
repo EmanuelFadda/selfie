@@ -11,7 +11,7 @@
     </div>
 
     <!-- Drag & Drop per la parte superiore -->
-    <draggable v-model="topItem" group="layout" item-key="id" class=" flex flex-auto flex-flow-col" @start="" @end="handleDrag">
+    <draggable v-model="topItem" group="layout" item-key="id" class="flex flex-auto flex-flow-col" @end="handleDrag">
       <template #item="{element}">
         <HomeGridTop :key="element.id" :title="element.title" componentType="div" :lightBgColor="element.lightBgColor" :darkBgColor="element.darkBgColor" :lightBordColor="element.lightBordColor" :darkBordColor="element.darkBordColor" content="Cambia il layout come preferisci!"></HomeGridTop>
       </template>
@@ -29,6 +29,10 @@
 </template>
 
 <script>
+// dovrei trovare un modo per far si che gli elementi vengano messi tutti nella stessa
+// grid, altrimenti ce un po di flickering quando si sposta un elemento dal top al bottom
+// e viceversa
+
 import router from "../router/index.js";
 import HomeGridBottom from "../components/HomeGridBottom.vue";
 import HomeGridTop from "../components/HomeGridTop.vue";
@@ -43,7 +47,7 @@ export default {
     HomeGridBottom,
   },
   setup() {
-    const store = useMainStore();
+    const store = useMainStore()
 
     const topItem = store.topItem
     const bottomItems = store.bottomItems
@@ -59,10 +63,10 @@ export default {
   methods: {
     goBack() {
       if (this.originalLayout) {
-        this.store.topItem = [...this.originalLayout.topItem];
-        this.store.bottomItems = [...this.originalLayout.bottomItems];
+        this.store.topItem = [...this.originalLayout.topItem]
+        this.store.bottomItems = [...this.originalLayout.bottomItems]
       }
-      router.go(-1);
+      router.go(-1)
     },
     handleDrag() {
       this.modified = false
@@ -103,10 +107,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.drag-placeholder {
-  opacity: 0.5; /* Rende il placeholder trasparente */
-  max-height: 0px; /* Mantiene lo spazio e previene flickering */
-}
-</style>
