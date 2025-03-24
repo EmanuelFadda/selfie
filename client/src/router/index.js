@@ -10,38 +10,38 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: HomeView
+    component: HomeView,
   },
   {
     path: "/login",
     name: "login",
-    component: LoginView
+    component: LoginView,
   },
   {
     path: "/calendar",
     name: "calendar",
-    component: CalendarView
+    component: CalendarView,
   },
   {
     path: "/credits",
     name: "credits",
-    component: CreditsView
+    component: CreditsView,
   },
   {
     path: "/modifylayout",
     name: "modifyLayout",
-    component: ModifyLayoutView
+    component: ModifyLayoutView,
   },
   {
     path: "/calendar/notifications",
     name: "calendarNotifications",
-    component: CalendarNotificationsView
+    component: CalendarNotificationsView,
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
 })
 
 export default router

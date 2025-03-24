@@ -1,8 +1,8 @@
 {
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindFunctions": ["clsx", "classnames"],
-  "htmlWhitespaceSensitivity": "ignore", 
+  "htmlWhitespaceSensitivity": "ignore",
   "vueIndentScriptAndStyle": false,
-  "printWidth": 10000
+  "printWidth": 10000,
+  "semi": false
 }
-  

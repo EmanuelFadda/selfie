@@ -5,9 +5,9 @@
 @tailwind utilities;
 
 .flex-flow-col {
-    flex-flow: column;
+  flex-flow: column;
 }
 
 .flex-flow-row {
-    flex-flow: row;
+  flex-flow: row;
 }

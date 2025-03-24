@@ -1,4 +1,3 @@
-
 <template>
   <div class="flex-flow-col flex min-h-screen">
     <Navbar viewName="Selfie" name="Nome" surname="Cognome" :settingsArray="settingsArray"></Navbar>
@@ -7,7 +6,7 @@
     <HomeGridTop v-for="(item, index) in store.topItem" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content"></HomeGridTop>
 
     <!-- Anteprima oggetti delle note e pomodoro (default piccole) -->
-    <div class="grid grid-cols-2 grid-rows-1 gap-4 ml-5 mr-5">
+    <div class="ml-5 mr-5 grid grid-cols-2 grid-rows-1 gap-4">
       <HomeGridBottom v-for="(item, index) in store.bottomItems" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content"></HomeGridBottom>
     </div>
   </div>
@@ -17,17 +16,17 @@
 import HomeGridTop from "../components/HomeGridTop.vue"
 import Navbar from "../components/Navbar.vue"
 import HomeGridBottom from "../components/HomeGridBottom.vue"
-import { useMainStore } from '../store/mainStore';
+import { useMainStore } from "../store/mainStore"
 
 export default {
   name: "HomeView",
   components: {
     Navbar,
     HomeGridTop,
-    HomeGridBottom
+    HomeGridBottom,
   },
   setup() {
-    const store = useMainStore();
+    const store = useMainStore()
     return { store }
   },
   data() {
@@ -37,7 +36,7 @@ export default {
         { label: "Riconoscimenti", route: "/credits", icon: "M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" },
         { label: "Logout", route: "/", icon: "M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" },
       ],
-    };
+    }
   },
-};
+}
 </script>

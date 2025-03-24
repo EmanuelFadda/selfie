@@ -41,5 +41,5 @@
 export default {
   name: "LoginView",
   components: {},
-};
+}
 </script>

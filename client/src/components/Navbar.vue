@@ -42,8 +42,8 @@ defineProps({
   settingsArray: {
     type: Array,
     required: true,
-  }
-});
+  },
+})
 </script>
 
 <script>
@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       settings: false,
-    };
+    }
   },
-};
+}
 </script>

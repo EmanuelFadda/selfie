@@ -11,20 +11,18 @@
     </div>
 
     <!-- Drag & Drop per la parte superiore -->
-    <draggable v-model="topItem" group="layout" item-key="id" class="flex flex-auto flex-flow-col" @end="handleDrag">
-      <template #item="{element}">
+    <draggable v-model="topItem" group="layout" item-key="id" class="flex-flow-col flex flex-auto" @end="handleDrag">
+      <template #item="{ element }">
         <HomeGridTop :key="element.id" :title="element.title" componentType="div" :lightBgColor="element.lightBgColor" :darkBgColor="element.darkBgColor" :lightBordColor="element.lightBordColor" :darkBordColor="element.darkBordColor" content="Cambia il layout come preferisci!"></HomeGridTop>
       </template>
     </draggable>
 
-
     <!-- Drag & Drop per la parte inferiore -->
-    <draggable v-model="bottomItems" group="layout" item-key="id" class="ml-5 mr-5 grid grid-cols-2 grid-rows-1 gap-4" @end="handleDrag"> 
-      <template #item="{element}">
+    <draggable v-model="bottomItems" group="layout" item-key="id" class="ml-5 mr-5 grid grid-cols-2 grid-rows-1 gap-4" @end="handleDrag">
+      <template #item="{ element }">
         <HomeGridBottom :key="element.id" :title="element.title" componentType="div" :lightBgColor="element.lightBgColor" :darkBgColor="element.darkBgColor" :lightBordColor="element.lightBordColor" :darkBordColor="element.darkBordColor" content="Cambia il layout come preferisci!"></HomeGridBottom>
       </template>
     </draggable>
-    
   </div>
 </template>
 
@@ -33,11 +31,11 @@
 // grid, altrimenti ce un po di flickering quando si sposta un elemento dal top al bottom
 // e viceversa
 
-import router from "../router/index.js";
-import HomeGridBottom from "../components/HomeGridBottom.vue";
-import HomeGridTop from "../components/HomeGridTop.vue";
-import { useMainStore } from "../store/mainStore.js";
-import draggable from "vuedraggable";
+import router from "../router/index.js"
+import HomeGridBottom from "../components/HomeGridBottom.vue"
+import HomeGridTop from "../components/HomeGridTop.vue"
+import { useMainStore } from "../store/mainStore.js"
+import draggable from "vuedraggable"
 
 export default {
   name: "ModifyLayoutView",
@@ -58,7 +56,7 @@ export default {
     return {
       modified: false,
       originalLayout: null,
-    };
+    }
   },
   methods: {
     goBack() {
@@ -72,38 +70,38 @@ export default {
       this.modified = false
 
       if (this.topItem.length === 2) {
-        let temp = this.topItem.find(n => this.originalLayout.topItem.includes(n));
-        this.topItem = this.topItem.filter(n => n !== temp);
-        let index = this.originalLayout.bottomItems.indexOf(this.topItem[0]);
-        this.bottomItems.splice(index, 0, temp);
+        let temp = this.topItem.find((n) => this.originalLayout.topItem.includes(n))
+        this.topItem = this.topItem.filter((n) => n !== temp)
+        let index = this.originalLayout.bottomItems.indexOf(this.topItem[0])
+        this.bottomItems.splice(index, 0, temp)
       } else if (this.topItem.length === 0) {
-        let index = this.bottomItems.indexOf(this.originalLayout.topItem[0]);
-        if (index > 1) index = 1;
-        let temp = this.bottomItems[index + 1];
-        this.topItem.push(temp);
-        this.bottomItems.splice(index + 1, 1);
+        let index = this.bottomItems.indexOf(this.originalLayout.topItem[0])
+        if (index > 1) index = 1
+        let temp = this.bottomItems[index + 1]
+        this.topItem.push(temp)
+        this.bottomItems.splice(index + 1, 1)
       }
 
       // Aggiorna lo stato dopo ogni operazione
       this.originalLayout = {
-        topItem: [...this.topItem], 
-        bottomItems: [...this.bottomItems]
-      };
+        topItem: [...this.topItem],
+        bottomItems: [...this.bottomItems],
+      }
 
-      this.modified = true;
+      this.modified = true
     },
     save() {
-      this.store.topItem = this.topItem;
-      this.store.bottomItems = this.bottomItems;
+      this.store.topItem = this.topItem
+      this.store.bottomItems = this.bottomItems
 
-      router.go(-1);
+      router.go(-1)
     },
   },
   mounted() {
     this.originalLayout = {
       topItem: this.store.topItem,
       bottomItems: [...this.store.bottomItems],
-    };
+    }
   },
-};
+}
 </script>
