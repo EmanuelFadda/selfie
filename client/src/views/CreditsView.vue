@@ -1,10 +1,10 @@
 <template>
   <div class="relative min-h-screen overflow-hidden" @click="startAnimation">
     <div class="mb-2 flex items-center p-6">
-      <svg @click.stop="goBack" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-6 size-6">
+      <svg @click.stop="goBack" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mr-6 size-6" ref="back">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
       </svg>
-      <h1 class="text-2xl font-semibold">Crediti</h1>
+      <h1 class="text-3xl font-semibold" ref="pageTitle">Crediti</h1>
     </div>
 
     <div class="h-full">
@@ -24,6 +24,8 @@ export default {
     const name1 = ref(null)
     const name2 = ref(null)
     const animationStarted = ref(false)
+    const back = ref(null)
+    const pageTitle = ref(null)
 
     const name1Class = computed(() => (animationStarted.value ? "absolute text-2xl font-semibold whitespace-nowrap" : "text-2xl font-semibold flex justify-center"))
 
@@ -55,11 +57,16 @@ export default {
       update()
     }
 
-    return { name1, name2, animationStarted, animate, name1Class, name2Class }
+    return { name1, name2, animationStarted, animate, name1Class, name2Class, back, pageTitle }
   },
   methods: {
     goBack() {
-      router.go(-1)
+      this.back.classList.add("animate-arrow")
+      this.pageTitle.classList.add("animate-page-title")
+
+      setTimeout(() => {
+        router.go(-1)
+      }, 650)
     },
     startAnimation() {
       if (this.animationStarted) return
@@ -73,3 +80,41 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.animate-arrow {
+  animation: arrow 0.5s;
+  -webkit-animation-fill-mode: forwards;
+  -moz-animation-fill-mode: forwards;
+  -o-animation-fill-mode: forwards;
+  -ms-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+.animate-page-title {
+  animation: page-title 0.5s;
+  -webkit-animation-fill-mode: forwards;
+  -moz-animation-fill-mode: forwards;
+  -o-animation-fill-mode: forwards;
+  -ms-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+@keyframes arrow {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-48px);
+  }
+}
+
+@keyframes page-title {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-48px);
+  }
+}
+</style>

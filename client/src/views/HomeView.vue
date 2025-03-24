@@ -1,13 +1,12 @@
 <template>
-  <div class="flex-flow-col flex min-h-screen">
+  <div class="flex min-h-screen flex-col">
     <Navbar viewName="Selfie" name="Nome" surname="Cognome" :settingsArray="settingsArray"></Navbar>
 
-    <!-- Anteprima oggetti del calendario (default grande) -->
-    <HomeGridTop v-for="(item, index) in store.topItem" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content"></HomeGridTop>
-
     <!-- Anteprima oggetti delle note e pomodoro (default piccole) -->
-    <div class="ml-5 mr-5 grid grid-cols-2 grid-rows-1 gap-4">
-      <HomeGridBottom v-for="(item, index) in store.bottomItems" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content"></HomeGridBottom>
+    <div class="ml-5 mr-5 grid h-[calc(100vh-108px)] grid-cols-2 grid-rows-2 gap-4 lg:ml-20 lg:mr-20 lg:h-[calc(100vh-132px)] lg:grid-cols-3 lg:gap-8 xl:ml-28 xl:mr-28 2xl:ml-36 2xl:mr-36">
+      <HomeGridTop v-for="(item, index) in topItem" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content" class="row-span-2 -mb-0 -ml-0 -mr-0 flex flex-auto flex-col max-sm:col-span-2 lg:col-span-2"></HomeGridTop>
+
+      <HomeGridBottom v-for="(item, index) in bottomItems" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content"></HomeGridBottom>
     </div>
   </div>
 </template>
@@ -27,7 +26,10 @@ export default {
   },
   setup() {
     const store = useMainStore()
-    return { store }
+    const topItem = store.topItem
+    const bottomItems = store.bottomItems
+
+    return { store, topItem, bottomItems }
   },
   data() {
     return {
