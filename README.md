@@ -36,62 +36,69 @@ Vai nel browser e cerca localhost:27017, dovrebbe restituire il seguente messagg
 
 # Default json structure
 
-I paragrafi segnati con "^" sono ancora da finire 
+> I parametri segnati con "^" sono ancora da definire 
 
-    ## User (documents) 
+> I campi di tipo Date non sono ancora standardizzati
+
+    # User (documents) 
         {
-            name:name,
-            surname:surname,
-            username:username,
-            email: email,
-            image:image,
-            password:password,
-            notes:[],
-            activities:[],
-            events:[],
-            tags:["some","tags"],
-            tomato_sessions:[]
+            _id: ObjectID
+            name: String,
+            surname: String,
+            username: String,
+            email: String,
+            image: String ^,
+            password: String,
+            notes: Array,
+            activities: Array,
+            events: Array,
+            tags: Array,
+            tomato_sessions: Array
         }
 
 
-    ## Activity
+    # Activity
         {
-            id: new ObjectId().toString,
-            name:"act1",
-            expiration:
-            created:
+            id: String,
+            name: String,
+            expiration: Date,
+            created: Date
         }
 
 
-    ## Event ^
+    # Event ^
         {
-            id: new ObjectId().toString(),
-            title: "titolo",
-            repeat: 0 **
-            
+            id: String,
+            title: String,
+            created: Date
+            repeat: {
+                type: Int**
+                start_date: Date
+                finish_date: Date
+            }  
         }
-        ** 0=not repeat , 1=day, 2=month, 3=year
+        ** 0=not repeat , 1=day, 2=week, 3=month, 4=year
 
 
-    ## Tomato
+    # Tomato
         { 
-            id:new ObjectId().toString,
-            name:"tomato1",
-            tomato_rep:3
+            id: String,
+            name: String,
+            tomato_rep: Int
             time:{
-                tomato:15,
-                short_break:5,
-                long_break:15,
+                tomato: Int,
+                short_break: Int,
+                long_break: Int,
             }
         }
 
 
-    ## Note 
+    # Note 
         {
-            id:new ObjectId().toString,
-            title:title,
-            date_creation: today,
-            date_last_modifiy:today,
-            content:content,
-            tag:tag
+            id: String,
+            title: String,
+            date_creation: Date ,
+            date_last_modifiy: Date,
+            content: String ^,
+            tag: String
         }
