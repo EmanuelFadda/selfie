@@ -55,7 +55,7 @@ async function delete_account(client,req,res){
     
 }
 
-// gestire parametri facoltativi, come i tag
+
 async function create_note(client,req,res){
   try{
     new_note=getters.get_new_note(req.params.title,req.params.content,req.params.id_tag)
@@ -71,6 +71,53 @@ async function create_note(client,req,res){
     res.send("error")
   }
 }
+
+// :username/:id_note
+async function delete_note(client,req,res){
+
+  try{
+    collection=await getters.get_db_collection(client)
+    collection.updateOne(
+      { username: req.params.username},
+      { $pull: { notes: { id : req.params.id_note}}}
+    )
+
+    res.send("Note was deleted")
+  }catch(error){
+    res.send("error")
+  }
+    
+}
+
+async function modify_note(client,req,res){
+
+}
+
+async function create_activity(client,req,res){
+  try{
+    new_activity=getters.get_new_activity(req.params.name,req.params.expiration)
+
+    collection=await getters.get_db_collection(client)
+
+    collection.updateOne(
+      { username: req.params.username },
+      { $push: { activities: new_activity } }
+   )
+   res.send("created a new activity")  
+  }catch(error){
+    res.send("error")
+  }
+}
+async function delete_activity(client,req,res){}
+async function modify_activity(client,req,res){}
+
+async function create_session_tomato(client,req,res){}
+async function delete_session_tomato(client,req,res){}
+async function modify_session_tomato(client,req,res){}
+
+async function create_event(client,req,res){}
+async function delete_event(client,req,res){}
+async function modify_event(client,req,res){}
 
 async function create_tag(client,req,res){
   try{
@@ -116,23 +163,6 @@ async function delete_tag(client,req,res){
   }
     
 }
-// :username/:id_note
-async function delete_note(client,req,res){
-
-  try{
-    collection=await getters.get_db_collection(client)
-    collection.updateOne(
-      { username: req.params.username},
-      { $pull: { notes: { id : req.params.id_note}}}
-    )
-
-    res.send("Note was deleted")
-  }catch(error){
-    res.send("error")
-  }
-    
-}
-
 
 module.exports={
   login,
@@ -142,7 +172,8 @@ module.exports={
   create_tag,
   modify_tag,
   delete_tag,
-  delete_note
+  delete_note,
+  create_activity
 }
 
 

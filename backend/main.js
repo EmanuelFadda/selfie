@@ -44,6 +44,7 @@ app.put("/modify_account/:username/:password/:name/:surname/:email/:image",async
 app.delete("/delete_note/:username/:id_note", async(req,res)=>functions.delete_note(client,req,res))
 
 // create an activity
+app.post("/create_activity/:username/:name/:expiration", async(req,res)=>functions.create_activity(client,req,res))
 
 // modify an activity
 
