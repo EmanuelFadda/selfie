@@ -50,5 +50,6 @@ app.post("/create_activity/:username/:name/:expiration", async(req,res)=>functio
 
 // delete an activity
 app.delete("/delete_activity/:username/:id_activity", async(req,res)=>functions.delete_activity(client,req,res))
-// pensare al pomodoro e agli eventi
 
+
+app.post("/create_tomato/:username/:name_tomato/:rep_tomato/:time_tomato/:short_break/:long_break", async(req,res)=>functions.create_tomato(client,req,res))

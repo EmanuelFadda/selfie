@@ -66,11 +66,11 @@ function get_new_activity(name,expiration){
   return new_activity
 }  
 
-function get_new_tomato(name,tomato_rep,time_tomato,short_break,long_break){
+function get_new_tomato(name,rep_tomato,time_tomato,short_break,long_break){
   new_tomato={ 
     id:new ObjectId().toString(),
     name:name,
-    tomato_rep:tomato_rep,
+    tomato_rep:rep_tomato,
     time:{
         tomato:time_tomato,
         short_break:short_break,

@@ -72,7 +72,6 @@ async function create_note(client,req,res){
   }
 }
 
-// :username/:id_note
 async function delete_note(client,req,res){
 
   try{
@@ -123,7 +122,22 @@ async function delete_activity(client,req,res){
 }
 async function modify_activity(client,req,res){}
 
-async function create_session_tomato(client,req,res){}
+async function create_tomato(client,req,res){
+  try{
+    let p=req.params
+    new_tomato=getters.get_new_tomato(p.name_tomato,p.rep_tomato,p.time_tomato,p.short_break,p.long_break)
+
+    collection=await getters.get_db_collection(client)
+
+    collection.updateOne(
+      { username: p.username },
+      { $push: { tomato_sessions: new_tomato } }
+   )
+   res.send("created a new tomato")  
+  }catch(error){
+    res.send("error")
+  }
+}
 async function delete_session_tomato(client,req,res){}
 async function modify_session_tomato(client,req,res){}
 
@@ -186,7 +200,8 @@ module.exports={
   delete_tag,
   delete_note,
   create_activity,
-  delete_activity
+  delete_activity,
+  create_tomato
 }
 
 
