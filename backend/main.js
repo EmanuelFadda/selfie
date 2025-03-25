@@ -37,7 +37,7 @@ app.delete("/delete_tag/:username/:name_tag", async(req,res)=>functions.delete_t
 // activity
 app.post("/create_activity/:username/:name/:expiration", async(req,res)=>functions.create_activity(client,req,res))
 app.delete("/delete_activity/:username/:id_activity", async(req,res)=>functions.delete_activity(client,req,res))
-
+app.post("/modify_activity/:username/:id_activity/:new_name/:new_expiration", async(req,res)=>functions.modify_activity(client,req,res))
 // tomato
 app.post("/create_tomato/:username/:name_tomato/:rep_tomato/:time_tomato/:short_break/:long_break", async(req,res)=>functions.create_tomato(client,req,res))
 app.delete("/delete_tomato/:username/:id_tomato", async(req,res)=>functions.delete_tomato(client,req,res))
