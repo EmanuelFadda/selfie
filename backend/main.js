@@ -49,6 +49,6 @@ app.post("/create_activity/:username/:name/:expiration", async(req,res)=>functio
 // modify an activity
 
 // delete an activity
-
+app.delete("/delete_activity/:username/:id_activity", async(req,res)=>functions.delete_activity(client,req,res))
 // pensare al pomodoro e agli eventi
 

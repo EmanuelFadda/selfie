@@ -108,7 +108,19 @@ async function create_activity(client,req,res){
     res.send("error")
   }
 }
-async function delete_activity(client,req,res){}
+async function delete_activity(client,req,res){
+  try{
+    collection=await getters.get_db_collection(client)
+    collection.updateOne(
+      { username: req.params.username},
+      { $pull: { activities: { id : req.params.id_activity}}}
+    )
+
+    res.send("Activity was deleted")
+  }catch(error){
+    res.send("error")
+  }
+}
 async function modify_activity(client,req,res){}
 
 async function create_session_tomato(client,req,res){}
@@ -173,7 +185,8 @@ module.exports={
   modify_tag,
   delete_tag,
   delete_note,
-  create_activity
+  create_activity,
+  delete_activity
 }
 
 
