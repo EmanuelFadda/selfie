@@ -22,7 +22,6 @@ async function login(client,req,res) {
     res.send(error)
   }
 }
-
 async function register(client,req,res){
   try{
     // connecting with db
@@ -41,7 +40,6 @@ async function register(client,req,res){
     res.send("error")
   }
 }
-
 async function delete_account(client,req,res){
     try{
       collection=await getters.get_db_collection(client)
@@ -54,8 +52,6 @@ async function delete_account(client,req,res){
     }
     
 }
-
-
 async function create_note(client,req,res){
   try{
     new_note=getters.get_new_note(req.params.title,req.params.content,req.params.id_tag)
@@ -71,7 +67,6 @@ async function create_note(client,req,res){
     res.send("error")
   }
 }
-
 async function delete_note(client,req,res){
 
   try{
@@ -87,7 +82,6 @@ async function delete_note(client,req,res){
   }
     
 }
-
 async function modify_note(client,req,res){
   try{
     collection=await getters.get_db_collection(client)
@@ -108,7 +102,6 @@ async function modify_note(client,req,res){
     res.send("error")
   }
 }
-
 async function create_activity(client,req,res){
   try{
     new_activity=getters.get_new_activity(req.params.name,req.params.expiration)
@@ -154,7 +147,6 @@ async function modify_activity(client,req,res){
     res.send("error")
   }
 }
-
 async function create_tomato(client,req,res){
   try{
     let p=req.params
@@ -184,8 +176,26 @@ async function delete_tomato(client,req,res){
     res.send("error")
   }
 }
-async function modify_session_tomato(client,req,res){}
-
+async function modify_tomato(client,req,res){
+  try{
+    collection=await getters.get_db_collection(client)
+    console.log(1)
+    collection.updateOne(
+      { username: req.params.username, "tomato_sessions.id": req.params.id_tomato},
+      { $set: {
+          "tomato_sessions.$.name" : req.params.new_name,
+          "tomato_sessions.$.rep_tomato":req.params.new_rep_tomato,
+          "tomato_sessions.$.time.tomato":req.params.new_time_tomato,
+          "tomato_sessions.$.time.short_break":req.params.new_short_break,
+          "tomato_sessions.$.time.long_break":req.params.new_long_break
+        }
+      }
+   )
+    res.send("Tomato session was modified")
+  }catch(error){
+    res.send("error")
+  }
+}
 async function create_event(client,req,res){}
 async function delete_event(client,req,res){}
 async function modify_event(client,req,res){}
@@ -204,7 +214,6 @@ async function create_tag(client,req,res){
     res.send("error")
   }
 }
-
 async function modify_tag(client,req,res){
   try{
     collection=await getters.get_db_collection(client)
@@ -219,7 +228,6 @@ async function modify_tag(client,req,res){
     res.send("error")
   }
 }
-
 async function delete_tag(client,req,res){
   try{
     collection=await getters.get_db_collection(client)
@@ -236,20 +244,15 @@ async function delete_tag(client,req,res){
 }
 
 module.exports={
-  login,
-  register,
-  delete_account,
-  create_note,
-  create_tag,
-  modify_tag,
-  delete_tag,
-  delete_note,
-  create_activity,
-  delete_activity,
-  create_tomato,
-  delete_tomato,
-  modify_note,
-  modify_activity
+  login,register,delete_account,
+
+  create_note,delete_note,modify_note,
+
+  create_tag,modify_tag,delete_tag,
+
+  create_activity,delete_activity,modify_activity,
+
+  create_tomato,delete_tomato,modify_tomato
 }
 
 
