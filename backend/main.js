@@ -15,13 +15,13 @@ app.listen(port, () => {
 })
 
 
-//login 
-app.get('/login/:username/:password', async (req, res) => functions.login(client,req,res))
+//get_account 
+app.get('/get_account/:username/:password', async (req, res) => functions.get_account(client,req,res))
 
 // user
-app.post('/register/:username/:password/:name/:surname/:email/:image', async(req,res)=> functions.register(client,req,res))
+app.post('/create_account/:username/:password/:name/:surname/:email/:image', async(req,res)=> functions.create_account(client,req,res))
 app.delete("/delete_account/:username/:password", async(req,res)=>functions.delete_account(client,req,res))
-app.post("/modify_account/:username/:password/:name/:surname/:email/:image",async(req,res)=> {})
+app.post("/modify_account/:old_username/:new_username/:new_password/:new_name/:new_surname/:new_email/:new_image",async(req,res)=>functions.modify_account(client,req,res))
 
 // note
 app.post("/create_note/:username/:title/:content/:tags", async(req,res)=>functions.create_note(client,req,res))

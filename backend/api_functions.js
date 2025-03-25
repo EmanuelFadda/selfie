@@ -1,7 +1,7 @@
 // file with all the functions called in the main.js
 const getters=require('./getters')
 
-async function login(client,req,res) {
+async function get_account(client,req,res) {
   try{
     // connecting with db
     collection=await getters.get_db_collection(client)
@@ -22,7 +22,7 @@ async function login(client,req,res) {
     res.send(error)
   }
 }
-async function register(client,req,res){
+async function create_account(client,req,res){
   try{
     // connecting with db
     collection=await getters.get_db_collection(client)
@@ -52,6 +52,29 @@ async function delete_account(client,req,res){
     }
     
 }
+async function modify_account(client,req,res){
+  try{
+    collection=await getters.get_db_collection(client)
+
+    collection.updateOne(
+      { username: req.params.old_username},
+      { $set: {
+          name: req.params.new_name,
+          surname: req.params.new_surname,
+          username: req.params.new_username,
+          email: req.params.new_email,
+          image: req.params.new_image,
+          password: req.params.new_password,
+        }
+      }
+   )
+
+    res.send("User was modified")
+  }catch(error){
+    res.send("error")
+  }
+}
+
 async function create_note(client,req,res){
   try{
     new_note=getters.get_new_note(req.params.title,req.params.content,req.params.id_tag)
@@ -244,14 +267,10 @@ async function delete_tag(client,req,res){
 }
 
 module.exports={
-  login,register,delete_account,
-
+  get_account,create_account,delete_account,modify_account,
   create_note,delete_note,modify_note,
-
   create_tag,modify_tag,delete_tag,
-
   create_activity,delete_activity,modify_activity,
-
   create_tomato,delete_tomato,modify_tomato
 }
 
