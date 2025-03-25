@@ -1,6 +1,6 @@
 // file with all the functions called in the main.js
 const getters=require('./getters')
-// capire perchè non va il codice 
+
 async function login(client,req,res) {
   try{
     // connecting with db
