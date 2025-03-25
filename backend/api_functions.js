@@ -138,7 +138,19 @@ async function create_tomato(client,req,res){
     res.send("error")
   }
 }
-async function delete_session_tomato(client,req,res){}
+async function delete_tomato(client,req,res){
+  try{
+    collection=await getters.get_db_collection(client)
+    collection.updateOne(
+      { username: req.params.username},
+      { $pull: { tomato_sessions: { id : req.params.id_tomato}}}
+    )
+
+    res.send("Tomato was deleted")
+  }catch(error){
+    res.send("error")
+  }
+}
 async function modify_session_tomato(client,req,res){}
 
 async function create_event(client,req,res){}
@@ -201,7 +213,8 @@ module.exports={
   delete_note,
   create_activity,
   delete_activity,
-  create_tomato
+  create_tomato,
+  delete_tomato
 }
 
 
