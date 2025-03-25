@@ -1,21 +1,20 @@
-const {MongoClient, ObjectId}=require("mongodb")
+const {MongoClient}=require("mongodb")
 const express = require('express')
-const functions=require('./functions')
+const functions=require('./api_functions')
+const db_url=require("./defaults").DB_URL
 
 const app = express()
 const port = 3000
-url_db="mongodb://localhost:27017/"
-const client=new MongoClient(url_db)
+
+const client=new MongoClient(db_url)
+
 
 // all api actions 
 app.listen(port, () => {
   console.log(`listening on port ${port}`)
 })
 
-// checks if exist an account with the same username
-app.get('exist/:username/', async (req, res) => {
-  //fai la query
-})
+
 //login 
 app.get('/login/:username/:password', async (req, res) => functions.login(client,req,res))
 
@@ -35,15 +34,6 @@ app.post("/create_tag/:username/:name_tag", async(req,res)=>functions.create_tag
 app.post("/modify_tag/:username/:old_name/:new_name", async(req,res)=>functions.modify_tag(client,req,res))
 // delete a tag
 app.delete("/delete_tag/:username/:name_tag", async(req,res)=>functions.delete_tag(client,req,res))
-
-
-
-
-
-
-
-
-
 
 // modify account (da finire)
 app.put("/modify_account/:username/:password/:name/:surname/:email/:image",async(req,res)=> {
