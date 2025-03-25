@@ -89,7 +89,24 @@ async function delete_note(client,req,res){
 }
 
 async function modify_note(client,req,res){
+  try{
+    collection=await getters.get_db_collection(client)
 
+    collection.updateOne(
+      { username: req.params.username, "notes.id": req.params.id_note},
+      { $set: {
+        "notes.$.title" : req.params.new_title,
+        "notes.$.content":req.params.new_content,
+        "notes.$.tag":req.params.new_tag,
+        "notes.$.date_last_modify":getters.get_time_now()
+        }
+      }
+   )
+
+    res.send("Note was modified")
+  }catch(error){
+    res.send("error")
+  }
 }
 
 async function create_activity(client,req,res){
@@ -214,7 +231,8 @@ module.exports={
   create_activity,
   delete_activity,
   create_tomato,
-  delete_tomato
+  delete_tomato,
+  modify_note
 }
 
 

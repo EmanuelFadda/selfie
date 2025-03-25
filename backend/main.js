@@ -20,37 +20,24 @@ app.get('/login/:username/:password', async (req, res) => functions.login(client
 
 // create account, use this function after checking if there is another user with the same username 
 app.post('/register/:username/:password/:name/:surname/:email/:image', async(req,res)=> functions.register(client,req,res))
-
-// delete an account
 app.delete("/delete_account/:username/:password", async(req,res)=>functions.delete_account(client,req,res))
+app.put("/modify_account/:username/:password/:name/:surname/:email/:image",async(req,res)=> {})
 
-// create note
+// note
 app.post("/create_note/:username/:title/:content/:tags", async(req,res)=>functions.create_note(client,req,res))
+app.delete("/delete_note/:username/:id_note", async(req,res)=>functions.delete_note(client,req,res))
+app.post("/modify_note/:username/:id_note/:new_title/:new_content/:new_tag",async(req,res)=>functions.modify_note(client,req,res))
 
-// create a tag
+// tag
 app.post("/create_tag/:username/:name_tag", async(req,res)=>functions.create_tag(client,req,res))
-
-// modify a tag
 app.post("/modify_tag/:username/:old_name/:new_name", async(req,res)=>functions.modify_tag(client,req,res))
-// delete a tag
 app.delete("/delete_tag/:username/:name_tag", async(req,res)=>functions.delete_tag(client,req,res))
 
-// modify account (da finire)
-app.put("/modify_account/:username/:password/:name/:surname/:email/:image",async(req,res)=> {
 
-})
-
-// delete a note (da finire)
-app.delete("/delete_note/:username/:id_note", async(req,res)=>functions.delete_note(client,req,res))
-
-// create an activity
+// activity
 app.post("/create_activity/:username/:name/:expiration", async(req,res)=>functions.create_activity(client,req,res))
-
-// modify an activity
-
-// delete an activity
 app.delete("/delete_activity/:username/:id_activity", async(req,res)=>functions.delete_activity(client,req,res))
 
-
+// tomato
 app.post("/create_tomato/:username/:name_tomato/:rep_tomato/:time_tomato/:short_break/:long_break", async(req,res)=>functions.create_tomato(client,req,res))
 app.delete("/delete_tomato/:username/:id_tomato", async(req,res)=>functions.delete_tomato(client,req,res))
