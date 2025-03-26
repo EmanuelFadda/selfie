@@ -247,7 +247,28 @@ async function modify_tomato(client,req,res){
     res.send(msg)
   }
 }
-async function create_event(client,req,res){}
+async function create_event(client,req,res){
+  try{
+    new_event=getters.get_new_event(
+      req.body.title,
+      req.body.type_rep,
+      req.body.start,
+      req.body.finish
+    )
+
+    collection=await getters.get_db_collection(client)
+
+    collection.updateOne(
+      { username: req.body.username },
+      { $push: { events: new_event } }
+   )
+   msg=getters.get_query_response(true,null,`Event ${new_event.id} was created`)
+   res.send(msg) 
+  }catch(error){
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
+}
+}
 async function delete_event(client,req,res){}
 async function modify_event(client,req,res){}
 
@@ -305,7 +326,8 @@ module.exports={
   create_note,delete_note,modify_note,
   create_tag,modify_tag,delete_tag,
   create_activity,delete_activity,modify_activity,
-  create_tomato,delete_tomato,modify_tomato
+  create_tomato,delete_tomato,modify_tomato,
+  create_event,modify_event,delete_event
 }
 
 

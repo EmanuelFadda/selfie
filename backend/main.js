@@ -67,3 +67,11 @@ app.post("/create_tomato", async(req,res)=>functions.create_tomato(client,req,re
 app.delete("/delete_tomato", async(req,res)=>functions.delete_tomato(client,req,res))
 // username,id_tomato,new_name,new_rep_tomato,new_time_tomato,new_short_break,new_long_break
 app.post("/modify_tomato", async(req,res)=>functions.modify_tomato(client,req,res))
+
+// event
+// username,title,type_rep,start,finish
+app.post("/create_event", async(req,res)=>functions.create_event(client,req,res))
+// username,id_event
+app.delete("/delete_event", async(req,res)=>functions.delete_event(client,req,res))
+// username,id_event,new_title,new_type_rep,new_start,new_finsih
+app.post("/modify_event", async(req,res)=>functions.modify_event(client,req,res))
