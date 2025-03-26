@@ -16,10 +16,16 @@ async function get_account(client,req,res) {
 
     //searching for result
     const result= await collection.find(query).toArray()
-    console.log(result)
-    res.send(result)
+    let msg
+    if(result[0]!=null){
+      msg=getters.get_query_response(true,result[0],`User ${req.body.username} was found`)
+    }else{
+      msg=getters.get_query_response(true,null,`User ${req.body.username} was not found`)
+    }
+    res.send(msg)
   } catch(error){
-    res.send(error)
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
 }
 async function create_account(client,req,res){
@@ -35,21 +41,24 @@ async function create_account(client,req,res){
       req.body.password
     )
     collection.insertOne(new_user)
-    res.send("User created")
-  }catch(error){
-    res.send("error")
+    msg=getters.get_query_response(true,null,`User ${req.body.username} was created`)
+    res.send(msg)
+  } catch(error){
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
 }
 async function delete_account(client,req,res){
-    try{
-      collection=await getters.get_db_collection(client)
-      
-      collection.deleteOne({username:req.body.username,password:req.body.password})
+  try{
+    collection=await getters.get_db_collection(client)  
+    collection.deleteOne({username:req.body.username,password:req.body.password})
 
-      res.send("User was deleted")
-    }catch(error){
-      res.send(error)
-    }
+    msg=getters.get_query_response(true,null,`User ${req.body.username} was deleted`)
+    res.send(msg)
+  } catch(error){
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
+  }
     
 }
 async function modify_account(client,req,res){
@@ -69,15 +78,17 @@ async function modify_account(client,req,res){
       }
    )
 
-    res.send("User was modified")
-  }catch(error){
-    res.send("error")
-  }
+   msg=getters.get_query_response(true,null,`User ${req.body.new_username} was modified`)
+   res.send(msg)
+ } catch(error){
+   msg=getters.get_query_response(false,null,`error`)
+   res.send(msg)
+ }
 }
 
 async function create_note(client,req,res){
   try{
-    new_note=getters.get_new_note(req.body.title,req.body.content,req.body.id_tag)
+    new_note=getters.get_new_note(req.body.title,req.body.content,req.body.tag)
 
     collection=await getters.get_db_collection(client)
 
@@ -85,9 +96,11 @@ async function create_note(client,req,res){
       { username: req.body.username },
       { $push: { notes: new_note } }
    )
-   res.send("created a new note")  
-  }catch(error){
-    res.send("error")
+    msg=getters.get_query_response(true,null,`Note ${new_note.id} was created`)
+    res.send(msg)
+  } catch(error){
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
 }
 async function delete_note(client,req,res){
@@ -99,9 +112,11 @@ async function delete_note(client,req,res){
       { $pull: { notes: { id : req.body.id_note}}}
     )
 
-    res.send("Note was deleted")
-  }catch(error){
-    res.send("error")
+    msg=getters.get_query_response(true,null,`Note ${req.body.id_note} was deleted`)
+    res.send(msg)
+  } catch(error){
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
     
 }
@@ -120,9 +135,11 @@ async function modify_note(client,req,res){
       }
    )
 
-    res.send("Note was modified")
+   msg=getters.get_query_response(true,null,`Note ${req.body.id_note} was modified`)
+   res.send(msg)
   }catch(error){
-    res.send("error")
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
 }
 async function create_activity(client,req,res){
@@ -135,9 +152,11 @@ async function create_activity(client,req,res){
       { username: req.body.username },
       { $push: { activities: new_activity } }
    )
-   res.send("created a new activity")  
+   msg=getters.get_query_response(true,null,`Activity ${new_activity.id} was created`)
+   res.send(msg) 
   }catch(error){
-    res.send("error")
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
 }
 async function delete_activity(client,req,res){
@@ -148,9 +167,11 @@ async function delete_activity(client,req,res){
       { $pull: { activities: { id : req.body.id_activity}}}
     )
 
-    res.send("Activity was deleted")
+    msg=getters.get_query_response(true,null,`Activity ${req.body.id_note} was deleted`)
+    res.send(msg)
   }catch(error){
-    res.send("error")
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
 }
 async function modify_activity(client,req,res){
@@ -165,9 +186,11 @@ async function modify_activity(client,req,res){
         }
       }
    )
-    res.send("Activity was modified")
+   msg=getters.get_query_response(true,null,`Activity ${req.body.id_activity} was modified`)
+   res.send(msg)
   }catch(error){
-    res.send("error")
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
 }
 async function create_tomato(client,req,res){
@@ -181,9 +204,11 @@ async function create_tomato(client,req,res){
       { username: p.username },
       { $push: { tomato_sessions: new_tomato } }
    )
-   res.send("created a new tomato")  
+   msg=getters.get_query_response(true,null,`Tomato ${new_tomato.id} was created`)
+   res.send(msg) 
   }catch(error){
-    res.send("error")
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
 }
 async function delete_tomato(client,req,res){
@@ -194,15 +219,16 @@ async function delete_tomato(client,req,res){
       { $pull: { tomato_sessions: { id : req.body.id_tomato}}}
     )
 
-    res.send("Tomato was deleted")
+    msg=getters.get_query_response(true,null,`Tomato ${req.body.id_tomato} was deleted`)
+    res.send(msg) 
   }catch(error){
-    res.send("error")
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
 }
 async function modify_tomato(client,req,res){
   try{
     collection=await getters.get_db_collection(client)
-
     collection.updateOne(
       { username: req.body.username, "tomato_sessions.id": req.body.id_tomato},
       { $set: {
@@ -214,9 +240,11 @@ async function modify_tomato(client,req,res){
         }
       }
    )
-    res.send("Tomato session was modified")
+   msg=getters.get_query_response(true,null,`Tomato ${req.body.id_tomato} was modified`)
+   res.send(msg) 
   }catch(error){
-    res.send("error")
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
 }
 async function create_event(client,req,res){}
@@ -232,9 +260,11 @@ async function create_tag(client,req,res){
       { $push: { tags: req.body.name_tag } }
    )
 
-    res.send("Tag was created")
+   msg=getters.get_query_response(true,null,`Tag ${req.body.name_tag} was created`)
+   res.send(msg) 
   }catch(error){
-    res.send("error")
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
 }
 async function modify_tag(client,req,res){
@@ -246,9 +276,11 @@ async function modify_tag(client,req,res){
       { $set: { "tags.$" : req.body.new_name }}
    )
 
-    res.send("Tag was modified")
+   msg=getters.get_query_response(true,null,`Tag ${req.body.old_name} was changed to ${req.body.new_name}`)
+   res.send(msg) 
   }catch(error){
-    res.send("error")
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
 }
 async function delete_tag(client,req,res){
@@ -259,9 +291,11 @@ async function delete_tag(client,req,res){
       { $pull: { tags : req.body.name_tag  }}
    )
 
-    res.send("Tag was deleted")
+   msg=getters.get_query_response(true,null,`Tag ${req.body.name_tag} was deleted`)
+   res.send(msg) 
   }catch(error){
-    res.send("error")
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
   }
     
 }

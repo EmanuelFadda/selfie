@@ -80,12 +80,38 @@ function get_new_tomato(name,rep_tomato,time_tomato,short_break,long_break){
   return new_tomato
 }
 
+function get_new_event(title,type_rep,start,finish){
+  today=get_time_now()
+  let new_event={
+    id: new ObjectId().toString(),
+    title: title,
+    created: today,
+    repeat: {
+        type:type_rep,
+        start_date:start,
+        finish_date:finish
+    }
+  }
+  return new_event
+}
 
+function get_query_response(success,content,message){
+  let response={ 
+    "success":success,
+    "content":content,
+    "message": message
+  }
+  return response 
+}
 module.exports={
     get_db_collection,
     get_new_activity,
     get_new_note,
     get_new_tomato,
     get_new_user,
-    get_time_now
+    get_time_now,
+    get_new_event,
+    get_query_response
 }
+
+

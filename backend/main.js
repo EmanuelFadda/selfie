@@ -33,7 +33,7 @@ app.delete("/delete_account", async(req,res)=>functions.delete_account(client,re
 // old_username,new_username,new_password,new_name,new_surname,new_email,new_image
 app.post("/modify_account",async(req,res)=>functions.modify_account(client,req,res))
 
-// username,title,content,tags
+// username,title,content,tag
 app.post("/create_note", async(req,res)=>functions.create_note(client,req,res))
 
 // username,id_note
