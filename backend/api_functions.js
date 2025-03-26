@@ -269,7 +269,21 @@ async function create_event(client,req,res){
     res.send(msg)
 }
 }
-async function delete_event(client,req,res){}
+async function delete_event(client,req,res){
+  try{
+    collection=await getters.get_db_collection(client)
+    collection.updateOne(
+      { username: req.body.username},
+      { $pull: { events: { id : req.body.id_event}}}
+    )
+
+    msg=getters.get_query_response(true,null,`Event ${req.body.id_event} was deleted`)
+    res.send(msg) 
+  }catch(error){
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
+  }
+}
 async function modify_event(client,req,res){
   try{
     collection=await getters.get_db_collection(client)
