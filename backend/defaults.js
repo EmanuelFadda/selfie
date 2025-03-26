@@ -1,7 +1,8 @@
+env=require('dotenv').config()
 // about database and collection
-const DB_NAME='user'
-const COLLECTION_NAME='user'
-const DB_URL="mongodb://localhost:27017/"
+const DB_NAME=process.env.DB_NAME
+const COLLECTION_NAME=process.env.COLLECTION_NAME
+const DB_URL=process.env.DB_URL
 
 // about default tags
 const TAGS=["Hobby","Gym","Study"]
