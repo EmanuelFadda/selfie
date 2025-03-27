@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-screen overflow-hidden" @click="startAnimation">
+  <div class="relative min-h-screen" @click="startAnimation">
     <div class="mb-2 flex items-center p-6">
       <svg @click.stop="goBack" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mr-6 size-6" ref="back">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />

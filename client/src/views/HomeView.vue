@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-h-screen flex-col">
-    <Navbar viewName="Selfie" name="Nome" surname="Cognome" :settingsArray="settingsArray"></Navbar>
+    <Navbar viewTitle="Selfie" name="Nome" surname="Cognome" :settingsArray="settingsArray"></Navbar>
 
     <!-- Anteprima oggetti delle note e pomodoro (default piccole) -->
     <div class="ml-5 mr-5 grid h-[calc(100vh-108px)] grid-cols-2 grid-rows-2 gap-4 lg:ml-20 lg:mr-20 lg:h-[calc(100vh-132px)] lg:grid-cols-3 lg:gap-8 xl:ml-28 xl:mr-28 2xl:ml-36 2xl:mr-36">
@@ -28,6 +28,9 @@ export default {
     const store = useMainStore()
     const topItem = store.topItem
     const bottomItems = store.bottomItems
+
+    console.log(topItem)
+    console.log(bottomItems)
 
     return { store, topItem, bottomItems }
   },
