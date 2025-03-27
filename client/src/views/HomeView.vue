@@ -29,9 +29,6 @@ export default {
     const topItem = store.topItem
     const bottomItems = store.bottomItems
 
-    console.log(topItem)
-    console.log(bottomItems)
-
     return { store, topItem, bottomItems }
   },
   data() {
