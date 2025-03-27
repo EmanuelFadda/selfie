@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import { useMainStore } from "@/store/mainStore"
 import Navbar from "../components/Navbar.vue"
 
 export default {
@@ -14,7 +13,7 @@ export default {
     Navbar,
   },
   setup() {
-    {}
+    return {}
   },
   data() {
     return {

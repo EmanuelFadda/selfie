@@ -14,7 +14,7 @@ export default {
     Navbar,
   },
   setup() {
-    {}
+    return {}
   },  
   data() {
     return {
