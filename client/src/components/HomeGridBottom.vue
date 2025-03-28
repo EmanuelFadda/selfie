@@ -9,15 +9,18 @@
   </component>
 </template>
 
-<script setup>
-defineProps({
-  title: String,
-  route: String,
-  content: String,
-  lightBgColor: String,
-  darkBgColor: String,
-  lightBordColor: String,
-  darkBordColor: String,
-  componentType: String,
-})
+<script>
+export default {
+  name: "HomeGridTop",
+  props: {
+    title: String,
+    route: String,
+    content: String,
+    lightBgColor: String,
+    darkBgColor: String,
+    lightBordColor: String,
+    darkBordColor: String,
+    componentType: String,
+  },
+}
 </script>

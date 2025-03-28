@@ -6,7 +6,9 @@
 
 <script>
 export default {
-  name: "CalendarNotificationsView",
-  components: {},
+  name: "RegisterView",
+  setup() {
+    return {}
+  },
 }
 </script>

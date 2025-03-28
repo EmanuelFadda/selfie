@@ -3,39 +3,57 @@ import HomeView from "../views/HomeView.vue"
 import LoginView from "../views/LoginView.vue"
 import CalendarView from "../views/CalendarView.vue"
 import CreditsView from "../views/CreditsView.vue"
-import ModifyLayoutView from "../views/ModifyLayoutView.vue"
+import EditLayoutView from "../views/EditLayoutView.vue"
 import CalendarNotificationsView from "../views/CalendarNotificationsView.vue"
+import RegisterView from "../views/RegisterView.vue"
+import NotesView from "../views/NotesView.vue"
+import TomatoView from "../views/TomatoView.vue"
 
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: HomeView,
-  },
-  {
-    path: "/login",
     name: "login",
     component: LoginView,
   },
   {
-    path: "/calendar",
+    path: "/register",
+    name: "register",
+    component: RegisterView,
+  },
+  {
+    path: "/:username",
+    name: "home",
+    component: HomeView,
+  },
+  {
+    path: "/:username/calendar",
     name: "calendar",
     component: CalendarView,
   },
   {
-    path: "/credits",
+    path: "/:username/credits",
     name: "credits",
     component: CreditsView,
   },
   {
-    path: "/modifylayout",
-    name: "modifyLayout",
-    component: ModifyLayoutView,
+    path: "/:username/editlayout",
+    name: "editLayout",
+    component: EditLayoutView,
   },
   {
-    path: "/calendar/notifications",
+    path: "/:username/calendar/notifications",
     name: "calendarNotifications",
     component: CalendarNotificationsView,
+  },
+  {
+    path: "/:username/notes",
+    name: "notes",
+    component: NotesView,
+  },
+  {
+    path: "/:username/tomato",
+    name: "tomato",
+    component: TomatoView,
   },
 ]
 
