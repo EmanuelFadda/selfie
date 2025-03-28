@@ -47,6 +47,7 @@ Vai nel browser e cerca localhost:27017, dovrebbe restituire il seguente messagg
             surname: String,
             username: String,
             email: String,
+            display: Array,
             image: String ^,
             password: String,
             notes: Array,
