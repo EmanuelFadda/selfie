@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-h-screen w-screen flex-col items-center justify-center max-sm:px-6">
-    <div class="w-full max-w-md rounded-xl form-shadow dark:form-shadow">
+    <div class="form-shadow dark:form-shadow w-full max-w-md rounded-xl">
       <h1 class="mb-6 mt-8 text-center text-3xl font-bold md:text-4xl">Selfie</h1>
       <div class="p-6 sm:p-8">
         <h1 class="mb-4 text-xl font-bold tracking-tight md:text-2xl">Accedi al tuo account</h1>
@@ -40,7 +40,7 @@ export default {
     const login = async () => {
       try {
         // Qui va la login ma per ora la login non funziona
-      } catch (err) {        
+      } catch (err) {
         console.log(err)
       } finally {
         // Solo per testare la navigazione

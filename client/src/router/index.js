@@ -3,7 +3,7 @@ import HomeView from "../views/HomeView.vue"
 import LoginView from "../views/LoginView.vue"
 import CalendarView from "../views/CalendarView.vue"
 import CreditsView from "../views/CreditsView.vue"
-import ModifyLayoutView from "../views/ModifyLayoutView.vue"
+import EditLayoutView from "../views/EditLayoutView.vue"
 import CalendarNotificationsView from "../views/CalendarNotificationsView.vue"
 import RegisterView from "../views/RegisterView.vue"
 import NotesView from "../views/NotesView.vue"
@@ -23,7 +23,7 @@ const routes = [
   {
     path: "/:username",
     name: "home",
-    component: HomeView,      
+    component: HomeView,
   },
   {
     path: "/:username/calendar",
@@ -36,9 +36,9 @@ const routes = [
     component: CreditsView,
   },
   {
-    path: "/:username/modifylayout",
-    name: "modifyLayout",
-    component: ModifyLayoutView,
+    path: "/:username/editlayout",
+    name: "editLayout",
+    component: EditLayoutView,
   },
   {
     path: "/:username/calendar/notifications",
@@ -54,7 +54,7 @@ const routes = [
     path: "/:username/tomato",
     name: "tomato",
     component: TomatoView,
-  }
+  },
 ]
 
 const router = createRouter({

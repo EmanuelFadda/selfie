@@ -37,7 +37,7 @@ import draggable from "vuedraggable"
 import { ref } from "vue"
 
 export default {
-  name: "ModifyLayoutView",
+  name: "EditLayoutView",
   components: {
     draggable,
     HomeGridTop,
