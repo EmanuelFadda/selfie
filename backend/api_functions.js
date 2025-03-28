@@ -354,16 +354,16 @@ async function delete_tag(client,req,res){
     
 }
 
-async function modify_display(client,req,res){
+async function modify_layout(client,req,res){
   try{
     collection=await getters.get_db_collection(client)
 
     collection.updateOne(
       { username: req.body.username},
-      { $set: { "display" : req.body.display }}
+      { $set: { "layout" : req.body.layout }}
    )
 
-   msg=getters.get_query_response(true,null,`Display was changed to ${req.body.display}`)
+   msg=getters.get_query_response(true,null,`Layout was changed to ${req.body.layout}`)
    res.send(msg) 
   }catch(error){
     msg=getters.get_query_response(false,null,`error`)
@@ -379,7 +379,7 @@ module.exports={
   create_activity,delete_activity,modify_activity,
   create_tomato,delete_tomato,modify_tomato,
   create_event,modify_event,delete_event,
-  modify_display
+  modify_layout
 }
 
 

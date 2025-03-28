@@ -76,6 +76,6 @@ app.delete("/delete_event", async(req,res)=>functions.delete_event(client,req,re
 // username,id_event,new_title,new_type_rep,new_start,new_finish
 app.post("/modify_event", async(req,res)=>functions.modify_event(client,req,res))
 
-// display 
-// display
-app.post("/modify_display",async(req,res)=>functions.modify_display(client,req,res))
+// layout
+// username,layout
+app.post("/modify_layout",async(req,res)=>functions.modify_layout(client,req,res))
