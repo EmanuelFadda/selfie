@@ -1,7 +1,10 @@
 // file with all the functions called in the main.js
 const getters=require('./getters')
+const { ObjectId } = require("mongodb")
 
-async function get_account(client,req,res) {
+
+
+async function login(client,req,res){ // restituisce il token con cui fare le query
   try{
     // connecting with db
     collection=await getters.get_db_collection(client)
@@ -15,14 +18,39 @@ async function get_account(client,req,res) {
     }
 
     //searching for result
-    const result= await collection.find(query).toArray()
+    let result= await collection.find(query,{_id:1}).toArray()
+    user=result[0]
     let msg
-    if(result[0]!=null){
-      msg=getters.get_query_response(true,result[0],`User ${req.body.username} was found`)
+    if(user!=null){
+      // il server invia il token jwt al client,il client da adesso in poi dovrà usare questo 
+      // per autenticarsi 
+      let token=getters.get_token(user._id)
+      msg=getters.get_query_response(true,token,`Successful login`)
     }else{
-      msg=getters.get_query_response(true,null,`User ${req.body.username} was not found`)
+      msg=getters.get_query_response(true,null,`User not found`)
     }
     res.send(msg)
+  } catch(error){
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
+  }
+}
+
+async function get_account(client,req,res) {
+  try{
+    // connecting with db
+    collection=await getters.get_db_collection(client)
+    let id_user=getters.verify_session(req.headers)
+    if(id_user!=null){
+      //creating a query
+      objectid=ObjectId.createFromHexString(id_user)
+      let user= await collection.findOne({_id: objectid  })
+      msg=getters.get_query_response(true,user,`User ${user.username} was found`)
+      res.send(msg)
+    }else{
+      msg=getters.get_query_response(false,null,`Invalid session`)
+      res.send(msg)
+    }
   } catch(error){
     msg=getters.get_query_response(false,null,`error`)
     res.send(msg)
@@ -379,7 +407,7 @@ module.exports={
   create_activity,delete_activity,modify_activity,
   create_tomato,delete_tomato,modify_tomato,
   create_event,modify_event,delete_event,
-  modify_layout
+  modify_layout,login
 }
 
 

@@ -3,6 +3,7 @@ env=require('dotenv').config()
 const DB_NAME=process.env.DB_NAME
 const COLLECTION_NAME=process.env.COLLECTION_NAME
 const DB_URL=process.env.DB_URL
+const SECRET_KEY = process.env.SECRET_KEY
 
 // about default tags
 const TAGS=["Hobby","Gym","Study"]
@@ -34,5 +35,5 @@ module.exports={
     TOMATO_SHORT_BREAK,
     TOMATO_TIME,
     TOMATO_LONG_BREAK,
-    TAGS,LAYOUT
+    TAGS,LAYOUT, SECRET_KEY
 }

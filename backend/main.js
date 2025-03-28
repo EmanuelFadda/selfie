@@ -19,6 +19,9 @@ app.listen(port, () => {
 })
 
 
+// login
+app.post("/login",async (req,res)=> functions.login(client,req,res))
+
 //get_account 
 app.get('/get_account', async (req, res) => functions.get_account(client,req,res))
 

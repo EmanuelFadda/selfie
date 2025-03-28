@@ -1,5 +1,7 @@
 const { ObjectId } = require("mongodb")
+const jwt = require('jsonwebtoken')
 const defaults=require("./defaults")
+
 
 function get_db_collection(client){
     client.connect()
@@ -104,6 +106,28 @@ function get_query_response(success,content,message){
   }
   return response 
 }
+
+
+function get_token(id){
+  let token=jwt.sign({
+    id: id
+  },defaults.SECRET_KEY, {expiresIn:'2h'})
+  console.log(token)
+  return token
+}
+
+function verify_session(header){
+  let token=header["token"]
+  let id_user=null
+  jwt.verify(token, defaults.SECRET_KEY, (err, decoded) => {
+    if (err) {
+      console.log('Something goes wrong');
+    } else {
+      id_user=decoded.id 
+    }
+  });
+  return id_user
+}
 module.exports={
     get_db_collection,
     get_new_activity,
@@ -112,7 +136,8 @@ module.exports={
     get_new_user,
     get_time_now,
     get_new_event,
-    get_query_response
+    get_query_response,
+    get_token,verify_session
 }
 
 
