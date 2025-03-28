@@ -354,13 +354,32 @@ async function delete_tag(client,req,res){
     
 }
 
+async function modify_display(client,req,res){
+  try{
+    collection=await getters.get_db_collection(client)
+
+    collection.updateOne(
+      { username: req.body.username},
+      { $set: { "display" : req.body.display }}
+   )
+
+   msg=getters.get_query_response(true,null,`Display was changed to ${req.body.display}`)
+   res.send(msg) 
+  }catch(error){
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
+  }
+}
+
+
 module.exports={
   get_account,create_account,delete_account,modify_account,
   create_note,delete_note,modify_note,
   create_tag,modify_tag,delete_tag,
   create_activity,delete_activity,modify_activity,
   create_tomato,delete_tomato,modify_tomato,
-  create_event,modify_event,delete_event
+  create_event,modify_event,delete_event,
+  modify_display
 }
 
 

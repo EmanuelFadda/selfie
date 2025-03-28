@@ -19,6 +19,9 @@ const TOMATO_TIME=15
 const TOMATO_SHORT_BREAK=5
 const TOMATO_LONG_BREAK=15
 
+// about default display
+const DISPLAY=[ "calendar", "notes", "tomato" ]
+
 module.exports={
     DB_URL,
     DB_NAME,
@@ -31,5 +34,5 @@ module.exports={
     TOMATO_SHORT_BREAK,
     TOMATO_TIME,
     TOMATO_LONG_BREAK,
-    TAGS
+    TAGS,DISPLAY
 }

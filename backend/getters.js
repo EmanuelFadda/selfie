@@ -16,6 +16,7 @@ function get_new_user(name,surname,username,email,image,password){
     email: email,
     image:image,
     password:password,
+    display:defaults.DISPLAY,
     notes:[
         get_new_note( 
             defaults.NOTE_TITLE , 
