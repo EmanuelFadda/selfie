@@ -4,6 +4,26 @@ const { ObjectId } = require("mongodb")
 
 
 
+//funzione generale per la creazione di note,attività,pomodori,eventi,tag
+async function create_object(client,req,res,object,field_obj,name_obj){
+  try{
+    let id_user=getters.verify_session(req.headers)
+    collection= await getters.get_db_collection(client)
+
+    let object_id_user=ObjectId.createFromHexString(id_user)
+    let push_obj={}
+    push_obj[field_obj]=object
+
+    collection.updateOne({ _id: object_id_user },{ $push: push_obj })  
+    
+    msg=getters.get_query_response(true,null,`${name_obj} ${(object.id) ? object.id : object} was created`)
+    res.send(msg)
+  }catch(error){
+    msg=getters.get_query_response(false,null,`error`)
+    res.send(msg)
+  }
+}
+
 async function login(client,req,res){ // restituisce il token con cui fare le query
   try{
     // connecting with db
@@ -40,6 +60,7 @@ async function get_account(client,req,res) {
   try{
     // connecting with db
     collection=await getters.get_db_collection(client)
+
     let id_user=getters.verify_session(req.headers)
     if(id_user!=null){
       //creating a query
@@ -79,6 +100,7 @@ async function create_account(client,req,res){
 async function delete_account(client,req,res){
   try{
     collection=await getters.get_db_collection(client)  
+    
     collection.deleteOne({username:req.body.username,password:req.body.password})
 
     msg=getters.get_query_response(true,null,`User ${req.body.username} was deleted`)
@@ -115,22 +137,11 @@ async function modify_account(client,req,res){
 }
 
 async function create_note(client,req,res){
-  try{
-    new_note=getters.get_new_note(req.body.title,req.body.content,req.body.tag)
-
-    collection=await getters.get_db_collection(client)
-
-    collection.updateOne(
-      { username: req.body.username },
-      { $push: { notes: new_note } }
-   )
-    msg=getters.get_query_response(true,null,`Note ${new_note.id} was created`)
-    res.send(msg)
-  } catch(error){
-    msg=getters.get_query_response(false,null,`error`)
-    res.send(msg)
-  }
+  new_note=getters.get_new_note(req.body.title,req.body.content,req.body.tag)
+  create_object(client,req,res,new_note,"notes","Note")
 }
+
+
 async function delete_note(client,req,res){
 
   try{
@@ -171,21 +182,8 @@ async function modify_note(client,req,res){
   }
 }
 async function create_activity(client,req,res){
-  try{
-    new_activity=getters.get_new_activity(req.body.name,req.body.expiration)
-
-    collection=await getters.get_db_collection(client)
-
-    collection.updateOne(
-      { username: req.body.username },
-      { $push: { activities: new_activity } }
-   )
-   msg=getters.get_query_response(true,null,`Activity ${new_activity.id} was created`)
-   res.send(msg) 
-  }catch(error){
-    msg=getters.get_query_response(false,null,`error`)
-    res.send(msg)
-  }
+  new_activity=getters.get_new_activity(req.body.name,req.body.expiration)
+  create_object(client,req,res,new_note,"activities","Activity")
 }
 async function delete_activity(client,req,res){
   try{
@@ -222,22 +220,14 @@ async function modify_activity(client,req,res){
   }
 }
 async function create_tomato(client,req,res){
-  try{
-    let p=req.body
-    new_tomato=getters.get_new_tomato(p.name_tomato,p.rep_tomato,p.time_tomato,p.short_break,p.long_break)
-
-    collection=await getters.get_db_collection(client)
-
-    collection.updateOne(
-      { username: p.username },
-      { $push: { tomato_sessions: new_tomato } }
-   )
-   msg=getters.get_query_response(true,null,`Tomato ${new_tomato.id} was created`)
-   res.send(msg) 
-  }catch(error){
-    msg=getters.get_query_response(false,null,`error`)
-    res.send(msg)
-  }
+  new_tomato=getters.get_new_tomato(
+    req.body.name_tomato,
+    req.body.rep_tomato,
+    req.body.time_tomato,
+    req.body.short_break,
+    req.body.long_break
+  )
+  create_object(client,req,res,new_tomato,"tomato_sessions","Tomato")
 }
 async function delete_tomato(client,req,res){
   try{
@@ -276,27 +266,10 @@ async function modify_tomato(client,req,res){
   }
 }
 async function create_event(client,req,res){
-  try{
-    new_event=getters.get_new_event(
-      req.body.title,
-      req.body.type_rep,
-      req.body.start,
-      req.body.finish
-    )
-
-    collection=await getters.get_db_collection(client)
-
-    collection.updateOne(
-      { username: req.body.username },
-      { $push: { events: new_event } }
-   )
-   msg=getters.get_query_response(true,null,`Event ${new_event.id} was created`)
-   res.send(msg) 
-  }catch(error){
-    msg=getters.get_query_response(false,null,`error`)
-    res.send(msg)
+  new_event=getters.get_new_event(req.body.title,req.body.type_rep,req.body.start,req.body.finish)
+  create_object(client,req,res,new_event,"events","Event")
 }
-}
+
 async function delete_event(client,req,res){
   try{
     collection=await getters.get_db_collection(client)
@@ -334,20 +307,7 @@ async function modify_event(client,req,res){
 }
 
 async function create_tag(client,req,res){
-  try{
-    collection=await getters.get_db_collection(client)
-
-    collection.updateOne(
-      { username: req.body.username },
-      { $push: { tags: req.body.name_tag } }
-   )
-
-   msg=getters.get_query_response(true,null,`Tag ${req.body.name_tag} was created`)
-   res.send(msg) 
-  }catch(error){
-    msg=getters.get_query_response(false,null,`error`)
-    res.send(msg)
-  }
+  create_object(client,req,res,req.body.name_tag,"tags","Tag")
 }
 async function modify_tag(client,req,res){
   try{
@@ -398,6 +358,9 @@ async function modify_layout(client,req,res){
     res.send(msg)
   }
 }
+
+
+
 
 
 module.exports={
