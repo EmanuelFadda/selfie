@@ -4,9 +4,9 @@
 
     <!-- Anteprima oggetti delle note e pomodoro (default piccole) -->
     <div class="ml-5 mr-5 grid h-[calc(100vh-108px)] grid-cols-2 grid-rows-2 gap-4 lg:ml-20 lg:mr-20 lg:h-[calc(100vh-132px)] lg:grid-cols-3 lg:gap-8 xl:ml-28 xl:mr-28 2xl:ml-36 2xl:mr-36">
-      <HomeGridTop v-for="(item, index) in topItem" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content" class="row-span-2 flex flex-auto flex-col max-sm:col-span-2 lg:col-span-2"></HomeGridTop>
+      <HomeGridTop v-for="(item, index) in store.topItem" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content" class="row-span-2 flex flex-auto flex-col max-sm:col-span-2 lg:col-span-2"></HomeGridTop>
 
-      <HomeGridBottom v-for="(item, index) in bottomItems" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content"></HomeGridBottom>
+      <HomeGridBottom v-for="(item, index) in store.bottomItems" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content"></HomeGridBottom>
     </div>
   </div>
 </template>
@@ -16,6 +16,7 @@ import HomeGridTop from "../components/HomeGridTop.vue"
 import Navbar from "../components/Navbar.vue"
 import HomeGridBottom from "../components/HomeGridBottom.vue"
 import { useMainStore } from "../store/mainStore"
+import router from "@/router"
 
 export default {
   name: "HomeView",
@@ -23,13 +24,6 @@ export default {
     Navbar,
     HomeGridTop,
     HomeGridBottom,
-  },
-  setup() {
-    const store = useMainStore()
-    const topItem = store.topItem
-    const bottomItems = store.bottomItems
-
-    return { store, topItem, bottomItems }
   },
   data() {
     return {
@@ -39,6 +33,45 @@ export default {
         { label: "Logout", route: "/", icon: "M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" },
       ],
     }
+  },
+  setup() {
+    const store = useMainStore()
+    const token = localStorage.getItem("token")  
+    let topItem = []
+    let bottomItems = []
+
+    if (token === undefined || token === null) {
+      router.push("/")
+    } else {
+      fetch("http://localhost:3000/get_account", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "token": `${token}`,
+        },
+      }).then(response => response.json())
+        .then(data => {
+          if (data.success === true) {
+            store.user = data.content
+
+            const items = {
+              "calendar" : { id: 0, title: "Calendario", route: `/${store.user.username}/calendar`, componentType: "RouterLink", lightBgColor: "bg-sky-400", darkBgColor: "dark:bg-sky-500", lightBordColor: "border-sky-400", darkBordColor: "dark:border-sky-500", content: "Qui ci verranno messi eventi e attività" },
+              "notes" : { id: 1, title: "Note", route: `/${store.user.username}/notes`, componentType: "RouterLink", lightBgColor: "bg-amber-300", darkBgColor: "dark:bg-amber-400", lightBordColor: "border-amber-300", darkBordColor: "dark:border-amber-400", content: "Una prova di una nota carina" },
+              "tomato" : { id: 2, title: "Pomodoro", route: `/${store.user.username}/tomato`, componentType: "RouterLink", lightBgColor: "bg-red-400", darkBgColor: "dark:bg-red-500", lightBordColor: "border-red-400", darkBordColor: "dark:border-red-500", content: "Studia tanto con i pomodori!" },
+            }
+            
+            store.topItem = [items[data.content.layout[0]]]
+            store.bottomItems = [items[data.content.layout[1]], items[data.content.layout[2]]]
+          } else {
+            console.log("Error fetching account data")
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }    
+    
+    return { store }
   },
 }
 </script>

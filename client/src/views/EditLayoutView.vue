@@ -99,8 +99,31 @@ export default {
       this.modified = true
     },
     save() {
-      this.store.topItem = this.topItem
-      this.store.bottomItems = this.bottomItems
+      const items = {
+        0 : "calendar",
+        1 : "notes",
+        2 : "tomato",
+      }
+
+      fetch(`http://localhost:3000/modify_layout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          username: this.store.user.username,
+          layout: [items[this.topItem[0].id], items[this.bottomItems[0].id], items[this.bottomItems[1].id]],
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            console.log("Layout salvato con successo")
+          } else {
+            console.error("Errore durante il salvataggio del layout")
+          }
+        })
 
       this.back.classList.add("animate-arrow")
       this.pageTitle.classList.add("animate-page-title")

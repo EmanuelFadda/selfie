@@ -4,6 +4,7 @@ export const useMainStore = defineStore("main", {
   state: () => ({
     topItem: [],
     bottomItems: [],
+    user: {},
   }),
   actions: {
     setTopItem(item) {

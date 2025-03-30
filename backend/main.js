@@ -4,6 +4,7 @@ const express = require('express')
 const functions=require('./api_functions')
 const db_url=require("./defaults").DB_URL
 const body_parser=require('body-parser')
+const cors = require('cors')
 const app = express()
 const port = 3000
 
@@ -11,6 +12,11 @@ const client=new MongoClient(db_url)
 
 app.use(body_parser.json()) 
 app.use(body_parser.urlencoded({ extended: true }))
+app.use(cors({ // permette le richieste cross-origin
+  origin: "http://localhost:8080", // porta del frontend
+  methods: "GET,POST,PUT,DELETE",
+  allowedHeaders: "Content-Type, Authorization, token"
+}))
 
 
 // all api actions 
