@@ -4,26 +4,26 @@
 
     <!-- Anteprima oggetti delle note e pomodoro (default piccole) -->
     <div class="ml-5 mr-5 grid h-[calc(100vh-108px)] grid-cols-2 grid-rows-2 gap-4 lg:ml-20 lg:mr-20 lg:h-[calc(100vh-132px)] lg:grid-cols-3 lg:gap-8 xl:ml-28 xl:mr-28 2xl:ml-36 2xl:mr-36">
-      <HomeGridTop v-for="(item, index) in store.topItem" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content" class="row-span-2 flex flex-auto flex-col max-sm:col-span-2 lg:col-span-2"></HomeGridTop>
+      <HomeTopItem v-for="(item, index) in store.items.slice(0, 1)" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content" class="row-span-2 flex flex-auto flex-col max-sm:col-span-2 lg:col-span-2"></HomeTopItem>
 
-      <HomeGridBottom v-for="(item, index) in store.bottomItems" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content"></HomeGridBottom>
+      <HomeBottomItem v-for="(item, index) in store.items.slice(1)" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content"></HomeBottomItem>
     </div>
   </div>
 </template>
 
 <script>
-import HomeGridTop from "../components/HomeGridTop.vue"
-import Navbar from "../components/Navbar.vue"
-import HomeGridBottom from "../components/HomeGridBottom.vue"
-import { useMainStore } from "../store/mainStore"
+import Navbar from "@/components/Navbar.vue"
+import HomeTopItem from "@/components/HomeTopItem.vue"
+import HomeBottomItem from "@/components/HomeBottomItem.vue"
+import { useMainStore } from "@/store"
 import router from "@/router"
 
 export default {
   name: "HomeView",
   components: {
     Navbar,
-    HomeGridTop,
-    HomeGridBottom,
+    HomeTopItem,
+    HomeBottomItem,
   },
   data() {
     return {
@@ -36,11 +36,9 @@ export default {
   },
   setup() {
     const store = useMainStore()
-    const token = localStorage.getItem("token")  
-    let topItem = []
-    let bottomItems = []
+    const token = localStorage.getItem("token")
 
-    if (token === undefined || token === null) {
+    if (!token) {
       router.push("/")
     } else {
       fetch("http://localhost:3000/get_account", {
@@ -60,17 +58,13 @@ export default {
               "tomato" : { id: 2, title: "Pomodoro", route: `/${store.user.username}/tomato`, componentType: "RouterLink", lightBgColor: "bg-red-400", darkBgColor: "dark:bg-red-500", lightBordColor: "border-red-400", darkBordColor: "dark:border-red-500", content: "Studia tanto con i pomodori!" },
             }
             
-            store.topItem = [items[data.content.layout[0]]]
-            store.bottomItems = [items[data.content.layout[1]], items[data.content.layout[2]]]
+            store.items = data.content.layout.map(item => items[item])
           } else {
             console.log("Error fetching account data")
           }
         })
-        .catch(err => {
-          console.log(err)
-        })
-    }    
-    
+    }
+
     return { store }
   },
 }

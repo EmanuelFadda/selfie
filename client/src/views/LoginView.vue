@@ -53,6 +53,7 @@ export default {
       const data = await response.json()
       if (data.success) {
         localStorage.setItem("token", data.content)
+        
         router.push(`/${this.username}`)
       } else {
         console.error("Login failed")

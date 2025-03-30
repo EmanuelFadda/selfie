@@ -16,7 +16,7 @@
 
 <script>
 import { ref, computed } from "vue"
-import router from "../router/index.js"
+import router from "@/router"
 
 export default {
   name: "CreditsView",

@@ -14,14 +14,14 @@
     <div class="ml-5 mr-5 grid h-[calc(100vh-108px)] grid-cols-2 grid-rows-2 gap-x-4 lg:ml-20 lg:mr-20 lg:h-[calc(100vh-132px)] lg:grid-cols-3 lg:gap-8 xl:ml-28 xl:mr-28 2xl:ml-36 2xl:mr-36">
       <draggable v-model="topItem" group="layout" item-key="id" @end="handleDrag" class="max-sm:mb-4 row-span-2 max-sm:col-span-2 lg:col-span-2">
         <template #item="{ element }">
-          <HomeGridTop :key="element.id" :title="element.title" componentType="div" :lightBgColor="element.lightBgColor" :darkBgColor="element.darkBgColor" :lightBordColor="element.lightBordColor" :darkBordColor="element.darkBordColor" content="Trascina questo blocco nella posizione che prefeisci!" class="-mb-0 -ml-0 -mr-0 flex flex-auto flex-col"></HomeGridTop>
+          <HomeTopItem :key="element.id" :title="element.title" componentType="div" :lightBgColor="element.lightBgColor" :darkBgColor="element.darkBgColor" :lightBordColor="element.lightBordColor" :darkBordColor="element.darkBordColor" content="Trascina questo blocco nella posizione che prefeisci!" class="-mb-0 -ml-0 -mr-0 flex flex-auto flex-col"></HomeTopItem>
         </template>
       </draggable>
 
       <!-- Drag & Drop per la parte inferiore -->
       <draggable v-model="bottomItems" group="layout" item-key="id" @end="handleDrag" class="row-span-2 grid grid-rows-subgrid gap-4 lg:gap-8 max-sm:gap-y-0 max-sm:col-span-2 max-sm:grid max-sm:grid-cols-subgrid">
         <template #item="{ element }">
-          <HomeGridBottom :key="element.id" :title="element.title" componentType="div" :lightBgColor="element.lightBgColor" :darkBgColor="element.darkBgColor" :lightBordColor="element.lightBordColor" :darkBordColor="element.darkBordColor" content="Trascina questo blocco nella posizione che prefeisci!"></HomeGridBottom>
+          <HomeBottomItem :key="element.id" :title="element.title" componentType="div" :lightBgColor="element.lightBgColor" :darkBgColor="element.darkBgColor" :lightBordColor="element.lightBordColor" :darkBordColor="element.darkBordColor" content="Trascina questo blocco nella posizione che prefeisci!"></HomeBottomItem>
         </template>
       </draggable>
     </div>
@@ -29,44 +29,34 @@
 </template>
 
 <script>
-import router from "../router/index.js"
-import HomeGridBottom from "../components/HomeGridBottom.vue"
-import HomeGridTop from "../components/HomeGridTop.vue"
-import { useMainStore } from "../store/mainStore.js"
 import draggable from "vuedraggable"
+import HomeTopItem from "@/components/HomeTopItem.vue"
+import HomeBottomItem from "@/components/HomeBottomItem.vue"
+import router from "@/router"
+import { useMainStore } from "@/store"
 import { ref } from "vue"
 
 export default {
   name: "EditLayoutView",
   components: {
     draggable,
-    HomeGridTop,
-    HomeGridBottom,
+    HomeTopItem,
+    HomeBottomItem,
   },
   setup() {
     const store = useMainStore()
     const back = ref(null)
     const pageTitle = ref(null)
     const save = ref(null)
+    const modified = ref(false)
 
-    const topItem = store.topItem
-    const bottomItems = store.bottomItems
+    const topItem = store.items.slice(0, 1)
+    const bottomItems = store.items.slice(1)
 
-    return { store, topItem, bottomItems, back, pageTitle, save }
-  },
-  data() {
-    return {
-      modified: false,
-      originalLayout: null,
-    }
+    return { store, topItem, bottomItems, back, pageTitle, save, modified }
   },
   methods: {
     goBack() {
-      if (this.originalLayout) {
-        this.store.topItem = [...this.originalLayout.topItem]
-        this.store.bottomItems = [...this.originalLayout.bottomItems]
-      }
-
       this.back.classList.add("animate-arrow")
       this.pageTitle.classList.add("animate-page-title")
 
@@ -78,22 +68,13 @@ export default {
       this.modified = false
 
       if (this.topItem.length === 2) {
-        let temp = this.topItem.find((n) => this.originalLayout.topItem.includes(n))
-        this.topItem = this.topItem.filter((n) => n !== temp)
-        let index = this.originalLayout.bottomItems.indexOf(this.topItem[0])
-        this.bottomItems.splice(index, 0, temp)
+          const temp = this.topItem.find(n => this.store.items.slice(0, 1).includes(n));
+          this.topItem = this.topItem.filter(n => n !== temp);
+          this.bottomItems.splice(this.store.items.slice(1).indexOf(this.topItem[0]), 0, temp);
       } else if (this.topItem.length === 0) {
-        let index = this.bottomItems.indexOf(this.originalLayout.topItem[0])
-        if (index > 1) index = 1
-        let temp = this.bottomItems[index + 1]
-        this.topItem.push(temp)
-        this.bottomItems.splice(index + 1, 1)
-      }
-
-      // Aggiorna lo stato dopo ogni operazione
-      this.originalLayout = {
-        topItem: [...this.topItem],
-        bottomItems: [...this.bottomItems],
+          let index = Math.min(this.bottomItems.indexOf(this.store.items[0]), 1);
+          this.topItem.push(this.bottomItems[index + 1]);
+          this.bottomItems.splice(index + 1, 1);
       }
 
       this.modified = true
@@ -105,25 +86,19 @@ export default {
         2 : "tomato",
       }
 
+      const layout = [items[this.topItem[0].id], items[this.bottomItems[0].id], items[this.bottomItems[1].id]]
+
       fetch(`http://localhost:3000/modify_layout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          token: localStorage.getItem("token"),
+          "token": localStorage.getItem("token"),
         },
         body: JSON.stringify({
           username: this.store.user.username,
-          layout: [items[this.topItem[0].id], items[this.bottomItems[0].id], items[this.bottomItems[1].id]],
+          layout: layout,
         }),
       })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            console.log("Layout salvato con successo")
-          } else {
-            console.error("Errore durante il salvataggio del layout")
-          }
-        })
 
       this.back.classList.add("animate-arrow")
       this.pageTitle.classList.add("animate-page-title")
@@ -134,12 +109,6 @@ export default {
         router.go(-1)
       }, 650)
     },
-  },
-  mounted() {
-    this.originalLayout = {
-      topItem: this.store.topItem,
-      bottomItems: [...this.store.bottomItems],
-    }
   },
 }
 </script>
