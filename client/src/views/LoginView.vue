@@ -10,11 +10,11 @@
         <form method="POST">
           <div>
             <label for="username" class="mb-2 block text-base font-medium">Username</label>
-            <input v-model="username" type="username" name="username" id="username" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci l'username" required="" />
+            <input v-model="username" autocomplete="username" type="username" name="username" id="username" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci l'username" required="" />
           </div>
           <div>
             <label for="password" class="mb-2 block text-base font-medium">Password</label>
-            <input v-model="password" type="password" name="password" id="password" placeholder="Inserisci la password" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" required="" />
+            <input v-model="password" autocomplete="current-password / new-password" type="password" name="password" id="password" placeholder="Inserisci la password" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" required="" />
           </div>
           <button @click="login" type="button" class="mt-16 w-full rounded-xl bg-white py-3 text-center text-lg font-semibold focus:outline md:mt-12 dark:bg-neutral-800">Accedi</button>
           <p class="mb-4 mt-2 ml-1 text-base font-light">
