@@ -40,7 +40,7 @@ app.post('/create_account', async(req,res)=> functions.create_account(client,req
 app.delete("/delete_account", async(req,res)=>functions.delete_account(client,req,res))
 
 // old_username,new_username,new_password,new_name,new_surname,new_email,new_image
-app.post("/modify_account",async(req,res)=>functions.modify_account(client,req,res))
+app.post("/edit_account",async(req,res)=>functions.edit_account(client,req,res))
 
 // username,title,content,tag
 app.post("/create_note", async(req,res)=>functions.create_note(client,req,res))
@@ -49,13 +49,13 @@ app.post("/create_note", async(req,res)=>functions.create_note(client,req,res))
 app.delete("/delete_note", async(req,res)=>functions.delete_note(client,req,res))
 
 // username,id_note,new_title,new_content,new_tag
-app.post("/modify_note",async(req,res)=>functions.modify_note(client,req,res))
+app.post("/edit_note",async(req,res)=>functions.edit_note(client,req,res))
 
 // username,name_tag
 app.post("/create_tag", async(req,res)=>functions.create_tag(client,req,res))
 
 // username,old_name,new_name
-app.post("/modify_tag", async(req,res)=>functions.modify_tag(client,req,res))
+app.post("/edit_tag", async(req,res)=>functions.edit_tag(client,req,res))
 
 // username,name_tag
 app.delete("/delete_tag", async(req,res)=>functions.delete_tag(client,req,res))
@@ -67,7 +67,7 @@ app.post("/create_activity", async(req,res)=>functions.create_activity(client,re
 // username,id_activity
 app.delete("/delete_activity", async(req,res)=>functions.delete_activity(client,req,res))
 // username,id_activity,new_name,new_expiration
-app.post("/modify_activity", async(req,res)=>functions.modify_activity(client,req,res))
+app.post("/edit_activity", async(req,res)=>functions.edit_activity(client,req,res))
 
 // tomato
 // username,name_tomato,rep_tomato,time_tomato,short_break,long_break
@@ -75,7 +75,7 @@ app.post("/create_tomato", async(req,res)=>functions.create_tomato(client,req,re
 // username,id_tomato
 app.delete("/delete_tomato", async(req,res)=>functions.delete_tomato(client,req,res))
 // username,id_tomato,new_name,new_rep_tomato,new_time_tomato,new_short_break,new_long_break
-app.post("/modify_tomato", async(req,res)=>functions.modify_tomato(client,req,res))
+app.post("/edit_tomato", async(req,res)=>functions.edit_tomato(client,req,res))
 
 // event
 // username,title,type_rep,start,finish
@@ -83,8 +83,8 @@ app.post("/create_event", async(req,res)=>functions.create_event(client,req,res)
 // username,id_event
 app.delete("/delete_event", async(req,res)=>functions.delete_event(client,req,res))
 // username,id_event,new_title,new_type_rep,new_start,new_finish
-app.post("/modify_event", async(req,res)=>functions.modify_event(client,req,res))
+app.post("/edit_event", async(req,res)=>functions.edit_event(client,req,res))
 
 // layout
 // username,layout
-app.post("/modify_layout",async(req,res)=>functions.modify_layout(client,req,res))
+app.post("/edit_layout",async(req,res)=>functions.edit_layout(client,req,res))

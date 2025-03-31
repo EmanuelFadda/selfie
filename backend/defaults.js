@@ -11,7 +11,7 @@ const TAGS=["Hobby","Gym","Study"]
 // about default note
 const NOTE_TITLE="Benvenuto"
 const NOTE_CONTENT="Heylaaaa!!! Qui puoi organizzare la tua vita universitaria facilmente! \nScrivi una nota, inserisci al calendario eventi o attività, oppure usa il timer pomodoro. \n Have fun and keep working :)\n\n... dagli sviluppatori di Selfie"
-const NOTE_TAG="Study"
+const NOTE_TAG=                     "Study"
 
 // about default tomato
 const TOMATO_NAME="Standard"
