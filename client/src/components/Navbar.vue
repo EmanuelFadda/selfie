@@ -1,7 +1,7 @@
 <!-- Navbar component -->
 <template>
   <nav class="max-lg:mb-1 flex items-center bg-slate-100 p-6 dark:bg-neutral-900">
-    <svg v-if="backButton" @click="goBack" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mr-5 -ml-1 size-6 lg:size-7" ref="back">
+    <svg v-if="backButton" @click="goBack" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mr-4 -ml-1 size-6 lg:size-7" ref="back">
       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
     </svg>
     <h1 class="text-3xl lg:text-4xl" :class="titleColor,backButton ? 'font-semibold' : 'font-bold'"  ref="pageTitle">{{ viewTitle }}</h1>
@@ -15,7 +15,7 @@
   <div v-if="settings" @click="settings = false" class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300"></div>
 
   <!-- Scrollable settings menu -->
-  <div :class="settings ? 'translate-x-0' : 'translate-x-full'" class="3xl:w-[16%] fixed right-0 top-0 h-full w-[82%] bg-slate-100 shadow-lg transition-transform duration-[400ms] md:w-[36%] lg:w-[30%] xl:w-[28%] 2xl:w-[20%] dark:bg-neutral-800">
+  <div :class="settings ? 'translate-x-0' : 'translate-x-full'" class="3xl:w-[16%] fixed right-0 top-0 h-full w-[85%] bg-slate-100 shadow-lg transition-transform duration-[400ms] md:w-[40%] lg:w-[30%] xl:w-[26%] 2xl:w-[20%] dark:bg-neutral-800">
     <!-- Menu content -->
     <div class="mt-6 flex items-center space-x-2 pl-2">
       <img src="" alt="Immagine profilo" class="h-[52px] w-[52px] rounded-full border-2 border-slate-200 dark:border-neutral-600" />
@@ -56,13 +56,13 @@ export default {
     viewTitle: String,
     backButton: Boolean,
     titleColor: { type: String, default: "" },
-    settingsArray: Array,
+    settingsArray: { type: Array, default: [] },
   },
   methods: {
     goBack() {
       this.back.classList.add("animate-arrow")
       this.pageTitle.classList.add("animate-page-title")
-
+      
       setTimeout(() => {
         router.go(-1)
       }, 650)
