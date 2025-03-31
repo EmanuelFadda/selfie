@@ -18,9 +18,9 @@
   <div :class="settings ? 'translate-x-0' : 'translate-x-full'" class="3xl:w-[16%] fixed right-0 top-0 h-full w-[82%] bg-slate-100 shadow-lg transition-transform duration-[400ms] md:w-[36%] lg:w-[30%] xl:w-[28%] 2xl:w-[20%] dark:bg-neutral-800">
     <!-- Menu content -->
     <div class="mt-6 flex items-center space-x-2 pl-2">
-      <img src="" alt="Immagine profilo" class="h-14 w-14 rounded-full border-2 border-slate-200 dark:border-neutral-600" />
+      <img src="" alt="Immagine profilo" class="h-[52px] w-[52px] rounded-full border-2 border-slate-200 dark:border-neutral-600" />
       <div class="flex-none">
-        <h2 class="text-xl font-semibold text-neutral-900 dark:text-slate-50">{{ name + " " + surname }}</h2>
+        <h2 class="text-lg font-semibold text-neutral-900 dark:text-slate-50">{{ name + " " + surname }}</h2>
         <h5 class="text-sm text-neutral-600 dark:text-neutral-400">Visualizza profilo</h5>
       </div>
     </div>
