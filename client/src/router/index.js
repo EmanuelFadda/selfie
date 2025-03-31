@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router"
-import HomeView from "../views/HomeView.vue"
-import LoginView from "../views/LoginView.vue"
-import CalendarView from "../views/CalendarView.vue"
-import CreditsView from "../views/CreditsView.vue"
-import EditLayoutView from "../views/EditLayoutView.vue"
-import CalendarNotificationsView from "../views/CalendarNotificationsView.vue"
-import RegisterView from "../views/RegisterView.vue"
-import NotesView from "../views/NotesView.vue"
-import TomatoView from "../views/TomatoView.vue"
+import HomeView from "@/views/HomeView.vue"
+import LoginView from "@/views/LoginView.vue"
+import CalendarView from "@/views/CalendarView.vue"
+import CreditsView from "@/views/CreditsView.vue"
+import EditLayoutView from "@/views/EditLayoutView.vue"
+import CalendarNotificationsView from "@/views/CalendarNotificationsView.vue"
+import RegisterView from "@/views/RegisterView.vue"
+import NotesView from "@/views/NotesView.vue"
+import TomatoView from "@/views/TomatoView.vue"
 
 const routes = [
   {

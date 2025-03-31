@@ -30,14 +30,14 @@ import router from "@/router"
 export default {
   name: "LoginView",
   components: {},
-  data () {
+  data() {
     return {
       username: "",
       password: "",
     }
   },
   methods: {
-    async login () {
+    async login() {
       // Funzione di login
       const response = await fetch("http://localhost:3000/login", {
         method: "POST",
@@ -53,6 +53,7 @@ export default {
       const data = await response.json()
       if (data.success) {
         localStorage.setItem("token", data.content)
+
         router.push(`/${this.username}`)
       } else {
         console.error("Login failed")
