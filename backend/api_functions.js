@@ -47,6 +47,29 @@ async function delete_object(client, req, res, delete_obj, pull_obj, name_obj) {
   }
 }
 
+async function edit_object(client, req, res, edit_obj, set_obj, name_obj, identifier) {
+  try {
+    // ottieni l'id dell'utente dal token
+    let id_user = getters.verify_session(req.headers)
+    collection = await getters.get_db_collection(client)
+
+    // si creano gli oggetti per la creazione della query
+    let object_id_user = ObjectId.createFromHexString(id_user)
+
+    search = {}
+    search["_id"] = object_id_user
+    search[identifier.key] = identifier.value
+
+    collection.updateOne(search, { $set: set_obj })
+
+    msg = getters.get_query_response(true, null, `${name_obj} ${edit_obj} was edited`)
+    res.send(msg)
+  } catch (error) {
+    msg = getters.get_query_response(false, null, `error`)
+    res.send(msg)
+  }
+}
+
 async function login(client, req, res) {
   // restituisce il token con cui fare le query
   try {
@@ -160,28 +183,17 @@ async function delete_note(client, req, res) {
   pull_obj["notes"] = { id: req.body.id_note }
   delete_object(client, req, res, req.body.id_note, pull_obj, "Note")
 }
+
 async function edit_note(client, req, res) {
-  try {
-    collection = await getters.get_db_collection(client)
-
-    collection.updateOne(
-      { username: req.body.username, "notes.id": req.body.id_note },
-      {
-        $set: {
-          "notes.$.title": req.body.new_title,
-          "notes.$.content": req.body.new_content,
-          "notes.$.tag": req.body.new_tag,
-          "notes.$.date_last_modify": getters.get_time_now(),
-        },
-      }
-    )
-
-    msg = getters.get_query_response(true, null, `Note ${req.body.id_note} was modified`)
-    res.send(msg)
-  } catch (error) {
-    msg = getters.get_query_response(false, null, `error`)
-    res.send(msg)
+  let set_obj = {
+    "notes.$.title": req.body.new_title,
+    "notes.$.content": req.body.new_content,
+    "notes.$.tag": req.body.new_tag,
+    "notes.$.date_last_modify": getters.get_time_now(),
   }
+
+  let identifier = { key: "notes.id", value: req.body.id_note }
+  edit_object(client, req, res, req.body.id_note, set_obj, "Note", identifier)
 }
 async function create_activity(client, req, res) {
   new_activity = getters.get_new_activity(req.body.name, req.body.expiration)
@@ -193,24 +205,9 @@ async function delete_activity(client, req, res) {
   delete_object(client, req, res, req.body.id_note, pull_obj, "Activity")
 }
 async function edit_activity(client, req, res) {
-  try {
-    collection = await getters.get_db_collection(client)
-
-    collection.updateOne(
-      { username: req.body.username, "activities.id": req.body.id_activity },
-      {
-        $set: {
-          "activities.$.name": req.body.new_name,
-          "activities.$.expiration": req.body.new_expiration,
-        },
-      }
-    )
-    msg = getters.get_query_response(true, null, `Activity ${req.body.id_activity} was modified`)
-    res.send(msg)
-  } catch (error) {
-    msg = getters.get_query_response(false, null, `error`)
-    res.send(msg)
-  }
+  let set_obj = { "activities.$.name": req.body.new_name, "activities.$.expiration": req.body.new_expiration }
+  let identifier = { key: "activities.id", value: req.body.id_activity }
+  edit_object(client, req, res, req.body.id_activity, set_obj, "Activity", identifier)
 }
 async function create_tomato(client, req, res) {
   new_tomato = getters.get_new_tomato(req.body.name_tomato, req.body.rep_tomato, req.body.time_tomato, req.body.short_break, req.body.long_break)
@@ -222,26 +219,9 @@ async function delete_tomato(client, req, res) {
   delete_object(client, req, res, req.body.id_tomato, pull_obj, "Tomato")
 }
 async function edit_tomato(client, req, res) {
-  try {
-    collection = await getters.get_db_collection(client)
-    collection.updateOne(
-      { username: req.body.username, "tomato_sessions.id": req.body.id_tomato },
-      {
-        $set: {
-          "tomato_sessions.$.name": req.body.new_name,
-          "tomato_sessions.$.rep_tomato": req.body.new_rep_tomato,
-          "tomato_sessions.$.time.tomato": req.body.new_time_tomato,
-          "tomato_sessions.$.time.short_break": req.body.new_short_break,
-          "tomato_sessions.$.time.long_break": req.body.new_long_break,
-        },
-      }
-    )
-    msg = getters.get_query_response(true, null, `Tomato ${req.body.id_tomato} was modified`)
-    res.send(msg)
-  } catch (error) {
-    msg = getters.get_query_response(false, null, `error`)
-    res.send(msg)
-  }
+  let set_obj = { "tomato_sessions.$.name": req.body.new_name, "tomato_sessions.$.rep_tomato": req.body.new_rep_tomato, "tomato_sessions.$.time.tomato": req.body.new_time_tomato, "tomato_sessions.$.time.short_break": req.body.new_short_break, "tomato_sessions.$.time.long_break": req.body.new_long_break }
+  let identifier = { key: "tomato_sessions.id", value: req.body.id_tomato }
+  edit_object(client, req, res, req.body.id_tomato, set_obj, "Tomato", identifier)
 }
 async function create_event(client, req, res) {
   new_event = getters.get_new_event(req.body.title, req.body.type_rep, req.body.start, req.body.finish)
@@ -255,42 +235,18 @@ async function delete_event(client, req, res) {
 }
 
 async function edit_event(client, req, res) {
-  try {
-    collection = await getters.get_db_collection(client)
-    collection.updateOne(
-      { username: req.body.username, "events.id": req.body.id_event },
-      {
-        $set: {
-          "events.$.title": req.body.new_title,
-          "events.$.repeat.type": req.body.new_type_rep,
-          "events.$.repeat.start_date": req.body.new_start,
-          "events.$.repeat.finish_date": req.body.new_finish,
-        },
-      }
-    )
-    msg = getters.get_query_response(true, null, `Event ${req.body.id_event} was modified`)
-    res.send(msg)
-  } catch (error) {
-    msg = getters.get_query_response(false, null, `error`)
-    res.send(msg)
-  }
+  let set_obj = { "events.$.title": req.body.new_title, "events.$.repeat.type": req.body.new_type_rep, "events.$.repeat.start_date": req.body.new_start, "events.$.repeat.finish_date": req.body.new_finish }
+  let identifier = { key: "events.id", value: req.body.id_event }
+  edit_object(client, req, res, req.body.id_event, set_obj, "Event", identifier)
 }
 
 async function create_tag(client, req, res) {
   create_object(client, req, res, req.body.name_tag, { tags: req.body.name_tag }, "Tag")
 }
 async function edit_tag(client, req, res) {
-  try {
-    collection = await getters.get_db_collection(client)
-
-    collection.updateOne({ username: req.body.username, tags: req.body.old_name }, { $set: { "tags.$": req.body.new_name } })
-
-    msg = getters.get_query_response(true, null, `Tag ${req.body.old_name} was changed to ${req.body.new_name}`)
-    res.send(msg)
-  } catch (error) {
-    msg = getters.get_query_response(false, null, `error`)
-    res.send(msg)
-  }
+  let set_obj = { "tags.$": req.body.new_name }
+  let identifier = { key: "tags", value: req.body.old_name }
+  edit_object(client, req, res, req.body.old_name, set_obj, "Tag", identifier)
 }
 async function delete_tag(client, req, res) {
   let pull_obj = {}
