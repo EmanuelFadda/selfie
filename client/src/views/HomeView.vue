@@ -3,7 +3,7 @@
     <Navbar viewTitle="Selfie" name="Nome" surname="Cognome" :settingsArray="settingsArray"></Navbar>
 
     <!-- Anteprima oggetti delle note e pomodoro (default piccole) -->
-    <div class="ml-5 mr-5 grid h-[calc(100vh-108px)] grid-cols-2 grid-rows-2 gap-4 lg:ml-20 lg:mr-20 lg:h-[calc(100vh-132px)] lg:grid-cols-3 lg:gap-6 xl:gap-7 2xl:gap-8 xl:ml-28 xl:mr-28 2xl:ml-36 2xl:mr-36">
+    <div class="ml-5 mr-5 grid h-[calc(100vh-108px)] grid-cols-2 grid-rows-2 gap-4 lg:ml-28 lg:mr-28 lg:h-[calc(100vh-132px)] lg:grid-cols-3 lg:gap-6 xl:gap-7 2xl:gap-8 2xl:ml-36 2xl:mr-36">
       <HomeTopItem v-for="(item, index) in store.items.slice(0, 1)" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content" class="row-span-2 flex flex-auto flex-col max-sm:col-span-2 lg:col-span-2"></HomeTopItem>
 
       <HomeBottomItem v-for="(item, index) in store.items.slice(1)" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content"></HomeBottomItem>

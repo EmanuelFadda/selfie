@@ -8,6 +8,7 @@ import CalendarNotificationsView from "@/views/CalendarNotificationsView.vue"
 import RegisterView from "@/views/RegisterView.vue"
 import NotesView from "@/views/NotesView.vue"
 import TomatoView from "@/views/TomatoView.vue"
+import NoteReaderView from "@/views/NoteReaderView.vue"
 
 const routes = [
   {
@@ -49,6 +50,11 @@ const routes = [
     path: "/:username/notes",
     name: "notes",
     component: NotesView,
+  },
+  {
+    path: "/:username/notes/:id",
+    name: "noteReder",
+    component: NoteReaderView,
   },
   {
     path: "/:username/tomato",
