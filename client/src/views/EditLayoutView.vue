@@ -88,7 +88,7 @@ export default {
 
       const layout = [items[this.topItem[0].id], items[this.bottomItems[0].id], items[this.bottomItems[1].id]]
 
-      fetch(`http://localhost:3000/modify_layout`, {
+      fetch(`http://localhost:3000/edit_layout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
