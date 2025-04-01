@@ -1,20 +1,23 @@
 <template>
-  <div class="flex min-h-screen w-screen flex-col items-center justify-center max-sm:px-6">
-    <div class="form-shadow dark:form-shadow w-full max-w-md rounded-xl">
-      <h1 class="mb-6 mt-8 text-center text-3xl font-bold md:text-4xl">Selfie</h1>
-      <div class="p-6 sm:p-8">
-        <h1 class="mb-4 text-xl font-bold tracking-tight md:text-2xl">Accedi al tuo account</h1>
-        <form>
+  <div class="flex min-h-screen w-screen items-center justify-center">
+    <div class="max-sm:form-shadow max-sm:min-h-screen dark:form-shadow w-full sm:max-w-md rounded-xl">
+      <div class="flex items-center justify-center mb-6 mt-24 md:mt-12">
+        <img src="../assets/logo.png" class="w-16 h-16 rounded-full mr-[14px] -ml-10">
+        <h1 class="text-4xl font-bold md:text-4xl">Selfie</h1>
+      </div>
+      <div class="p-8">
+        <h1 class="mb-4 text-2xl font-bold tracking-tight md:text-2xl">Ben tornato!</h1>
+        <form method="POST">
           <div>
-            <label for="username" class="mb-2 block text-sm font-medium">Username</label>
-            <input v-model="username" type="username" name="username" id="username" class="mb-4 block w-full rounded-lg p-2.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="user123" required="" />
+            <label for="username" class="mb-2 block text-base font-medium">Username</label>
+            <input v-model="username" autocomplete="username" type="username" name="username" id="username" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci l'username" required="" />
           </div>
           <div>
-            <label for="password" class="mb-2 block text-sm font-medium">Password</label>
-            <input v-model="password" type="password" name="password" id="password" placeholder="••••••••" class="mb-4 block w-full rounded-lg p-2.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" required="" />
+            <label for="password" class="mb-2 block text-base font-medium">Password</label>
+            <input v-model="password" autocomplete="current-password / new-password" type="password" name="password" id="password" placeholder="Inserisci la password" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" required="" />
           </div>
-          <button @click="login" type="button" class="mt-10 w-full rounded-lg bg-white px-5 py-2.5 text-center text-sm font-medium focus:outline md:mt-12 dark:bg-neutral-800">Accedi</button>
-          <p class="mb-4 mt-2 text-sm font-light">
+          <button @click="login" type="button" class="mt-16 w-full rounded-xl bg-white py-3 text-center text-lg font-semibold focus:outline md:mt-12 dark:bg-neutral-800">Accedi</button>
+          <p class="mb-4 mt-2 ml-1 text-base font-light">
             Non hai ancora un account?
             <a href="#" class="font-medium hover:underline">Registrati</a>
           </p>
