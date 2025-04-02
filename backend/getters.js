@@ -62,6 +62,7 @@ function get_new_activity(name, expiration) {
     name: name,
     expiration: expiration,
     created: today,
+    done: false,
   }
   return new_activity
 }
@@ -109,7 +110,7 @@ function get_token(id) {
     {
       id: id,
     },
-    defaults.SECRET_KEY,
+    defaults.SECRET_KEY
   )
   console.log(token)
   return token
@@ -138,5 +139,5 @@ module.exports = {
   get_query_response,
   get_token,
   verify_session,
-  get_new_tag
+  get_new_tag,
 }

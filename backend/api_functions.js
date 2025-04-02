@@ -202,10 +202,10 @@ async function create_activity(client, req, res) {
 async function delete_activity(client, req, res) {
   let pull_obj = {}
   pull_obj["activities"] = { id: req.body.id_activity }
-  delete_object(client, req, res, req.body.id_note, pull_obj, "Activity")
+  delete_object(client, req, res, req.body.id_activity, pull_obj, "Activity")
 }
 async function edit_activity(client, req, res) {
-  let set_obj = { "activities.$.name": req.body.new_name, "activities.$.expiration": req.body.new_expiration }
+  let set_obj = { "activities.$.name": req.body.new_name, "activities.$.expiration": req.body.new_expiration, "activities.$.done": req.body.new_done }
   let identifier = { key: "activities.id", value: req.body.id_activity }
   edit_object(client, req, res, req.body.id_activity, set_obj, "Activity", identifier)
 }
