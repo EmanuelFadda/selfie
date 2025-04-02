@@ -93,7 +93,7 @@ export default {
 
     const isMobile = checkMobile()
 
-    return { deleteButton, editButton, isMobile, tagColor }
+    return { deleteButton, editButton, isMobile, tagColor, store }
   },
   data() {
     return {
@@ -159,6 +159,7 @@ export default {
     },
     editNote() {
       if (!this.exlcudeClick) {
+        this.store.currentNote = this.store.notes.filter(note => note.id == this.id)[0]
         router.push(`/${this.$route.params.username}/notes/${this.id}`)
       }
       this.exlcudeClick = false

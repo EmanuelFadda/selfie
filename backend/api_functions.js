@@ -122,11 +122,11 @@ async function login(client, req, res) {
 }
 
 async function get_account(client, req, res) {
-  let fields = ["name", "surname", "username", "email", "image", "layouts", "tags"]
+  let fields = ["name", "surname", "username", "email", "image", "layout", "tags"]
   get_objects(client, req, res, fields, "Information")
 }
 async function get_notes(client, req, res) {
-  let fields = ["notes"]
+  let fields = ["notes", "tags"]
   get_objects(client, req, res, fields, "Notes")
 }
 async function get_activities(client, req, res) {

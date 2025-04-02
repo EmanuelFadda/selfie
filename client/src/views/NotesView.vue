@@ -3,7 +3,7 @@
     <Navbar viewTitle="Note" :titleColor="classColor" :backButton="true"></Navbar>
   </div>
   <div class="pt-[88px] lg:pt-[92px] overflow-auto ml-5 mr-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[10px] lg:gap-4 lg:ml-28 lg:mr-28 2xl:gap-6 2xl:ml-36 2xl:mr-36">
-    <Note v-for="note in notes" :id="note.id" :title="note.title" :content="note.content" :tag="note.tag"></Note>
+    <Note v-for="note in store.notes" :id="note.id" :title="note.title" :content="note.content" :tag="note.tag"></Note>
     <div class="h-4"></div>
   </div>
   
@@ -13,6 +13,7 @@
 import Navbar from "@/components/Navbar.vue"
 import Note from "@/components/Note.vue"
 import { useMainStore } from "@/store"
+import router from "@/router"
 
 export default {
   name: "NotesView",
@@ -23,10 +24,26 @@ export default {
   setup() {
     const classColor = "text-amber-300 dark:text-amber-400"
     const store = useMainStore()
+    const token = localStorage.getItem("token")
 
-    const notes = store.user.notes 
+    if (!token) {
+      router.push("/")
+    } else {
+      fetch("http://localhost:3000/get_notes", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          token: `${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          store.notes = data.content.notes
+          store.user.tags = data.content.tags
+        })
+    }
 
-    return { classColor, notes }
+    return { classColor, store }
   },
   methods: {},
 }
