@@ -70,6 +70,27 @@ async function edit_object(client, req, res, edit_obj, set_obj, name_obj, identi
   }
 }
 
+async function get_objects(client, req, res, fields, name_obj) {
+  try {
+    // ottieni l'id dell'utente dal token
+    let id_user = getters.verify_session(req.headers)
+    collection = await getters.get_db_collection(client)
+    // si creano gli oggetti per la creazione della query
+    let object_id_user = ObjectId.createFromHexString(id_user)
+    let projection = {}
+    fields.forEach((element) => {
+      projection[element] = 1
+    })
+
+    let objects = await collection.findOne({ _id: object_id_user }, { projection: projection })
+    msg = getters.get_query_response(true, objects, `${name_obj} were found in ${id_user}`)
+    res.send(msg)
+  } catch (error) {
+    msg = getters.get_query_response(false, null, `error`)
+    res.send(msg)
+  }
+}
+
 async function login(client, req, res) {
   // restituisce il token con cui fare le query
   try {
@@ -101,26 +122,26 @@ async function login(client, req, res) {
 }
 
 async function get_account(client, req, res) {
-  try {
-    // connecting with db
-    collection = await getters.get_db_collection(client)
-
-    let id_user = getters.verify_session(req.headers)
-    if (id_user != null) {
-      //creating a query
-      objectid = ObjectId.createFromHexString(id_user)
-      let user = await collection.findOne({ _id: objectid })
-      msg = getters.get_query_response(true, user, `User ${user.username} was found`)
-      res.send(msg)
-    } else {
-      msg = getters.get_query_response(false, null, `Invalid session`)
-      res.send(msg)
-    }
-  } catch (error) {
-    msg = getters.get_query_response(false, null, `error`)
-    res.send(msg)
-  }
+  let fields = ["name", "surname", "username", "email", "image", "layouts", "tags"]
+  get_objects(client, req, res, fields, "Information")
 }
+async function get_notes(client, req, res) {
+  let fields = ["notes"]
+  get_objects(client, req, res, fields, "Notes")
+}
+async function get_activities(client, req, res) {
+  let fields = ["activities"]
+  get_objects(client, req, res, fields, "Activities")
+}
+async function get_events(client, req, res) {
+  let fields = ["events"]
+  get_objects(client, req, res, fields, "Events")
+}
+async function get_tomato_sessions(client, req, res) {
+  let fields = ["tomato_sessions"]
+  get_objects(client, req, res, fields, "Tomato sessions")
+}
+
 async function create_account(client, req, res) {
   try {
     // connecting with db
@@ -293,4 +314,9 @@ module.exports = {
   delete_event,
   edit_layout,
   login,
+  get_notes,
+  get_account,
+  get_activities,
+  get_tomato_sessions,
+  get_events,
 }

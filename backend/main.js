@@ -26,13 +26,12 @@ app.listen(port, () => {
   console.log(`listening on port ${port}`)
 })
 
+//user
 // login
 app.post("/login", async (req, res) => functions.login(client, req, res))
 
 //get_account
 app.get("/get_account", async (req, res) => functions.get_account(client, req, res))
-
-// user
 
 // name,surname,username,email,image,password
 app.post("/create_account", async (req, res) => functions.create_account(client, req, res))
@@ -42,6 +41,8 @@ app.delete("/delete_account", async (req, res) => functions.delete_account(clien
 
 // old_username,new_username,new_password,new_name,new_surname,new_email,new_image
 app.post("/edit_account", async (req, res) => functions.edit_account(client, req, res))
+
+app.get("/get_notes", async (req, res) => functions.get_notes(client, req, res))
 
 // username,title,content,tag
 app.post("/create_note", async (req, res) => functions.create_note(client, req, res))
@@ -68,6 +69,7 @@ app.post("/create_activity", async (req, res) => functions.create_activity(clien
 app.delete("/delete_activity", async (req, res) => functions.delete_activity(client, req, res))
 // username,id_activity,new_name,new_expiration
 app.post("/edit_activity", async (req, res) => functions.edit_activity(client, req, res))
+app.get("/get_activities", async (req, res) => functions.get_activities(client, req, res))
 
 // tomato
 // username,name_tomato,rep_tomato,time_tomato,short_break,long_break
@@ -76,6 +78,7 @@ app.post("/create_tomato", async (req, res) => functions.create_tomato(client, r
 app.delete("/delete_tomato", async (req, res) => functions.delete_tomato(client, req, res))
 // username,id_tomato,new_name,new_rep_tomato,new_time_tomato,new_short_break,new_long_break
 app.post("/edit_tomato", async (req, res) => functions.edit_tomato(client, req, res))
+app.get("/get_tomato_sessions", async (req, res) => functions.get_tomato_sessions(client, req, res))
 
 // event
 // username,title,type_rep,start,finish
@@ -84,7 +87,10 @@ app.post("/create_event", async (req, res) => functions.create_event(client, req
 app.delete("/delete_event", async (req, res) => functions.delete_event(client, req, res))
 // username,id_event,new_title,new_type_rep,new_start,new_finish
 app.post("/edit_event", async (req, res) => functions.edit_event(client, req, res))
+app.get("/get_events", async (req, res) => functions.get_events(client, req, res))
 
 // layout
 // username,layout
 app.post("/edit_layout", async (req, res) => functions.edit_layout(client, req, res))
+
+// CONTROLLARE GET EVENTS!!!!!
