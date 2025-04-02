@@ -1,6 +1,6 @@
 // file with all the functions called in the main.js
 const getters = require("./getters")
-const { ObjectId } = require("mongodb")
+const { ObjectId, Binary } = require("mongodb")
 
 //funzione generale per la creazione di note,attività,pomodori,eventi,tag
 async function create_object(client, req, res, create_obj, push_obj, name_obj) {
@@ -16,7 +16,7 @@ async function create_object(client, req, res, create_obj, push_obj, name_obj) {
     collection.updateOne({ _id: object_id_user }, { $push: push_obj })
 
     // invio del risultato
-    msg = getters.get_query_response(true, null, `${name_obj} ${create_obj.id ? create_obj.id : create_obj} was created`)
+    msg = getters.get_query_response(true, null, `${name_obj} ${create_obj} was created`)
     res.send(msg)
   } catch (error) {
     msg = getters.get_query_response(false, null, `error`)
@@ -159,7 +159,7 @@ async function edit_account(client, req, res) {
           surname: req.body.new_surname,
           username: req.body.new_username,
           email: req.body.new_email,
-          image: req.body.new_image,
+          image: new Binary(req.body.new_image),
           password: req.body.new_password,
         },
       }
@@ -241,16 +241,20 @@ async function edit_event(client, req, res) {
 }
 
 async function create_tag(client, req, res) {
-  create_object(client, req, res, req.body.name_tag, { tags: req.body.name_tag }, "Tag")
+  new_tag = getters.get_new_tag(req.body.name, req.body.color)
+  create_object(client, req, res, new_tag.name, { tags: new_tag }, "Tag")
 }
+
 async function edit_tag(client, req, res) {
-  let set_obj = { "tags.$": req.body.new_name }
-  let identifier = { key: "tags", value: req.body.old_name }
+  let set_obj = { "tags.$.name": req.body.new_name, "tags.$.color": req.body.new_color }
+  let identifier = { key: "tags.name", value: req.body.old_name }
+
   edit_object(client, req, res, req.body.old_name, set_obj, "Tag", identifier)
 }
+
 async function delete_tag(client, req, res) {
   let pull_obj = {}
-  pull_obj["tags"] = req.body.name_tag
+  pull_obj["tags"] = { name: req.body.name_tag }
   delete_object(client, req, res, req.body.name_tag, pull_obj, "Tag")
 }
 async function edit_layout(client, req, res) {
