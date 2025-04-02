@@ -6,6 +6,7 @@ export const useMainStore = defineStore("main", {
     user: {},
     notes: [],
     currentNote: {},
+    tagFilter: [],
   }),
   actions: {},
 })

@@ -35,8 +35,7 @@ export default {
           "Content-Type": "application/json",
           token: `${token}`,
         },
-      })
-        .then((response) => response.json())
+      }).then((response) => response.json())
         .then((data) => {
           store.notes = data.content.notes
           store.user.tags = data.content.tags
