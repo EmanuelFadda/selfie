@@ -1,5 +1,5 @@
 <template>
-  <div @click="openNote" class="relative w-full rounded-2xl bg-white p-4 pb-3 pt-3 dark:bg-neutral-800" :class="tag.length === 0 ? 'min-h-[70px] sm:min-h-[90px] lg:min-h-[110px]' : 'min-h-[114px] sm:min-h-[134px] lg:min-h-[154px]'" @touchstart="startTouch" @touchmove="handleTouch" @touchend="endTouch" style="user-select: none">
+  <div @click="openNote" class="relative w-full rounded-2xl bg-white p-4 pb-3 pt-3 dark:bg-neutral-800" :class="tag.length === 0 ? 'min-h-[70px] sm:min-h-[90px] lg:min-h-[110px]' : 'min-h-[108px] sm:min-h-[128px] lg:min-h-[148px]'" @touchstart="startTouch" @touchmove="handleTouch" @touchend="endTouch" style="user-select: none">
     <div class="flex items-center justify-between">
       <!-- Title -->
       <h2 class="text-xl font-semibold">{{ title }}</h2>
@@ -32,7 +32,7 @@
     <p class="line-clamp-1 pr-6 text-lg/5 text-neutral-400 sm:line-clamp-2 lg:line-clamp-3">{{ content }}</p>
 
     <!-- Tags -->
-    <span v-if="tag.length > 0" class="absolute bottom-4 inline-flex items-center rounded-lg px-2 py-1 text-xs font-medium ring-1 ring-inset" :class="tagColor">{{ tag }}</span>
+    <span v-if="tag.length > 0" class="absolute bottom-[14px] inline-flex items-center rounded-lg px-2 py-1 text-xs font-medium ring-1 ring-inset" :class="tagColor">{{ tag }}</span>
 
     <!-- Mobile Buttons -->
     <div v-if="showButtons" class="absolute z-20 flex flex-col items-center gap-3 rounded-lg transition-transform" :style="{ top: `${position.y}px`, left: `${position.x}px` }">

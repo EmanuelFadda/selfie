@@ -9,6 +9,7 @@ import RegisterView from "@/views/RegisterView.vue"
 import NotesView from "@/views/NotesView.vue"
 import TomatoView from "@/views/TomatoView.vue"
 import NoteReaderView from "@/views/NoteReaderView.vue"
+import EditTagsView from "@/views/EditTagsView.vue"
 
 const routes = [
   {
@@ -40,6 +41,11 @@ const routes = [
     path: "/:username/editlayout",
     name: "editLayout",
     component: EditLayoutView,
+  },
+  {
+    path: "/:username/edittags",
+    name: "editTags",
+    component: EditTagsView,
   },
   {
     path: "/:username/calendar/notifications",

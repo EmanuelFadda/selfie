@@ -32,8 +32,8 @@
     <!-- Options list -->
     <div class="mt-3 pl-1">
       <RouterLink v-for="(setting, index) in settingsArray" :key="index" :to="setting.route" class="flex items-center border-b border-slate-300 py-3 pl-4 text-lg dark:border-neutral-600">
-        <svg v-if="setting.icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 size-6">
-          <path :d="setting.icon" stroke-linecap="round" stroke-linejoin="round" />
+        <svg v-if="setting.icon.length > 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 size-6">
+          <path v-for="path in setting.icon":d="path" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
         {{ setting.label }}
       </RouterLink>
