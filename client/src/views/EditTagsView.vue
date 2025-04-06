@@ -181,7 +181,7 @@ export default {
     return { mappedTags, colorsMap, editTag, deleteModal, addTag, newTagName, newTagColor }
   },
   methods: {
-    resetNewTag(index) {
+    resetNewTag() {
       this.addTag = false
 
       this.newTagName = "Nuovo tag"

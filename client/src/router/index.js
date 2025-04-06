@@ -38,12 +38,12 @@ const routes = [
     component: CreditsView,
   },
   {
-    path: "/:username/editlayout",
+    path: "/:username/edit_layout",
     name: "editLayout",
     component: EditLayoutView,
   },
   {
-    path: "/:username/edittags",
+    path: "/:username/edit_tags",
     name: "editTags",
     component: EditTagsView,
   },
