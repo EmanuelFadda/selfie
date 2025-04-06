@@ -71,7 +71,10 @@ export default {
         store.notes = data.content.notes
         store.user.tags = data.content.tags
         store.currentNote = store.notes.filter((note) => note.id == route.params.id)[0]
-        store.tagFilter = store.user.tags.filter((tag) => tag.name == store.currentNote.tag).map((tag) => ({"name": tag.name, "color": colorsMap[tag.color]}))
+        if (store.currentNote.tag !== "") {
+          store.tagFilter = store.user.tags.filter((tag) => tag.name == store.currentNote.tag)
+        }
+        store.tagFilter = store.user.tags.map((tag) => ({"name": tag.name, "color": colorsMap[tag.color]}))
         selected.value = store.currentNote.tag
       })
     
@@ -79,7 +82,7 @@ export default {
     return { classColor, store, selected, colorsMap }
   },
   methods: {
-    selectBadge (name) {
+    selectBadge(name) {
       if (this.selected === name) { 
         this.selected = ""
         this.store.tagFilter = this.store.user.tags.map((tag) => ({"name": tag.name, "color": this.colorsMap[tag.color]}))  

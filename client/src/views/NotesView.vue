@@ -4,7 +4,7 @@
   </div>
   <div class="pt-[88px] lg:pt-[92px] overflow-auto ml-5 mr-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[10px] lg:gap-4 lg:ml-28 lg:mr-28 2xl:gap-6 2xl:ml-36 2xl:mr-36">
     <Note v-for="note in store.notes" :id="note.id" :title="note.title" :content="note.content" :tag="note.tag"></Note>
-    <div class="h-4"></div>
+    <div class="h-8"></div>
   </div>
   
 </template>
