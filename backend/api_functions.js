@@ -275,8 +275,8 @@ async function edit_tag(client, req, res) {
 
 async function delete_tag(client, req, res) {
   let pull_obj = {}
-  pull_obj["tags"] = { name: req.body.name_tag }
-  delete_object(client, req, res, req.body.name_tag, pull_obj, "Tag")
+  pull_obj["tags"] = { name: req.body.name }
+  delete_object(client, req, res, req.body.name, pull_obj, "Tag")
 }
 async function edit_layout(client, req, res) {
   try {
