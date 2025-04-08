@@ -6,14 +6,14 @@ const { ObjectId, Binary } = require("mongodb")
 async function create_object(client, req, res, create_obj, push_obj, name_obj) {
   try {
     // ottieni l'id dell'utente dal token
-    let id_user = getters.verify_session(req.headers)
+    let id_user = await getters.verify_session(req.headers)
     collection = await getters.get_db_collection(client)
 
     // si creano gli oggetti per la creazione della query                                 push_obj={ field_obj : object }
     let object_id_user = ObjectId.createFromHexString(id_user)
 
     // modifiche al database
-    collection.updateOne({ _id: object_id_user }, { $push: push_obj })
+    await collection.updateOne({ _id: object_id_user }, { $push: push_obj })
 
     // invio del risultato
     msg = getters.get_query_response(true, null, `${name_obj} ${create_obj} was created`)
@@ -31,14 +31,14 @@ async function create_object(client, req, res, create_obj, push_obj, name_obj) {
 async function delete_object(client, req, res, delete_obj, pull_obj, name_obj) {
   try {
     // ottieni l'id dell'utente dal token
-    let id_user = getters.verify_session(req.headers)
+    let id_user = await getters.verify_session(req.headers)
     collection = await getters.get_db_collection(client)
 
     // creazione degli oggetti per la creazione della query
     let object_id_user = ObjectId.createFromHexString(id_user)
 
     // eliminazione dell'oggetto
-    collection.updateOne({ _id: object_id_user }, { $pull: pull_obj })
+    await collection.updateOne({ _id: object_id_user }, { $pull: pull_obj })
     msg = getters.get_query_response(true, null, `${name_obj} ${delete_obj} was deleted`)
     res.send(msg)
   } catch (error) {
@@ -50,7 +50,7 @@ async function delete_object(client, req, res, delete_obj, pull_obj, name_obj) {
 async function edit_object(client, req, res, edit_obj, set_obj, name_obj, identifier) {
   try {
     // ottieni l'id dell'utente dal token
-    let id_user = getters.verify_session(req.headers)
+    let id_user = await getters.verify_session(req.headers)
     collection = await getters.get_db_collection(client)
 
     // si creano gli oggetti per la creazione della query
@@ -60,7 +60,7 @@ async function edit_object(client, req, res, edit_obj, set_obj, name_obj, identi
     search["_id"] = object_id_user
     search[identifier.key] = identifier.value
 
-    collection.updateOne(search, { $set: set_obj })
+    await collection.updateOne(search, { $set: set_obj })
 
     msg = getters.get_query_response(true, null, `${name_obj} ${edit_obj} was edited`)
     res.send(msg)
@@ -121,27 +121,6 @@ async function login(client, req, res) {
   }
 }
 
-async function get_account(client, req, res) {
-  let fields = ["name", "surname", "username", "email", "image", "layout", "tags"]
-  get_objects(client, req, res, fields, "Information")
-}
-async function get_notes(client, req, res) {
-  let fields = ["notes", "tags"]
-  get_objects(client, req, res, fields, "Notes")
-}
-async function get_activities(client, req, res) {
-  let fields = ["activities"]
-  get_objects(client, req, res, fields, "Activities")
-}
-async function get_events(client, req, res) {
-  let fields = ["events"]
-  get_objects(client, req, res, fields, "Events")
-}
-async function get_tomato_sessions(client, req, res) {
-  let fields = ["tomato_sessions"]
-  get_objects(client, req, res, fields, "Tomato sessions")
-}
-
 async function create_account(client, req, res) {
   try {
     // connecting with db
@@ -194,18 +173,43 @@ async function edit_account(client, req, res) {
   }
 }
 
+async function get_account(client, req, res) {
+  let fields = ["name", "surname", "username", "email", "image", "layout", "tags"]
+  get_objects(client, req, res, fields, "Information")
+}
+async function get_notes(client, req, res) {
+  let fields = ["notes", "tags"]
+  get_objects(client, req, res, fields, "Notes")
+}
+async function get_activities(client, req, res) {
+  let fields = ["activities"]
+  get_objects(client, req, res, fields, "Activities")
+}
+async function get_events(client, req, res) {
+  let fields = ["events"]
+  get_objects(client, req, res, fields, "Events")
+}
+async function get_tomato_sessions(client, req, res) {
+  let fields = ["tomato_sessions"]
+  get_objects(client, req, res, fields, "Tomato sessions")
+}
+
 async function create_note(client, req, res) {
-  new_note = getters.get_new_note(req.body.title, req.body.content, req.body.tag)
+  new_note = getters.get_new_note(
+    req.body.title, 
+    req.body.content, 
+    req.body.tag
+  )
   create_object(client, req, res, new_note.id, { notes: new_note }, "Note")
 }
-
 async function delete_note(client, req, res) {
   let pull_obj = {}
-  pull_obj["notes"] = { id: req.body.id_note }
-  delete_object(client, req, res, req.body.id_note, pull_obj, "Note")
+  let id = req.body.id
+  pull_obj["notes"] = { id: id }
+  delete_object(client, req, res, id, pull_obj, "Note")
 }
-
 async function edit_note(client, req, res) {
+  let id = req.body.id
   let set_obj = {
     "notes.$.title": req.body.new_title,
     "notes.$.content": req.body.new_content,
@@ -213,70 +217,112 @@ async function edit_note(client, req, res) {
     "notes.$.date_last_modify": getters.get_time_now(),
   }
 
-  let identifier = { key: "notes.id", value: req.body.id_note }
-  edit_object(client, req, res, req.body.id_note, set_obj, "Note", identifier)
+  let identifier = { key: "notes.id", value: id }
+  edit_object(client, req, res, id, set_obj, "Note", identifier)
 }
 async function create_activity(client, req, res) {
-  new_activity = getters.get_new_activity(req.body.name, req.body.expiration)
+  new_activity = getters.get_new_activity(
+    req.body.name, 
+    req.body.expiration
+  )
   create_object(client, req, res, new_activity.id, { activities: new_activity }, "Activity")
 }
 async function delete_activity(client, req, res) {
   let pull_obj = {}
-  pull_obj["activities"] = { id: req.body.id_activity }
-  delete_object(client, req, res, req.body.id_activity, pull_obj, "Activity")
+  let id = req.body.id
+  pull_obj["activities"] = { id: id }
+  delete_object(client, req, res, id, pull_obj, "Activity")
 }
 async function edit_activity(client, req, res) {
-  let set_obj = { "activities.$.name": req.body.new_name, "activities.$.expiration": req.body.new_expiration, "activities.$.done": req.body.new_done }
-  let identifier = { key: "activities.id", value: req.body.id_activity }
-  edit_object(client, req, res, req.body.id_activity, set_obj, "Activity", identifier)
+  let id = req.body.id
+  let set_obj = {
+    "activities.$.name": req.body.new_name,
+    "activities.$.expiration": req.body.new_expiration,
+    "activities.$.done": req.body.new_done,
+  }
+  let identifier = { key: "activities.id", value: id }
+  edit_object(client, req, res, id, set_obj, "Activity", identifier)
 }
 async function create_tomato(client, req, res) {
-  new_tomato = getters.get_new_tomato(req.body.name_tomato, req.body.rep_tomato, req.body.time_tomato, req.body.short_break, req.body.long_break)
+  new_tomato = getters.get_new_tomato(
+    req.body.name,
+    req.body.rep_tomato, 
+    req.body.time_tomato, 
+    req.body.time_short_break, 
+    req.body.time_long_break
+  )
   create_object(client, req, res, new_tomato.id, { tomato_sessions: new_tomato }, "Tomato")
 }
 async function delete_tomato(client, req, res) {
   let pull_obj = {}
-  pull_obj["tomato_sessions"] = { id: req.body.id_tomato }
-  delete_object(client, req, res, req.body.id_tomato, pull_obj, "Tomato")
+  let id = req.body.id
+  pull_obj["tomato_sessions"] = { id: id }
+  delete_object(client, req, res, id, pull_obj, "Tomato")
 }
 async function edit_tomato(client, req, res) {
-  let set_obj = { "tomato_sessions.$.name": req.body.new_name, "tomato_sessions.$.rep_tomato": req.body.new_rep_tomato, "tomato_sessions.$.time.tomato": req.body.new_time_tomato, "tomato_sessions.$.time.short_break": req.body.new_short_break, "tomato_sessions.$.time.long_break": req.body.new_long_break }
-  let identifier = { key: "tomato_sessions.id", value: req.body.id_tomato }
-  edit_object(client, req, res, req.body.id_tomato, set_obj, "Tomato", identifier)
+  let id = req.body.id
+  let set_obj = {
+    "tomato_sessions.$.name": req.body.new_name,
+    "tomato_sessions.$.rep_tomato": req.body.new_rep_tomato,
+    "tomato_sessions.$.time.tomato": req.body.new_time_tomato,
+    "tomato_sessions.$.time.short_break": req.body.new_short_break,
+    "tomato_sessions.$.time.long_break": req.body.new_long_break,
+  }
+  let identifier = { key: "tomato_sessions.id", value: id }
+  edit_object(client, req, res, id, set_obj, "Tomato", identifier)
 }
 async function create_event(client, req, res) {
-  new_event = getters.get_new_event(req.body.title, req.body.type_rep, req.body.start, req.body.finish)
+  new_event = getters.get_new_event(
+    req.body.title, 
+    req.body.repeat_type, 
+    req.body.repeat_start_date, 
+    req.body.repeat_finish_date
+  )
   create_object(client, req, res, new_event.id, { events: new_event }, "Event")
 }
 
 async function delete_event(client, req, res) {
   let pull_obj = {}
-  pull_obj["events"] = { id: req.body.id_event }
-  delete_object(client, req, res, req.body.id_event, pull_obj, "Event")
+  let id = req.body.id
+  pull_obj["events"] = { id: id }
+  delete_object(client, req, res, id, pull_obj, "Event")
 }
 
 async function edit_event(client, req, res) {
-  let set_obj = { "events.$.title": req.body.new_title, "events.$.repeat.type": req.body.new_type_rep, "events.$.repeat.start_date": req.body.new_start, "events.$.repeat.finish_date": req.body.new_finish }
-  let identifier = { key: "events.id", value: req.body.id_event }
-  edit_object(client, req, res, req.body.id_event, set_obj, "Event", identifier)
+  let id = req.body.id
+
+  let set_obj = {
+    "events.$.title": req.body.new_title,
+    "events.$.repeat.type": req.body.new_type_rep,
+    "events.$.repeat.start_date": req.body.new_start,
+    "events.$.repeat.finish_date": req.body.new_finish,
+  }
+  let identifier = { key: "events.id", value: id }
+  edit_object(client, req, res, id, set_obj, "Event", identifier)
 }
 
 async function create_tag(client, req, res) {
-  new_tag = getters.get_new_tag(req.body.name, req.body.color)
+  new_tag = getters.get_new_tag(
+    req.body.name, 
+    req.body.color
+  )
   create_object(client, req, res, new_tag.name, { tags: new_tag }, "Tag")
 }
 
 async function edit_tag(client, req, res) {
-  let set_obj = { "tags.$.name": req.body.new_name, "tags.$.color": req.body.new_color }
-  let identifier = { key: "tags.name", value: req.body.old_name }
+  let name = req.body.name
 
-  edit_object(client, req, res, req.body.old_name, set_obj, "Tag", identifier)
+  let set_obj = { "tags.$.name": req.body.new_name, "tags.$.color": req.body.new_color }
+  let identifier = { key: "tags.name", value: name }
+
+  edit_object(client, req, res, name, set_obj, "Tag", identifier)
 }
 
 async function delete_tag(client, req, res) {
   let pull_obj = {}
-  pull_obj["tags"] = { name: req.body.name }
-  delete_object(client, req, res, req.body.name, pull_obj, "Tag")
+  let name = req.body.name
+  pull_obj["tags"] = { name: name }
+  delete_object(client, req, res, name, pull_obj, "Tag")
 }
 async function edit_layout(client, req, res) {
   try {
