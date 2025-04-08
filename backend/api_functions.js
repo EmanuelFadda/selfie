@@ -9,7 +9,7 @@ async function create_object(client, req, res, create_obj, push_obj, name_obj) {
     let id_user = await getters.verify_session(req.headers)
     collection = await getters.get_db_collection(client)
 
-    // si creano gli oggetti per la creazione della query                                 push_obj={ field_obj : object }
+    // si creano gli oggetti per la creazione della query                               
     let object_id_user = ObjectId.createFromHexString(id_user)
 
     // modifiche al database

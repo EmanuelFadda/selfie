@@ -93,4 +93,3 @@ app.get("/get_events", async (req, res) => functions.get_events(client, req, res
 // username,layout
 app.post("/edit_layout", async (req, res) => functions.edit_layout(client, req, res))
 
-// CONTROLLARE GET EVENTS!!!!!
