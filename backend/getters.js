@@ -112,7 +112,6 @@ function get_token(id) {
     },
     defaults.SECRET_KEY
   )
-  console.log(token)
   return token
 }
 

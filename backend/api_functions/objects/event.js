@@ -31,4 +31,10 @@ async function edit_event(client, req, res) {
   edit_object(client, req, res, id, set_obj, "Event", identifier)
 }
 
-module.exports={get_events,create_event,delete_event,edit_event}
+async function get_event(client, req, res) {
+  let id = req.body.id
+  let fields = ["events.$"]
+  let identifier = { key: "events.id", value: id }
+  get_objects(client, req, res, fields, "Event", identifier)
+}
+module.exports={get_events,create_event,delete_event,edit_event,get_event}

@@ -100,9 +100,7 @@ async function get_objects(client, req, res, fields, name_obj, identifier) {
       projection[element] = 1
     })
 
-    console.log(search, { projection: projection })
     let objects = await collection.findOne(search, { projection: projection })
-    console.log(objects)
     msg = get_query_response(true, objects, `${name_obj} were found in ${id_user}`)
     res.send(msg)
   } catch (error) {

@@ -25,4 +25,11 @@ async function get_tags(client, req, res) {
   let fields = ["tags"]
   get_objects(client, req, res, fields, "Tags")
 }
-module.exports={create_tag,delete_tag,edit_tag,get_tags}
+
+async function get_tag(client, req, res) {
+  let name = req.body.name
+  let fields = ["tags.$"]
+  let identifier = { key: "tags.name", value: name }
+  get_objects(client, req, res, fields, "Tag", identifier)
+}
+module.exports={create_tag,delete_tag,edit_tag,get_tags,get_tag}

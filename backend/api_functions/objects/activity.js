@@ -27,4 +27,11 @@ async function edit_activity(client, req, res) {
   edit_object(client, req, res, id, set_obj, "Activity", identifier)
 }
 
-module.exports={get_activities,delete_activity,edit_activity,create_activity}
+async function get_activity(client, req, res) {
+  let id = req.body.id
+  let fields = ["activities.$"]
+  let identifier = { key: "activities.id", value: id }
+  get_objects(client, req, res, fields, "Activity", identifier)
+}
+
+module.exports={get_activities,delete_activity,edit_activity,create_activity,get_activity}
