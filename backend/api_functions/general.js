@@ -76,19 +76,33 @@ async function edit_object(client, req, res, edit_obj, set_obj, name_obj, identi
   }
 }
 
-async function get_objects(client, req, res, fields, name_obj) {
+async function get_objects(client, req, res, fields, name_obj, identifier) {
   try {
     // ottieni l'id dell'utente dal token
     let id_user = verify_session(req.headers)
     collection = await get_db_collection(client)
+
     // si creano gli oggetti per la creazione della query
     let object_id_user = ObjectId.createFromHexString(id_user)
+
+    search = {}
+    search["_id"] = object_id_user
+
+    // passaggio per fare in modo che venga ricercato un solo oggetto
+    // nel caso in cui ce ne sia bisogno
+    if(identifier!=null){
+      search[identifier.key] = identifier.value
+    }
+    
+    // per filtrare i parametri da ottenere
     let projection = {}
     fields.forEach((element) => {
       projection[element] = 1
     })
 
-    let objects = await collection.findOne({ _id: object_id_user }, { projection: projection })
+    console.log(search, { projection: projection })
+    let objects = await collection.findOne(search, { projection: projection })
+    console.log(objects)
     msg = get_query_response(true, objects, `${name_obj} were found in ${id_user}`)
     res.send(msg)
   } catch (error) {

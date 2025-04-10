@@ -1,5 +1,5 @@
-const { get_new_note,get_time_now } = require("../../getters")
-const { create_object,edit_object,delete_object,get_objects } = require("../general")
+const { get_new_note, get_time_now } = require("../../getters")
+const { create_object, edit_object, delete_object, get_objects } = require("../general")
 
 async function create_note(client, req, res) {
   new_note = get_new_note(req.body.title, req.body.content, req.body.tag)
@@ -28,4 +28,11 @@ async function get_notes(client, req, res) {
   get_objects(client, req, res, fields, "Notes")
 }
 
-module.exports={create_note,delete_note,edit_note,get_notes}
+async function get_note(client, req, res) {
+  let id = req.body.id
+  let fields = ["notes.$"]
+  let identifier = { key: "notes.id", value: id }
+  get_objects(client, req, res, fields, "Notes", identifier)
+}
+
+module.exports = { create_note, delete_note, edit_note, get_notes, get_note }
