@@ -1,8 +1,8 @@
-const { ObjectId, Binary } = require("mongodb")
+const { ObjectId } = require("mongodb")
 const jwt = require("jsonwebtoken")
 const defaults = require("./defaults")
 
-function get_db_collection(client) {
+function  get_db_collection(client) {
   client.connect()
   const db = client.db(defaults.DB_NAME)
   let collection = db.collection(defaults.COLLECTION_NAME)
@@ -129,7 +129,7 @@ function verify_session(header) {
   return id_user
 }
 module.exports = {
-  get_db_collection,
+   get_db_collection,
   get_new_activity,
   get_new_note,
   get_new_tomato,
