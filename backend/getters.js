@@ -2,34 +2,59 @@ const { ObjectId } = require("mongodb")
 const jwt = require("jsonwebtoken")
 const defaults = require("./defaults")
 
-function  get_db_collection(client) {
+function get_db_collection(client) {
   client.connect()
   const db = client.db(defaults.DB_NAME)
   let collection = db.collection(defaults.COLLECTION_NAME)
   return collection
 }
 
-function get_new_user(name, surname, username, email, image, password) {
+function get_new_user(name, surname, username, email, image, password, birthday) {
   let default_tags = []
   for (let i = 0; i < defaults.TAGS_NAMES.length; i++) {
     default_tags[i] = get_new_tag(defaults.TAGS_NAMES[i], defaults.TAGS_COLORS[i])
   }
+  let default_note = get_new_note(defaults.NOTE_TITLE, defaults.NOTE_CONTENT, defaults.NOTE_TAG)
+  let default_tomato = get_new_tomato(defaults.TOMATO_NAME, defaults.TOMATO_REP, defaults.TOMATO_TIME, defaults.TOMATO_SHORT_BREAK, defaults.TOMATO_LONG_BREAK)
+  let menù = get_new_menù(defaults.LAYOUT, default_note, default_tomato)
+  let credentials = get_new_credentials(name, surname, username, email, image, password, birthday)
 
   let new_user = {
+    credentials: credentials,
+    menù: menù,
+    notes: [default_note],
+    activities: [],
+    events: [],
+    tags: default_tags,
+    tomato_sessions: [default_tomato],
+  }
+  return new_user
+}
+
+function get_new_credentials(name, surname, username, email, image, password, birthday) {
+  let credentials = {
     name: name,
     surname: surname,
     username: username,
     email: email,
     image: image,
     password: password,
-    layout: defaults.LAYOUT,
-    notes: [get_new_note(defaults.NOTE_TITLE, defaults.NOTE_CONTENT, defaults.NOTE_TAG)],
-    activities: [],
-    events: [],
-    tags: default_tags,
-    tomato_sessions: [get_new_tomato(defaults.TOMATO_NAME, defaults.TOMATO_REP, defaults.TOMATO_TIME, defaults.TOMATO_SHORT_BREAK, defaults.TOMATO_LONG_BREAK)],
+    birthday: birthday,
   }
-  return new_user
+  return credentials
+}
+
+function get_new_menù(layout, default_note, default_tomato) {
+  let menù = {
+    layout: layout,
+    content: {
+      activities: [],
+      events: [],
+      notes: [default_note],
+      tomato_sessions: [default_tomato],
+    },
+  }
+  return menù
 }
 function get_new_tag(name, color) {
   let new_tag = {
@@ -128,7 +153,7 @@ function verify_session(header) {
   return id_user
 }
 module.exports = {
-   get_db_collection,
+  get_db_collection,
   get_new_activity,
   get_new_note,
   get_new_tomato,

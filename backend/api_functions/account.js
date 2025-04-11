@@ -1,5 +1,5 @@
-const { get_token, get_query_response,  get_db_collection, get_new_user } = require("../getters")
-const { get_objects } = require("./general")
+const { get_token, get_query_response, get_db_collection, get_new_user, verify_session } = require("../getters")
+const { ObjectId } = require("mongodb")
 
 async function login(client, req, res) {
   // restituisce il token con cui fare le query
@@ -9,7 +9,7 @@ async function login(client, req, res) {
 
     //creating a query
     let query = {
-      $and: [{ username: req.body.username }, { password: req.body.password }],
+      $and: [{ "credentials.username": req.body.username }, { "credentials.password": req.body.password }],
     }
 
     //searching for result
@@ -35,7 +35,7 @@ async function create_account(client, req, res) {
   try {
     // connecting with db
     collection = await get_db_collection(client)
-    new_user = get_new_user(req.body.name, req.body.surname, req.body.username, req.body.email, req.body.image, req.body.password)
+    new_user = get_new_user(req.body.name, req.body.surname, req.body.username, req.body.email, req.body.image, req.body.password, req.body.birthday)
     collection.insertOne(new_user)
     msg = get_query_response(true, null, `User ${req.body.username} was created`)
     res.send(msg)
@@ -46,36 +46,14 @@ async function create_account(client, req, res) {
 }
 async function delete_account(client, req, res) {
   try {
+    // ottieni l'id dell'utente dal token
+    let id_user = await verify_session(req.headers)
     collection = await get_db_collection(client)
-
-    collection.deleteOne({ username: req.body.username, password: req.body.password })
-
-    msg = get_query_response(true, null, `User ${req.body.username} was deleted`)
-    res.send(msg)
-  } catch (error) {
-    msg = get_query_response(false, null, `error`)
-    res.send(msg)
-  }
-}
-async function edit_account(client, req, res) {
-  try {
-    collection = await get_db_collection(client)
-
-    collection.updateOne(
-      { username: req.body.old_username },
-      {
-        $set: {
-          name: req.body.new_name,
-          surname: req.body.new_surname,
-          username: req.body.new_username,
-          email: req.body.new_email,
-          image: new Binary(req.body.new_image),
-          password: req.body.new_password,
-        },
-      }
-    )
-
-    msg = get_query_response(true, null, `User ${req.body.new_username} was modified`)
+    // creazione degli oggetti per la creazione della query
+    let object_id_user = ObjectId.createFromHexString(id_user)
+    console.log(object_id_user)
+    await collection.deleteOne({ _id: object_id_user })
+    msg = get_query_response(true, null, `User ${id_user} was deleted`)
     res.send(msg)
   } catch (error) {
     msg = get_query_response(false, null, `error`)
@@ -83,12 +61,4 @@ async function edit_account(client, req, res) {
   }
 }
 
-async function get_account(client, req, res) {
-  let fields = ["name", "surname", "username", "email", "image", "layout", "tags"]
-  get_objects(client, req, res, fields, "Information")
-}
-
-async function edit_layout(client, req, res) {}
-
-
-module.exports={login,create_account,delete_account,edit_account,get_account,edit_layout}
+module.exports = { login, create_account, delete_account }
