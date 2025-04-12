@@ -1,5 +1,5 @@
 const { get_new_activity } = require("../../getters")
-const { create_object,edit_object,delete_object,get_objects } = require("../general")
+const { create_object, edit_object, delete_object, get_objects } = require("../general")
 
 async function get_activities(client, req, res) {
   let fields = ["activities"]
@@ -24,7 +24,7 @@ async function edit_activity(client, req, res) {
     "activities.$.done": req.body.new_done,
   }
   let identifier = { key: "activities.id", value: id }
-  edit_object(client, req, res, id, set_obj, "Activity", identifier)
+  edit_object(client, req, res, set_obj, "Activity", identifier)
 }
 
 async function get_activity(client, req, res) {
@@ -34,4 +34,4 @@ async function get_activity(client, req, res) {
   get_objects(client, req, res, fields, "Activity", identifier)
 }
 
-module.exports={get_activities,delete_activity,edit_activity,create_activity,get_activity}
+module.exports = { get_activities, delete_activity, edit_activity, create_activity, get_activity }

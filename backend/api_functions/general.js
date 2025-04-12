@@ -1,4 +1,4 @@
-const { get_query_response,  get_db_collection, verify_session } = require("../getters")
+const { get_query_response, get_db_collection, verify_session } = require("../getters")
 const { ObjectId } = require("mongodb")
 
 //funzione generale per la creazione di note,attività,pomodori,eventi,tag
@@ -22,7 +22,6 @@ async function create_object(client, req, res, create_obj, push_obj, name_obj) {
     res.send(msg)
   }
 }
-
 
 async function delete_object(client, req, res, delete_obj, pull_obj, name_obj) {
   try {
@@ -53,7 +52,7 @@ async function delete_object(client, req, res, delete_obj, pull_obj, name_obj) {
  * @param {*} name_obj indica il tipo dell'oggetto
  * @param {*} identifier indica qual'è l'oggetto dell'array da modificare
  */
-async function edit_object(client, req, res, edit_obj, set_obj, name_obj, identifier) {
+async function edit_object(client, req, res, set_obj, name_obj, identifier) {
   try {
     // ottieni l'id dell'utente dal token
     let id_user = await verify_session(req.headers)
@@ -61,14 +60,13 @@ async function edit_object(client, req, res, edit_obj, set_obj, name_obj, identi
 
     // si creano gli oggetti per la creazione della query
     let object_id_user = ObjectId.createFromHexString(id_user)
-
     search = {}
     search["_id"] = object_id_user
-    search[identifier.key] = identifier.value
-
+    if (identifier != null) {
+      search[identifier.key] = identifier.value
+    }
     await collection.updateOne(search, { $set: set_obj })
-
-    msg = get_query_response(true, null, `${name_obj} ${edit_obj} was edited`)
+    msg = get_query_response(true, null, `${name_obj} was edited`)
     res.send(msg)
   } catch (error) {
     msg = get_query_response(false, null, `error`)
@@ -90,10 +88,10 @@ async function get_objects(client, req, res, fields, name_obj, identifier) {
 
     // passaggio per fare in modo che venga ricercato un solo oggetto
     // nel caso in cui ce ne sia bisogno
-    if(identifier!=null){
+    if (identifier != null) {
       search[identifier.key] = identifier.value
     }
-    
+
     // per filtrare i parametri da ottenere
     let projection = {}
     fields.forEach((element) => {
@@ -109,8 +107,9 @@ async function get_objects(client, req, res, fields, name_obj, identifier) {
   }
 }
 
-
-
-module.exports={
-  create_object,delete_object,edit_object,get_objects
+module.exports = {
+  create_object,
+  delete_object,
+  edit_object,
+  get_objects,
 }

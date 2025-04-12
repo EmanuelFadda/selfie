@@ -1,5 +1,5 @@
 const { get_new_event } = require("../../getters")
-const { create_object,edit_object,delete_object,get_objects } = require("../general")
+const { create_object, edit_object, delete_object, get_objects } = require("../general")
 
 async function get_events(client, req, res) {
   let fields = ["events"]
@@ -28,7 +28,7 @@ async function edit_event(client, req, res) {
     "events.$.repeat.finish_date": req.body.new_finish,
   }
   let identifier = { key: "events.id", value: id }
-  edit_object(client, req, res, id, set_obj, "Event", identifier)
+  edit_object(client, req, res, set_obj, "Event", identifier)
 }
 
 async function get_event(client, req, res) {
@@ -37,4 +37,4 @@ async function get_event(client, req, res) {
   let identifier = { key: "events.id", value: id }
   get_objects(client, req, res, fields, "Event", identifier)
 }
-module.exports={get_events,create_event,delete_event,edit_event,get_event}
+module.exports = { get_events, create_event, delete_event, edit_event, get_event }

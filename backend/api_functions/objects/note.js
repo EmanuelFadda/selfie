@@ -21,7 +21,7 @@ async function edit_note(client, req, res) {
   }
 
   let identifier = { key: "notes.id", value: id }
-  edit_object(client, req, res, id, set_obj, "Note", identifier)
+  edit_object(client, req, res, set_obj, "Note", identifier)
 }
 async function get_notes(client, req, res) {
   let fields = ["notes"]

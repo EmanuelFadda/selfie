@@ -7,12 +7,12 @@ const cors = require("cors")
 
 const { login, create_account, delete_account } = require("./api_functions/account")
 const { get_notes, create_note, delete_note, edit_note, get_note } = require("./api_functions/objects/note")
-const { create_tag, edit_tag, delete_tag,get_tags, get_tag } = require("./api_functions/objects/tag")
+const { create_tag, edit_tag, delete_tag, get_tags, get_tag } = require("./api_functions/objects/tag")
 const { create_activity, delete_activity, edit_activity, get_activities, get_activity } = require("./api_functions/objects/activity")
 const { create_tomato, delete_tomato, edit_tomato, get_tomatoes, get_tomato } = require("./api_functions/objects/tomato")
 const { create_event, delete_event, edit_event, get_events, get_event } = require("./api_functions/objects/event")
-const { get_credentials } = require("./api_functions/objects/credentials")
-const { get_menù } = require("./api_functions/objects/menù")
+const { get_credentials, set_credentials } = require("./api_functions/objects/credentials")
+const { get_menù, set_menù_content_events, set_menù_content_activities, set_menù_content_tomatoes, set_menù_layout, set_menù_content_notes } = require("./api_functions/objects/menù")
 
 const app = express()
 const port = 3000
@@ -41,11 +41,16 @@ app.post("/create_account", async (req, res) => create_account(client, req, res)
 app.delete("/delete_account", async (req, res) => delete_account(client, req, res))
 
 // Credentials
-app.get("/get_credentials", async(req,res)=> get_credentials(client,req,res))
+app.get("/get_credentials", async (req, res) => get_credentials(client, req, res))
+app.post("/set_credentials", async (req, res) => set_credentials(client, req, res))
 
 // Menù
-app.get("/get_menu", async(req,res)=> get_menù(client,req,res))
-
+app.get("/get_menu", async (req, res) => get_menù(client, req, res))
+app.post("/set_menu/layout", async (req, res) => set_menù_layout(client, req, res))
+app.post("/set_menu/content/events", async (req, res) => set_menù_content_events(client, req, res))
+app.post("/set_menu/content/activities", async (req, res) => set_menù_content_activities(client, req, res))
+app.post("/set_menu/content/tomatoes", async (req, res) => set_menù_content_tomatoes(client, req, res))
+app.post("/set_menu/content/notes", async (req, res) => set_menù_content_notes(client, req, res))
 
 // Note
 app.get("/get_notes", async (req, res) => get_notes(client, req, res))

@@ -1,6 +1,5 @@
 const { get_new_tomato } = require("../../getters")
-const { create_object,edit_object,delete_object,get_objects } = require("../general")
-
+const { create_object, edit_object, delete_object, get_objects } = require("../general")
 
 async function get_tomatoes(client, req, res) {
   let fields = ["tomato_sessions"]
@@ -27,7 +26,7 @@ async function edit_tomato(client, req, res) {
     "tomato_sessions.$.time.long_break": req.body.new_long_break,
   }
   let identifier = { key: "tomato_sessions.id", value: id }
-  edit_object(client, req, res, id, set_obj, "Tomato", identifier)
+  edit_object(client, req, res, set_obj, "Tomato", identifier)
 }
 
 async function get_tomato(client, req, res) {
@@ -37,4 +36,4 @@ async function get_tomato(client, req, res) {
   get_objects(client, req, res, fields, "Tomato", identifier)
 }
 
-module.exports={get_tomatoes,create_tomato,delete_tomato,edit_tomato,get_tomato}
+module.exports = { get_tomatoes, create_tomato, delete_tomato, edit_tomato, get_tomato }
