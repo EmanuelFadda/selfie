@@ -2,7 +2,7 @@ const { get_query_response, get_db_collection, verify_session } = require("../ge
 const { ObjectId } = require("mongodb")
 
 //funzione generale per la creazione di note,attività,pomodori,eventi,tag
-async function create_object(client, req, res, create_obj, push_obj, name_obj) {
+async function create_object(client, req, res, push_obj, name_obj) {
   try {
     // ottieni l'id dell'utente dal token
     let id_user = await verify_session(req.headers)
@@ -15,7 +15,7 @@ async function create_object(client, req, res, create_obj, push_obj, name_obj) {
     await collection.updateOne({ _id: object_id_user }, { $push: push_obj })
 
     // invio del risultato
-    msg = get_query_response(true, null, `${name_obj} ${create_obj} was created`)
+    msg = get_query_response(true, null, `${name_obj} was created`)
     res.send(msg)
   } catch (error) {
     msg = get_query_response(false, null, `error`)
@@ -23,7 +23,7 @@ async function create_object(client, req, res, create_obj, push_obj, name_obj) {
   }
 }
 
-async function delete_object(client, req, res, delete_obj, pull_obj, name_obj) {
+async function delete_object(client, req, res, pull_obj, name_obj) {
   try {
     // ottieni l'id dell'utente dal token
     let id_user = await verify_session(req.headers)
@@ -34,7 +34,7 @@ async function delete_object(client, req, res, delete_obj, pull_obj, name_obj) {
 
     // eliminazione dell'oggetto
     await collection.updateOne({ _id: object_id_user }, { $pull: pull_obj })
-    msg = get_query_response(true, null, `${name_obj} ${delete_obj} was deleted`)
+    msg = get_query_response(true, null, `${name_obj} was deleted`)
     res.send(msg)
   } catch (error) {
     msg = get_query_response(false, null, `error`)

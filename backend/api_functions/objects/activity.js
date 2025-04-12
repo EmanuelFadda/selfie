@@ -1,5 +1,6 @@
 const { get_new_activity } = require("../../getters")
 const { create_object, edit_object, delete_object, get_objects } = require("../general")
+const name_obj="Activity"
 
 async function get_activities(client, req, res) {
   let fields = ["activities"]
@@ -8,13 +9,13 @@ async function get_activities(client, req, res) {
 
 async function create_activity(client, req, res) {
   let new_activity = get_new_activity(req.body.name, req.body.expiration)
-  create_object(client, req, res, new_activity.id, { activities: new_activity }, "Activity")
+  create_object(client, req, res, { activities: new_activity }, name_obj)
 }
 async function delete_activity(client, req, res) {
   let pull_obj = {}
   let id = req.body.id
   pull_obj["activities"] = { id: id }
-  delete_object(client, req, res, id, pull_obj, "Activity")
+  delete_object(client, req, res, pull_obj, name_obj)
 }
 async function edit_activity(client, req, res) {
   let id = req.body.id
@@ -24,14 +25,14 @@ async function edit_activity(client, req, res) {
     "activities.$.done": req.body.new_done,
   }
   let identifier = { key: "activities.id", value: id }
-  edit_object(client, req, res, set_obj, "Activity", identifier)
+  edit_object(client, req, res, set_obj, name_obj, identifier)
 }
 
 async function get_activity(client, req, res) {
   let id = req.body.id
   let fields = ["activities.$"]
   let identifier = { key: "activities.id", value: id }
-  get_objects(client, req, res, fields, "Activity", identifier)
+  get_objects(client, req, res, fields, name_obj, identifier)
 }
 
 module.exports = { get_activities, delete_activity, edit_activity, create_activity, get_activity }
