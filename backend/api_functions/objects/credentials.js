@@ -9,13 +9,13 @@ async function get_credentials(client, req, res) {
 
 async function set_credentials(client, req, res) {
   let set_obj = {
-    "credentials.name": req.body.name,
-    "credentials.surname": req.body.surname,
-    "credentials.username": req.body.username,
-    "credentials.email": req.body.email,
-    "credentials.image": req.body.image,
-    "credentials.password": req.body.password,
-    "credentials.birthday": req.body.birthday,
+    "credentials.name": req.body.new_name,
+    "credentials.surname": req.body.new_surname,
+    "credentials.username": req.body.new_username,
+    "credentials.email": req.body.new_email,
+    "credentials.image": req.body.new_image,
+    "credentials.password": req.body.new_password,
+    "credentials.birthday": req.body.new_birthday,
   }
   edit_object(client, req, res, set_obj, name_obj, null)
 }

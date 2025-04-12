@@ -7,35 +7,35 @@ async function get_menù(client, req, res) {
 
 async function set_menù_layout(client, req, res) {
   let set_obj = {
-    "menù.layout": req.body.layout,
+    "menù.layout": req.body.new_layout,
   }
   edit_object(client, req, res, set_obj, "Layout", null)
 }
 
 async function set_menù_content_activities(client, req, res) {
   let set_obj = {
-    "menù.content.activities": req.body.activities,
+    "menù.content.activities": req.body.new_activities,
   }
   edit_object(client, req, res, set_obj, "Section content activity", null)
 }
 
 async function set_menù_content_events(client, req, res) {
   let set_obj = {
-    "menù.content.events": req.body.events,
+    "menù.content.events": req.body.new_events,
   }
   edit_object(client, req, res, set_obj, "Section content events", null)
 }
 
 async function set_menù_content_tomatoes(client, req, res) {
   let set_obj = {
-    "menù.content.tomato_sessions": req.body.tomatoes,
+    "menù.content.tomato_sessions": req.body.new_tomatoes,
   }
   edit_object(client, req, res, set_obj, "Section content tomatoes", null)
 }
 
 async function set_menù_content_notes(client, req, res) {
   let set_obj = {
-    "menù.content.notes": req.body.notes,
+    "menù.content.notes": req.body.new_notes,
   }
   edit_object(client, req, res, set_obj, "Section content notes", null)
 }
