@@ -1,9 +1,17 @@
 const { MongoClient } = require("mongodb")
 const express = require("express")
-
 const db_url = require("./defaults").DB_URL
 const body_parser = require("body-parser")
 const cors = require("cors")
+const multer=require("multer")
+
+const file_size=500*1024 //500kb
+const upload=multer(
+  {
+    storage:multer.memoryStorage(),
+    limits: { fileSize: file_size  }
+  }
+)
 
 const { login, create_account, delete_account } = require("./api_functions/account")
 const { get_notes, create_note, delete_note, edit_note, get_note } = require("./api_functions/objects/note")
@@ -37,12 +45,12 @@ app.listen(port, () => {
 
 // Account
 app.post("/login", async (req, res) => login(client, req, res))
-app.post("/create_account", async (req, res) => create_account(client, req, res))
+app.post("/create_account", upload.single("image") , async (req, res) => create_account(client, req, res))
 app.delete("/delete_account", async (req, res) => delete_account(client, req, res))
 
 // Credentials
 app.get("/get_credentials", async (req, res) => get_credentials(client, req, res))
-app.post("/set_credentials", async (req, res) => set_credentials(client, req, res))
+app.post("/set_credentials",upload.single("new_image"), async (req, res) => set_credentials(client, req, res))
 
 // Menù
 app.get("/get_menu", async (req, res) => get_menù(client, req, res))

@@ -152,6 +152,10 @@ function verify_session(header) {
   })
   return id_user
 }
+
+function get_new_image(base64,mimetype){
+  return `data:${mimetype};base64,${base64}`
+}
 module.exports = {
   get_db_collection,
   get_new_activity,
@@ -164,4 +168,5 @@ module.exports = {
   get_token,
   verify_session,
   get_new_tag,
+  get_new_image
 }

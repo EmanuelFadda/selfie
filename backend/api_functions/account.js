@@ -35,7 +35,12 @@ async function create_account(client, req, res) {
   try {
     // connecting with db
     collection = await get_db_collection(client)
-    new_user = get_new_user(req.body.name, req.body.surname, req.body.username, req.body.email, req.body.image, req.body.password, req.body.birthday)
+    const image=get_new_image(
+      req.file.buffer.toString("base64"),
+      req.file.mimetype
+    )
+
+    new_user = get_new_user(req.body.name, req.body.surname, req.body.username, req.body.email, image, req.body.password, req.body.birthday)
     collection.insertOne(new_user)
     msg = get_query_response(true, null, `User ${req.body.username} was created`)
     res.send(msg)
