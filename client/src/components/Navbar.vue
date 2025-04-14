@@ -15,8 +15,8 @@
     </svg>
 
     <!-- Add -->
-    <svg v-if="addButton" @click="addButtonClick" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="absolute right-5 size-7 lg:size-8" ref="add">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+    <svg v-if="myButton.exist" @click="myButton.function" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="absolute right-5 size-7 lg:size-8" ref="mybutton">
+      <path v-for="path in myButton.paths" stroke-linecap="round" stroke-linejoin="round" :d="path" />
     </svg>
   </nav>
 
@@ -56,9 +56,9 @@ export default {
     const back = ref(null)
     const pageTitle = ref(null)
     const settings = ref(false)
-    const add = ref(null)
+    const mybutton = ref(null)
 
-    return { back, pageTitle, settings, add }
+    return { back, pageTitle, settings, mybutton }
   },
   props: {
     name: String,
@@ -67,8 +67,7 @@ export default {
     backButton: Boolean,
     titleColor: { type: String, default: "" },
     settingsArray: { type: Array, default: [] },
-    addButton: { type: Boolean, default: false },
-    addButtonActive: { type: Boolean, default: false },
+    myButton: { type: Object, default: {exist: false}}
   },
   methods: {
     goBack() {
@@ -78,16 +77,6 @@ export default {
       setTimeout(() => {
         router.go(-1)
       }, 650)
-    },
-    addButtonClick() {
-      if (this.addButtonActive) {
-        this.add.classList.remove("rotateForward")
-        this.add.classList.add("rotateBackward")
-      } else {
-        this.add.classList.remove("rotateBackward")
-        this.add.classList.add("rotateForward")
-      }
-      this.$emit('update:addButtonActive', !this.addButtonActive)
     },
   },
 }
@@ -129,32 +118,4 @@ export default {
     transform: translateX(-36px);
   }
 }
-
-.rotateForward {
-    animation-name: rotateForward;
-    animation-duration: 0.4s;
-    animation-fill-mode: forwards;
-}
-
-@keyframes rotateForward {
-    from {
-        transform: rotate(0deg);
-    } to {
-        transform: rotate(45deg);
-    }
-}
-
-.rotateBackward {
-    animation-name: rotateBackward;
-    animation-duration: 0.4s;
-}
-
-@keyframes rotateBackward {
-    from {
-        transform: rotate(45deg);
-    } to {
-        transform: rotate(0deg);
-    }
-}
-
 </style>

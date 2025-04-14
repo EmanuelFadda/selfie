@@ -11,35 +11,71 @@
     </div>
 
     <!-- Drag & Drop per la parte superiore -->
-    <div class="ml-5 mr-5 grid h-[calc(100vh-108px)] grid-cols-2 grid-rows-2 gap-x-4 lg:ml-20 lg:mr-20 lg:h-[calc(100vh-132px)] lg:grid-cols-3 lg:gap-8 xl:ml-28 xl:mr-28 2xl:ml-36 2xl:mr-36">
-      <draggable v-model="topItem" group="layout" item-key="id" @end="handleDrag" class="max-sm:mb-4 row-span-2 max-sm:col-span-2 lg:col-span-2">
-        <template #item="{ element }">
-          <HomeTopItem :key="element.id" :title="element.title" componentType="div" :lightBgColor="element.lightBgColor" :darkBgColor="element.darkBgColor" :lightBordColor="element.lightBordColor" :darkBordColor="element.darkBordColor" content="Trascina questo blocco nella posizione che prefeisci!" class="-mb-0 -ml-0 -mr-0 flex flex-auto flex-col"></HomeTopItem>
-        </template>
-      </draggable>
+    <div ref="container" class="ml-5 mr-5 grid h-[calc(100vh-108px)] grid-cols-2 grid-rows-2 gap-x-4 lg:ml-20 lg:mr-20 lg:h-[calc(100vh-132px)] lg:grid-cols-3 lg:gap-8 xl:ml-28 xl:mr-28 2xl:ml-36 2xl:mr-36">
+      
+      <div data-swapy-slot="a" class="flex flex-auto max-sm:col-span-2 h-full">
+        <div data-swapy-item="a" class="flex flex-auto h-full">
+          <HomeTopItem
+            :title="items[0].title"
+            :route="items[0].route"
+            :content="items[0].content"
+            :lightBgColor="items[0].lightBgColor"
+            :darkBgColor="items[0].darkBgColor"
+            :lightBordColor="items[0].lightBordColor"
+            :darkBordColor="items[0].darkBordColor"
+            componentType="div"
+            class="flex flex-auto flex-col"
+          >
+          </HomeTopItem>
+        </div>
+      </div>
 
-      <!-- Drag & Drop per la parte inferiore -->
-      <draggable v-model="bottomItems" group="layout" item-key="id" @end="handleDrag" class="row-span-2 grid grid-rows-subgrid gap-4 lg:gap-8 max-sm:gap-y-0 max-sm:col-span-2 max-sm:grid max-sm:grid-cols-subgrid">
-        <template #item="{ element }">
-          <HomeBottomItem :key="element.id" :title="element.title" componentType="div" :lightBgColor="element.lightBgColor" :darkBgColor="element.darkBgColor" :lightBordColor="element.lightBordColor" :darkBordColor="element.darkBordColor" content="Trascina questo blocco nella posizione che prefeisci!"></HomeBottomItem>
-        </template>
-      </draggable>
+      <div data-swapy-slot="b">
+        <div data-swapy-item="b">
+          <HomeBottomItem
+            :title="items[1].title"
+            :route="items[1].route"
+            :content="items[1].content"
+            :lightBgColor="items[1].lightBgColor"
+            :darkBgColor="items[1].darkBgColor"
+            :lightBordColor="items[1].lightBordColor"
+            :darkBordColor="items[1].darkBordColor"
+            componentType="div"
+          >
+          </HomeBottomItem>
+        </div>
+      </div>
+
+      <div data-swapy-slot="c">
+        <div data-swapy-item="c">
+          <HomeBottomItem
+            :title="items[2].title"
+            :route="items[2].route"
+            :content="items[2].content"
+            :lightBgColor="items[2].lightBgColor"
+            :darkBgColor="items[2].darkBgColor"
+            :lightBordColor="items[2].lightBordColor"
+            :darkBordColor="items[2].darkBordColor"
+            componentType="div"
+          >
+        </HomeBottomItem>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import draggable from "vuedraggable"
 import HomeTopItem from "@/components/HomeTopItem.vue"
 import HomeBottomItem from "@/components/HomeBottomItem.vue"
 import router from "@/router"
 import { useMainStore } from "@/store"
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
+import { createSwapy } from 'swapy'
 
 export default {
   name: "EditLayoutView",
   components: {
-    draggable,
     HomeTopItem,
     HomeBottomItem,
   },
@@ -50,10 +86,18 @@ export default {
     const save = ref(null)
     const modified = ref(false)
 
-    const topItem = store.items.slice(0, 1)
-    const bottomItems = store.items.slice(1)
+    const items = ref(store.items)
 
-    return { store, topItem, bottomItems, back, pageTitle, save, modified }
+    const container = ref()
+    const swapy = ref()
+
+    onMounted(() => {
+      swapy.value = createSwapy(container.value, {
+        
+      })
+    })
+
+    return { store, items, back, pageTitle, save, modified, swapy, container}
   },
   methods: {
     goBack() {

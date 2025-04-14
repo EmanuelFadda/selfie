@@ -1,16 +1,16 @@
 <template>
-  <Navbar viewTitle="Note" :titleColor="classColor" :backButton="true"></Navbar>
+  <Navbar viewTitle="Note" :titleColor="classColor" :backButton="true" :myButton="myButton"></Navbar>
 
   <div class="ml-5 mr-5 h-[calc(100vh-108px)] rounded-2xl lg:h-[calc(100vh-132px)] dark:bg-neutral-800">
     <!-- Title -->
     <div class="relative ml-[18px] mr-[18px] pt-5">
-      <input name="title" id="title" class="peer block w-full appearance-none rounded-xl border-2 border-neutral-700 bg-neutral-800 p-2.5 pl-3.5 pr-3.5 text-xl font-semibold outline-0" placeholder="" :value="currentNote.title || ''" />
+      <input name="title" id="title" class="peer block w-full appearance-none rounded-xl border-2 border-neutral-700 bg-neutral-800 p-2.5 pl-3.5 pr-3.5 text-xl font-semibold outline-0" placeholder="" v-model="currentNote.title" />
       <label for="title" class="pear-focus:text-neutral-300 absolute start-1 top-2 z-10 mt-2.5 origin-[0] -translate-y-3 translate-x-1.5 scale-75 transform rounded-xl bg-neutral-800 px-2 text-xl font-medium duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-3 peer-focus:translate-x-1.5 peer-focus:scale-75 peer-focus:px-2">Titolo</label>
     </div>
 
     <!-- Content -->
     <div class="relative ml-[18px] mr-[18px] h-[calc(100%-164px)] pt-5">
-      <textarea name="content" id="content" class="peer block h-full w-full appearance-none rounded-xl border-2 border-neutral-700 bg-neutral-800 p-2.5 pl-3.5 pr-3.5 text-sm font-semibold text-neutral-400 outline-0" placeholder="" :value="currentNote.content || ''"></textarea>
+      <textarea name="content" id="content" class="peer block h-full w-full appearance-none rounded-xl border-2 border-neutral-700 bg-neutral-800 p-2.5 pl-3.5 pr-3.5 text-sm font-semibold text-neutral-400 outline-0" placeholder="" v-model="currentNote.content"></textarea>
       <label for="content" class="pear-focus:text-neutral-300 absolute start-1 top-2 z-10 mt-2.5 origin-[0] -translate-y-3 translate-x-1.5 scale-75 transform rounded-xl bg-neutral-800 px-2 text-xl font-medium duration-300 peer-placeholder-shown:top-9 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-3 peer-focus:translate-x-1.5 peer-focus:scale-75 peer-focus:px-2">Testo</label>
     </div>
 
@@ -30,72 +30,79 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Navbar from "@/components/Navbar.vue"
 import { useMainStore } from "@/store"
 import { useRoute } from "vue-router"
-import { ref } from "vue"
+import router from "@/router"
+import { ref, onMounted } from "vue"
+import api from "@/api"
 
-export default {
-  name: "NoteReaderView",
-  components: {
-    Navbar,
-  },
-  setup() {
-    const classColor = "text-amber-300 dark:text-amber-400"
-    const store = useMainStore()
-    const route = useRoute()
-    const token = localStorage.getItem("token")
-    const colorsMap = {
-      grey: "bg-gray-50 text-gray-600 ring-gray-500/10 dark:bg-grey-400/10 dark:text-grey-400 dark:ring-grey-400/20",
-      red: "bg-red-50 text-red-700 ring-red-600/10 dark:bg-red-400/10 dark:text-red-400 dark:ring-red-400/20",
-      yellow: "bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:bg-yellow-400/10 dark:text-yellow-500 dark:ring-yellow-400/20",
-      green: "bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20",
-      blue: "bg-blue-50 text-blue-700 ring-blue-700/10 dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30",
-      indigo: "bg-indigo-50 text-indigo-700 ring-indigo-700/10 dark:bg-indigo-400/10 dark:text-indigo-400 dark:ring-indigo-400/30",
-      purple: "bg-purple-50 text-purple-700 ring-purple-700/10 dark:bg-purple-400/10 dark:text-purple-400 dark:ring-purple-400/30",
-      pink: "bg-pink-50 text-pink-700 ring-pink-700/10 dark:bg-pink-400/10 dark:text-pink-400 dark:ring-pink-400/20",
+const store = useMainStore()
+const route = useRoute()
+
+const colorsMap = store.colorsMap
+const classColor = "text-amber-300 dark:text-amber-400"
+const selected = ref("")
+const tagFilter = ref([])
+const currentNote = ref({})
+
+const myButton = {
+  exist: true,
+  paths: ["m4.5 12.75 6 6 9-13.5"],
+  function: async () => {
+    if (currentNote.value.id === "") {
+      await api.createNote(currentNote.value.title, currentNote.value.content, selected.value)
+
+      const response = await api.getNotes()
+      const notes = response.content.notes
+      store.notes = notes
+    } else {
+      await api.editNote(currentNote.value.id, currentNote.value.title, currentNote.value.content, selected.value)
     }
-    const selected = ref("")
 
-    const tagFilter = ref([])
-    const currentNote = ref({})
-
-    fetch("http://localhost:3000/get_notes", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        token: `${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        store.notes = data.content.notes
-        store.user.tags = data.content.tags
-        currentNote.value = store.notes.filter((note) => note.id == route.params.id)[0]
-        if (currentNote.tag !== "") {
-          tagFilter.value = store.user.tags.filter((tag) => tag.name == store.currentNote.tag)
-        }
-        tagFilter.value = tagFilter.value.map((tag) => ({"name": tag.name, "color": colorsMap[tag.color]}))
-        selected.value = currentNote.value.tag
-      })
-    
-
-    return { classColor, currentNote, tagFilter, selected, colorsMap, store }
-  },
-  methods: {
-    selectBadge(name) {
-      if (this.selected === name) { 
-        this.selected = ""
-        this.tagFilter = this.store.user.tags.map((tag) => ({"name": tag.name, "color": this.colorsMap[tag.color]}))  
-      }
-      else if (this.selected.length >= 0) {
-        this.selected = name
-        this.tagFilter = this.tagFilter.filter(tag => tag.name === name)
-      }
-    }
+    router.go(-1)
   },
 }
+
+onMounted(async () => {
+  if (route.params.id === "new") {
+    currentNote.value = {
+      id: "",
+      title: "",
+      content: "",
+      tag: "",
+    }
+  } else {
+    const response = await api.getNotes()
+    const notes = response.content.notes
+    store.notes = notes
+
+    currentNote.value = store.notes.filter((note) => note.id == route.params.id)[0]
+  }
+
+  const response = await api.getTags()
+  const tags = response.content.tags
+  store.tags = tags
+  tagFilter.value = tags
+
+  if (currentNote.value.tag !== "") tagFilter.value = store.tags.filter((tag) => tag.name == currentNote.value.tag)
+  
+  tagFilter.value = tagFilter.value.map((tag) => ({"name": tag.name, "color": colorsMap[tag.color]}))
+  selected.value = currentNote.value.tag
+})
+
+function selectBadge(name) {
+  if (selected.value === name) { 
+    selected.value = ""
+    tagFilter.value = store.tags.map((tag) => ({"name": tag.name, "color": colorsMap[tag.color]}))  
+  }
+  else if (selected.value.length >= 0) {
+    selected.value = name
+    tagFilter.value = tagFilter.value.filter(tag => tag.name === name)
+  }
+}
+
 </script>
 
 <style scoped>

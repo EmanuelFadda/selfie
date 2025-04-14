@@ -8,18 +8,19 @@
   </component>
 </template>
 
-<script>
-export default {
-  name: "HomeTopItem",
-  props: {
-    title: String,
-    route: String,
-    content: String,
-    lightBgColor: String,
-    darkBgColor: String,
-    lightBordColor: String,
-    darkBordColor: String,
-    componentType: String,
-  },
-}
+<script setup>
+defineOptions({
+  name: "HomeTopItem"
+})
+
+defineProps({
+  title: String,
+  route: String,
+  content: String,
+  lightBgColor: String,
+  darkBgColor: String,
+  lightBordColor: String,
+  darkBordColor: String,
+  componentType: String,
+})
 </script>
