@@ -4,21 +4,9 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Navbar from "../components/Navbar.vue"
 
-export default {
-  name: "TomatoView",
-  components: {
-    Navbar,
-  },
-  setup() {
-    return {}
-  },
-  data() {
-    return {
-      classColor: "text-red-400 dark:text-red-500",
-    }
-  },
-}
+const classColor = "text-red-400 dark:text-red-500"
+  
 </script>

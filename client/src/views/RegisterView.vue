@@ -4,11 +4,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "RegisterView",
-  setup() {
-    return {}
-  },
-}
+<script setup>
+
 </script>

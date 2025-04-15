@@ -14,70 +14,71 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, computed } from "vue"
-import router from "@/router"
+import { useRouter } from "vue-router"
 
-export default {
-  name: "CreditsView",
-  setup() {
-    const name1 = ref(null)
-    const name2 = ref(null)
-    const animationStarted = ref(false)
-    const back = ref(null)
-    const pageTitle = ref(null)
+const name1 = ref(null)
+const name2 = ref(null)
+const animationStarted = ref(false)
+const back = ref(null)
+const pageTitle = ref(null)
 
-    const name1Class = computed(() => (animationStarted.value ? "absolute text-2xl font-semibold whitespace-nowrap" : "text-2xl font-semibold flex justify-center"))
+const router = useRouter()
 
-    const name2Class = computed(() => (animationStarted.value ? "absolute text-2xl font-semibold whitespace-nowrap" : "text-2xl font-semibold flex justify-center"))
+const name1Class = computed(() =>
+  animationStarted.value ? "absolute text-2xl font-semibold whitespace-nowrap" : "text-2xl font-semibold flex justify-center"
+)
 
-    const animate = (element, speedX, speedY) => {
-      let rect = element.getBoundingClientRect()
-      let x = window.innerWidth / 2 - element.innerHTML.length * 3
-      let y = rect.y + (element.innerHTML.length > 17 ? 0 : 32) - 20
+const name2Class = computed(() =>
+  animationStarted.value ? "absolute text-2xl font-semibold whitespace-nowrap" : "text-2xl font-semibold flex justify-center"
+)
 
-      element.style.position = "absolute"
-      element.style.left = `${x}px`
-      element.style.top = `${y}px`
+const animate = (element, speedX, speedY) => {
+  let rect = element.getBoundingClientRect()
+  let x = window.innerWidth / 2 - element.innerHTML.length * 3
+  let y = rect.y + (element.innerHTML.length > 17 ? 0 : 32) - 20
 
-      const update = () => {
-        if (!element) return
+  element.style.position = "absolute"
+  element.style.left = `${x}px`
+  element.style.top = `${y}px`
 
-        x += speedX
-        y += speedY
+  const update = () => {
+    if (!element) return
 
-        if (x <= 0 || x + element.offsetWidth >= window.innerWidth) speedX *= -1
-        if (y <= 0 || y + element.offsetHeight >= window.innerHeight) speedY *= -1
+    x += speedX
+    y += speedY
 
-        element.style.left = `${x}px`
-        element.style.top = `${y}px`
+    if (x <= 0 || x + element.offsetWidth >= window.innerWidth) speedX *= -1
+    if (y <= 0 || y + element.offsetHeight >= window.innerHeight) speedY *= -1
 
-        requestAnimationFrame(update)
-      }
-      update()
-    }
+    element.style.left = `${x}px`
+    element.style.top = `${y}px`
 
-    return { name1, name2, animationStarted, animate, name1Class, name2Class, back, pageTitle }
-  },
-  methods: {
-    goBack() {
-      this.back.classList.add("animate-arrow")
-      this.pageTitle.classList.add("animate-page-title")
+    requestAnimationFrame(update)
+  }
+  update()
+}
 
-      setTimeout(() => {
-        router.go(-1)
-      }, 650)
-    },
-    startAnimation() {
-      if (this.animationStarted) return
-      this.animationStarted = true
+const goBack = () => {
+  if (back.value && pageTitle.value) {
+    back.value.classList.add("animate-arrow")
+    pageTitle.value.classList.add("animate-page-title")
 
-      if (this.name1 && this.name2) {
-        this.animate(this.name1, -1.5, -1.5)
-        this.animate(this.name2, 1.5, -1.5)
-      }
-    },
-  },
+    setTimeout(() => {
+      router.go(-1)
+    }, 650)
+  }
+}
+
+const startAnimation = () => {
+  if (animationStarted.value) return
+  animationStarted.value = true
+
+  if (name1.value && name2.value) {
+    animate(name1.value, -1.5, -1.5)
+    animate(name2.value, 1.5, -1.5)
+  }
 }
 </script>
 

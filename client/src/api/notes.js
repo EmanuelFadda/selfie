@@ -22,7 +22,7 @@ async function createNote(title, content, tag) {
 
 async function editNote(id, new_title, new_content, new_tag) {
   try {
-    const response = await AXIOS.post("/login", { id, new_title, new_content, new_tag })
+    const response = await AXIOS.post("/edit_note", { id, new_title, new_content, new_tag })
     return response.data
   } catch (error) {
     console.error("Edit note error:", error)

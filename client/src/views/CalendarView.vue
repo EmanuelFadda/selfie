@@ -4,18 +4,9 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Navbar from "@/components/Navbar.vue"
 
-export default {
-  name: "CalendarView",
-  components: {
-    Navbar,
-  },
-  setup() {
-    const classColor = "text-sky-400 dark:text-sky-500"
+const classColor = "text-sky-400 dark:text-sky-500"
 
-    return { classColor }
-  },
-}
 </script>

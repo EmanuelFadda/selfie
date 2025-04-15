@@ -33,29 +33,37 @@
 </template>
 
 <script>
+defineOptions({
+  name: "DeleteModal"
+})
+
+defineProps({
+  deleteFunction: {
+    type: Function,
+    required: true,
+  },
+  cancelFunction: {
+    type: Function,
+    required: true,
+  },
+  state: {
+    type: Boolean,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  message: {
+    type: String,
+    required: true,
+  },
+})
+
 export default {
   name: "DeleteModal",
   props: {
-    deleteFunction: {
-      type: Function,
-      required: true,
-    },
-    cancelFunction: {
-      type: Function,
-      required: true,
-    },
-    state: {
-      type: Boolean,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    message: {
-      type: String,
-      required: true,
-    },
+    
   }
 }
 

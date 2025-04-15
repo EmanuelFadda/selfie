@@ -4,9 +4,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "CalendarNotificationsView",
-  components: {},
-}
+<script setup>
+
 </script>

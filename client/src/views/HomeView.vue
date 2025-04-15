@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-h-screen flex-col">
-    <Navbar viewTitle="Selfie" name="Nome" surname="Cognome" :settingsArray="settingsArray"></Navbar>
+    <Navbar viewTitle="Selfie" :name="store.user.name" :surname="store.user.surname" :image="store.user.image" :settingsArray="settingsArray"></Navbar>
 
     <!-- Anteprima oggetti delle note e pomodoro (default piccole) -->
     <div class="ml-5 mr-5 grid h-[calc(100vh-108px)] grid-cols-2 grid-rows-2 gap-4 lg:ml-28 lg:mr-28 lg:h-[calc(100vh-132px)] lg:grid-cols-3 lg:gap-6 xl:gap-7 2xl:gap-8 2xl:ml-36 2xl:mr-36">

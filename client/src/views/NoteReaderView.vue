@@ -51,15 +51,15 @@ const myButton = {
   exist: true,
   paths: ["m4.5 12.75 6 6 9-13.5"],
   function: async () => {
-    if (currentNote.value.id === "") {
+    if (currentNote.value.id === "new") {
       await api.createNote(currentNote.value.title, currentNote.value.content, selected.value)
-
-      const response = await api.getNotes()
-      const notes = response.content.notes
-      store.notes = notes
     } else {
       await api.editNote(currentNote.value.id, currentNote.value.title, currentNote.value.content, selected.value)
     }
+
+    const response = await api.getNotes()
+    const notes = response.content.notes
+    store.notes = notes
 
     router.go(-1)
   },
@@ -68,7 +68,7 @@ const myButton = {
 onMounted(async () => {
   if (route.params.id === "new") {
     currentNote.value = {
-      id: "",
+      id: "new",
       title: "",
       content: "",
       tag: "",
@@ -102,7 +102,6 @@ function selectBadge(name) {
     tagFilter.value = tagFilter.value.filter(tag => tag.name === name)
   }
 }
-
 </script>
 
 <style scoped>

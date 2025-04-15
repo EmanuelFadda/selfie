@@ -9,17 +9,18 @@
 </template>
 
 <script>
-export default {
-  name: "HomeBottomItem",
-  props: {
-    title: String,
-    route: String,
-    content: String,
-    lightBgColor: String,
-    darkBgColor: String,
-    lightBordColor: String,
-    darkBordColor: String,
-    componentType: String,
-  },
-}
+defineOptions({
+  name: "HomeBottomItem"
+})
+
+defineProps({
+  title: String,
+  route: String,
+  content: String,
+  lightBgColor: String,
+  darkBgColor: String,
+  lightBordColor: String,
+  darkBordColor: String,
+  componentType: String,
+})
 </script>

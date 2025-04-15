@@ -12,7 +12,7 @@ async function getTags() {
 
 async function createTag(name, color) {
   try {
-    const response = await AXIOS.post("/create_tag", { name, color})
+    const response = await AXIOS.post("/create_tag", { name, color })
     return response.data
   } catch (error) {
     console.error("Create tag error:", error)

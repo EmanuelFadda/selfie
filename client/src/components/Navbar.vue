@@ -27,7 +27,7 @@
   <div :class="settings ? 'translate-x-0' : 'translate-x-full'" class="fixed right-0 top-0 h-full w-[85%] bg-slate-100 shadow-lg transition-transform duration-[400ms] sm:w-[300px] dark:bg-neutral-800">
     <!-- Menu content -->
     <div class="mt-6 flex items-center space-x-2 pl-2">
-      <img src="" alt="Immagine profilo" class="h-[52px] w-[52px] rounded-full border-2 border-slate-200 dark:border-neutral-600" />
+      <img :src="image" alt="Immagine profilo" class="h-[52px] w-[52px] rounded-full border-2 border-slate-200 dark:border-neutral-600" />
       <div class="flex-none">
         <h2 class="text-lg font-semibold text-neutral-900 dark:text-slate-50">{{ name + " " + surname }}</h2>
         <h5 class="text-sm text-neutral-600 dark:text-neutral-400">Visualizza profilo</h5>
@@ -46,39 +46,34 @@
   </div>
 </template>
 
-<script>
+<script setup>
+defineOptions({ name: "Navbar" })
 import router from "@/router"
 import { ref } from "vue"
 
-export default {
-  name: "Navbar",
-  setup() {
-    const back = ref(null)
-    const pageTitle = ref(null)
-    const settings = ref(false)
-    const mybutton = ref(null)
+const back = ref(null)
+const pageTitle = ref(null)
+const settings = ref(false)
+const mybutton = ref(null)
 
-    return { back, pageTitle, settings, mybutton }
-  },
-  props: {
-    name: String,
-    surname: String,
-    viewTitle: String,
-    backButton: Boolean,
-    titleColor: { type: String, default: "" },
-    settingsArray: { type: Array, default: [] },
-    myButton: { type: Object, default: {exist: false}}
-  },
-  methods: {
-    goBack() {
-      this.back.classList.add("animate-arrow")
-      this.pageTitle.classList.add("animate-page-title")
-      
-      setTimeout(() => {
-        router.go(-1)
-      }, 650)
-    },
-  },
+const props = defineProps({
+  name: String,
+  surname: String,
+  viewTitle: String,
+  backButton: Boolean,
+  titleColor: { type: String, default: "" },
+  settingsArray: { type: Array, default: [] },
+  myButton: { type: Object, default: {exist: false}},
+  image: String,
+})
+
+const goBack = () => {
+  back.value.classList.add("animate-arrow")
+  pageTitle.value.classList.add("animate-page-title")
+  
+  setTimeout(() => {
+    router.go(-1)
+  }, 650)
 }
 </script>
 

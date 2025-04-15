@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-h-screen w-screen items-center justify-center">
-    <div class="max-sm:form-shadow max-sm:min-h-screen dark:form-shadow w-full sm:max-w-md rounded-xl">
+    <div class="form-shadow max-sm:min-h-screen dark:form-shadow w-full sm:max-w-md rounded-xl">
       <div class="flex items-center justify-center mb-6 mt-24 sm:mt-12">
         <!-- App Logo -->
         <img src="../assets/logo.png" class="w-16 h-16 rounded-full mr-[14px] -ml-10">
