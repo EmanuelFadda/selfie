@@ -32,7 +32,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 defineOptions({
   name: "DeleteModal"
 })
@@ -59,12 +59,4 @@ defineProps({
     required: true,
   },
 })
-
-export default {
-  name: "DeleteModal",
-  props: {
-    
-  }
-}
-
 </script>

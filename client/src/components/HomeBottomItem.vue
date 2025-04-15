@@ -8,7 +8,7 @@
   </component>
 </template>
 
-<script>
+<script setup>
 defineOptions({
   name: "HomeBottomItem"
 })
