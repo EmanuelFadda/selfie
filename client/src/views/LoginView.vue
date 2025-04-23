@@ -27,7 +27,7 @@
           <!-- Go To Register -->
           <p class="mb-4 mt-2 ml-1 text-base font-light">
             Non hai ancora un account?
-            <a href="#" class="font-medium hover:underline">Registrati</a>
+            <router-link to="/register" class="font-medium hover:underline">Registrati</router-link>
           </p>
         </form>
       </div>
