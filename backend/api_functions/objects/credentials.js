@@ -13,6 +13,7 @@ async function set_credentials(client, req, res) {
     req.file.buffer.toString("base64"),
     req.file.mimetype
   )
+
   let set_obj = {
     "credentials.name": req.body.new_name,
     "credentials.surname": req.body.new_surname,
@@ -21,7 +22,9 @@ async function set_credentials(client, req, res) {
     "credentials.image": image,
     "credentials.password": req.body.new_password,
     "credentials.birthday": req.body.new_birthday,
+    "credentials.login":req.body.new_login
   }
+    
   edit_object(client, req, res, set_obj, name_obj, null)
 }
 

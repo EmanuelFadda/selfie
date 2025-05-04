@@ -6,29 +6,21 @@ const {
   verify_session,
   get_new_image,
 } = require("../getters");
+
 const { ObjectId } = require("mongodb");
 
 async function login(client, req, res) {
   // restituisce il token con cui fare le query
   try {
-    // connecting with db
-    collection = await get_db_collection(client);
+    let login_credentials=req.body
 
-    //creating a query
-    let query = {
-      $and: [
-        { "credentials.username": req.body.username },
-        { "credentials.password": req.body.password },
-      ],
-    };
+    let user= await search_account(client,login_credentials)
 
-    //searching for result
-    let result = await collection.find(query, { _id: 1 }).toArray();
-    user = result[0];
     let msg;
     if (user != null) {
       // il server invia il token jwt al client,il client da adesso in poi dovrà usare questo
       // per autenticarsi
+      console.log(user._id)
       let token = get_token(user._id);
       msg = get_query_response(true, token, `Successful login`);
     } else {
@@ -40,6 +32,40 @@ async function login(client, req, res) {
     res.send(msg);
   }
 }
+
+
+// login 
+// 1) metto username,password -> faccio la richiesta -> cerca l'account 
+        //      -> trovato -> ti da il token 
+        //      -> non trovato -> niente
+// 2) accedo con google -> inserisco la password google -> cerco l'account (con email, tipo di login)
+
+// funzione generalizzata per la ricerca dell'account
+async function search_account(client,login_credentials){
+  // connecting with db
+  collection = await get_db_collection(client);
+
+  /*
+    //creating a query
+    let query = {
+      $and: [
+        login_credentials
+      ]
+    };
+  */
+  //searching for result
+let result = await collection.find(login_credentials, { projection: { _id: 1 } }).toArray();
+  user = result[0];
+  return user
+}
+
+
+// { "credentials.username": req.body.username },{ "credentials.password": req.body.password }
+// {"credentials.email":req.body.email}, {"credentials.login": req.body.login}
+
+/*
+
+*/ 
 
 async function create_account(client, req, res) {
   // ricordarsi cosa passare al server in immagine
@@ -56,7 +82,6 @@ async function create_account(client, req, res) {
       );
     }
 
-
     new_user = get_new_user(
       req.body.name,
       req.body.surname,
@@ -64,7 +89,8 @@ async function create_account(client, req, res) {
       req.body.email,
       image,
       req.body.password,
-      req.body.birthday
+      req.body.birthday,
+      req.body.login
     );
 
     collection.insertOne(new_user);
@@ -88,7 +114,6 @@ async function delete_account(client, req, res) {
     collection = await get_db_collection(client);
     // creazione degli oggetti per la creazione della query
     let object_id_user = ObjectId.createFromHexString(id_user);
-    console.log(object_id_user);
     await collection.deleteOne({ _id: object_id_user });
     msg = get_query_response(true, null, `User ${id_user} was deleted`);
     res.send(msg);
