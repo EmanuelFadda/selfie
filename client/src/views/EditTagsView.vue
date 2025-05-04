@@ -232,7 +232,6 @@ async function saveTag(index) {
     const tags = tags_response.content.tags
     store.tags = tags
 
-    console.log(store.tags)
 
     const response = await api.getNotes()
     const notes = response.content.notes

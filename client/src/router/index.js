@@ -10,7 +10,7 @@ import NotesView from "@/views/NotesView.vue"
 import TomatoView from "@/views/TomatoView.vue"
 import NoteReaderView from "@/views/NoteReaderView.vue"
 import EditTagsView from "@/views/EditTagsView.vue"
-
+import CallbackView from "@/views/CallbackView.vue"
 const routes = [
   {
     path: "/",
@@ -67,6 +67,11 @@ const routes = [
     name: "tomato",
     component: TomatoView,
   },
+  {
+    path:"/callback",
+    name: "callback",
+    component: CallbackView,
+  }
 ]
 
 const router = createRouter({

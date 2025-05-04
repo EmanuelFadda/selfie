@@ -13,14 +13,12 @@ async function login(client, req, res) {
   // restituisce il token con cui fare le query
   try {
     let login_credentials=req.body
-
     let user= await search_account(client,login_credentials)
 
     let msg;
     if (user != null) {
       // il server invia il token jwt al client,il client da adesso in poi dovrà usare questo
       // per autenticarsi
-      console.log(user._id)
       let token = get_token(user._id);
       msg = get_query_response(true, token, `Successful login`);
     } else {
@@ -34,38 +32,19 @@ async function login(client, req, res) {
 }
 
 
-// login 
-// 1) metto username,password -> faccio la richiesta -> cerca l'account 
-        //      -> trovato -> ti da il token 
-        //      -> non trovato -> niente
-// 2) accedo con google -> inserisco la password google -> cerco l'account (con email, tipo di login)
 
 // funzione generalizzata per la ricerca dell'account
 async function search_account(client,login_credentials){
   // connecting with db
   collection = await get_db_collection(client);
-
-  /*
-    //creating a query
-    let query = {
-      $and: [
-        login_credentials
-      ]
-    };
-  */
   //searching for result
-let result = await collection.find(login_credentials, { projection: { _id: 1 } }).toArray();
+  let result = await collection.find(login_credentials, { projection: { _id: 1 } }).toArray();
+  console.log(result)
   user = result[0];
   return user
 }
 
 
-// { "credentials.username": req.body.username },{ "credentials.password": req.body.password }
-// {"credentials.email":req.body.email}, {"credentials.login": req.body.login}
-
-/*
-
-*/ 
 
 async function create_account(client, req, res) {
   // ricordarsi cosa passare al server in immagine
