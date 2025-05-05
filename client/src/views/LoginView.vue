@@ -1,7 +1,7 @@
 <template>
   <div class="flex min-h-screen w-screen items-center justify-center">
     <div class="form-shadow dark:form-shadow w-full rounded-xl max-sm:min-h-screen sm:max-w-md">
-      <div class="mb-6 mt-24 flex items-center justify-center sm:mt-12">
+      <div class="mb-4 mt-24 flex items-center justify-center sm:mt-10">
         <!-- App Logo -->
         <img src="../assets/logo.png" class="-ml-10 mr-[14px] h-16 w-16 rounded-full" />
         <!-- Title -->
@@ -24,9 +24,9 @@
           </div>
           <GoogleSignIn />
           <!-- Login Button -->
-          <button @click="login" type="button" class="mt-16 w-full rounded-xl bg-white py-3 text-center text-lg font-semibold focus:outline sm:mt-12 dark:bg-neutral-800">Accedi</button>
+          <button @click="login" type="button" class="mt-16 w-full rounded-xl bg-white py-3 text-center  font-semibold focus:outline sm:mt-10 dark:bg-neutral-800">Accedi</button>
           <!-- Go To Register -->
-          <p class="mb-4 ml-1 mt-2 text-base font-light">
+          <p class="mb-3 ml-1 mt-2 text-sm font-light">
             Non hai ancora un account?
             <router-link :to="{ path: '/register', query: { type: 0 } }" class="font-medium hover:underline">Registrati</router-link>
           </p>

@@ -1,7 +1,15 @@
 <template>
-  <div>
-    <div ref="googleBtn"></div>
+  <div class="flex items-center justify-center mt-5 mb-2.5">
+    <div class="flex-grow h-px bg-stone-300"></div>
+    <span class="px-3 text-sm whitespace-nowrap font-medium">Oppure</span>
+    <div class="flex-grow h-px bg-stone-300"></div>
+
   </div>
+  <div class="flex items-center justify-center">
+    <div ref="googleBtn" class=""></div>
+
+  </div>
+
 </template>
 
 <script setup>
@@ -9,16 +17,16 @@ import router from "@/router"
 import { onMounted, ref } from "vue"
 import { useMainStore } from "@/store"
 
-
 defineOptions({
   name: "GoogleSignIn",
 })
+
 const googleBtn = ref(null)
-const store=useMainStore()
+const store = useMainStore()
 
 function handleCredentialResponse(response) {
   // salva nello store il risultato della risposta
-  store.callback_token=response.credential
+  store.callback_token = response.credential
   router.push({ name: "callback" })
 }
 
@@ -33,7 +41,6 @@ function loadGoogleScript(callback) {
   document.head.appendChild(script)
 }
 
-
 // inizializza il bottone google
 function initializeGoogleSignIn() {
   google.accounts.id.initialize({
@@ -46,10 +53,8 @@ function initializeGoogleSignIn() {
   google.accounts.id.renderButton(googleBtn.value, {
     type: "standard",
     theme: "filled_black",
-    size: "medium",
-    text: "continue_with",
     shape: "rectangular",
-    logo_alignment: "left",
+    logo_alignment: "center",
   })
 
   // Se vuoi mostrare il prompt automatico:
