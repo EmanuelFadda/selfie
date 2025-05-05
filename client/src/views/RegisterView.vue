@@ -1,66 +1,76 @@
 <template>
   <div class="flex min-h-screen w-screen items-center justify-center">
     <div class="form-shadow dark:form-shadow w-full rounded-xl max-sm:min-h-screen sm:max-w-md">
-      <div class="mb-6 mt-24 flex items-center justify-center sm:mt-12">
+      <div class="mb-2 mt-24 flex items-center justify-center sm:mt-10">
         <img src="../assets/logo.png" class="-ml-10 mr-[14px] h-16 w-16 rounded-full" />
         <h1 class="text-4xl font-bold md:text-4xl">Selfie</h1>
       </div>
-      <div class="p-8">
-        <div class="mb-8">
-          <div class="mb-2 flex justify-between">
-            <span :class="{ 'opacity-50': actual_step != 0 }" class="inline-block rounded-full bg-green-200 px-2 py-1 text-xs uppercase text-green-600" id="step1">User info</span>
-            <span :class="{ 'opacity-50': actual_step != 1 }" class="inline-block rounded-full bg-green-200 px-2 py-1 text-xs uppercase text-green-600" id="step2">Credentials</span>
-            <span :class="{ 'opacity-50': actual_step != 2 }" class="inline-block rounded-full bg-green-200 px-2 py-1 text-xs uppercase text-green-600" id="step3">User image</span>
+      <div class="p-8" :class="{ 'py-6' : actual_step === 1}">
+        <div class="mb-6">
+          <div class="mb-2 grid grid-cols-3 sm:gap-14 gap-6">
+            <span @click="goToStep(0)" class="inline-block rounded-full px-2 py-1 text-sm bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20 text-center" id="step1">Info Utente</span>
+            <span @click="goToStep(1)" :class="{ 'opacity-50': actual_step < 1 }" class="inline-block rounded-full px-2 py-1 text-sm bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20 text-center" id="step2">Credenziali</span>
+            <span @click="goToStep(2)" :class="{ 'opacity-50': actual_step < 2 }" class="inline-block rounded-full px-2 py-1 text-sm bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20 text-center" id="step3">Immagine</span>
           </div>
-          <div class="mb-4 flex h-2 overflow-hidden rounded bg-green-200 text-xs">
-            <div ref="progress_bar" :style="{ width: `${(actual_step + 1) * 25}%` }" class="flex flex-col justify-center whitespace-nowrap bg-green-500 text-center text-white shadow-none transition-all duration-500 ease-in-out"></div>
+          <div class="flex h-2 overflow-hidden rounded bg-green-500/10 text-xs">
+            <div ref="progress_bar" :style="{ width: `${(actual_step + 1) * 33 + (actual_step === 2 ? 1 : 0)}%` }" class="flex flex-col justify-center whitespace-nowrap bg-green-400 text-center text-white shadow-none transition-all duration-500 ease-in-out"></div>
           </div>
         </div>
         <form @submit.prevent="submit()" ref="multi_step_form">
           <div v-if="actual_step === 0" ref="step_1" class="step">
             <!-- personal information -->
-            <label for="name" class="mb-2 block text-sm">Name</label>
+            <label for="name" class="mb-2 block font-medium">Nome</label>
             <input v-model="name" name="name" id="name" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci il nome" required />
-            <label for="surname" class="mb-2 block text-sm">Surname</label>
+            <label for="surname" class="mb-2 block font-medium">Cognome</label>
             <input v-model="surname" name="surname" id="surname" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci il cognome" required />
-            <label for="birthday" class="mb-2 block text-sm">Birthday</label>
+            <label for="birthday" class="mb-2 block font-medium">Compleanno</label>
             <input v-model="birthday" type="date" name="birthday" id="birthday" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" required />
           </div>
 
           <div v-if="actual_step === 1" ref="step_2" class="step">
             <!-- account information -->
-            <label for="email" class="mb-2 block text-sm">Email</label>
+            <label for="email" class="mb-2 block ">Email</label>
             <input :disabled="isDisabled" v-model="email" type="email" name="email" id="email" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci l'email" required />
 
-            <label for="username" class="mb-2 block text-sm">Username</label>
+            <label for="username" class="mb-2 block font-medium">Username</label>
             <input :disabled="isDisabled" v-model="username" ref="input_username" type="username" name="username" id="username" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci l'username" required />
+            
+            <label for="password" class="mb-2 block font-medium">Password</label>
+            <input :disabled="isDisabled" v-model="password" ref="input_password" type="password" name="password" id="password" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci la password" required />
 
-            <label for="password" class="mb-2 block text-sm">Password</label>
-            <input :disabled="isDisabled" v-model="password" ref="input_password" type="" name="password" id="password" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci la password" required />
-
-            <label for="r_password" class="mb-2 block text-sm">Ripeti la password</label>
-            <input :disabled="isDisabled" v-model="r_password" ref="input_r_password" type="" name="r_password" id="r_password" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Riscrivi la password" required />
+            <label for="r_password" class="mb-2 block font-medium">Ripeti la password</label>
+            <input :disabled="isDisabled" v-model="r_password" ref="input_r_password" type="password" name="r_password" id="r_password" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Riscrivi la password" required />
           </div>
 
           <div v-if="actual_step === 2" ref="step_3" class="step">
             <!-- not required credentials -->
-            <label for="image" class="mb-2 block text-sm">Immagine profilo</label>
-            <input type="file" ref="input_image" @change="get_image()" name="image" id="image" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" />
+            <label for="image" class="mb-2 block font-medium">Immagine profilo</label>
+            <input type="file" ref="input_image" @change="get_image()" name="image" id="image" class="mb-1.5 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" />
+            <p class="mb-4 ml-1 text-sm font-light">*se non inserita, ne viene usata una di default</p>
             <div class="flex justify-center">
               <img v-if="image" :src="image" class="mt-2 h-32 w-32 object-cover" />
             </div>
           </div>
 
-          <p class="mb-4 ml-1 mt-2 text-base font-light">
+          <p :class="{ 'invisible': actual_step != 0 }" class="mb-4 ml-1 mt-2 text-sm font-light">
             Hai già un account?
             <router-link to="/" class="font-medium hover:underline">Accedi</router-link>
           </p>
 
           <!-- bottoni -->
-          <div class="mt-8 flex justify-between">
-            <button ref="prevBtn" @click="previous_step()" type="button" class="focus:shadow-outline hidden rounded-lg bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400 focus:outline-none">Previous</button>
-            <button ref="nextBtn" @click="next_step()" type="button" class="focus:shadow-outline rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600 focus:outline-none">Next</button>
-            <button ref="submitBtn" type="submit" class="focus:shadow-outline hidden rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600 focus:outline-none">Submit</button>
+          <div class="flex" :class=" actual_step === 0 ? 'justify-end mt-10 sm:mt-0' : 'justify-between mt-6 sm:-mt-6'">
+            <button ref="prevBtn" @click="previous_step()" type="button" class="flex items-center focus:shadow-outline rounded-xl bg-gray-300 py-3 pr-4 text-gray-800 hover:bg-gray-400 focus:outline-none">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="size-[22px] ml-1.5 mr-0.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+              </svg>
+              Indietro
+            </button>
+            <button ref="nextBtn" @click="next_step()" type="button" class="flex items-center focus:shadow-outline rounded-xl bg-green-500 py-3 pl-4 text-white hover:bg-green-600 focus:outline-none">Avanti
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="size-[22px] ml-0.5 mr-1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+            </button>
+            <button ref="submitBtn" type="submit" class="focus:shadow-outline hidden rounded-xl bg-green-500 px-4 text-white hover:bg-green-600 focus:outline-none">Registrati</button>
           </div>
         </form>
       </div>
@@ -97,7 +107,7 @@ const password = ref("")
 const r_password = ref("")
 const username = ref("")
 const image = ref("")
-let file=null
+let file = null
 const login = ref("")
 
 let isDisabled = 0
@@ -107,9 +117,9 @@ let step_1 = ref(null)
 let step_2 = ref(null)
 let step_3 = ref(null)
 
-step[0] = step_1
-step[1] = step_2
-step[2] = step_3
+step.push(step_1)
+step.push(step_2)
+step.push(step_3)
 
 let actual_step = ref(0)
 
@@ -140,7 +150,7 @@ onMounted(async () => {
     username.value = ""
     image.value = ""
     login.value = 0
-    file=null
+    file = null
   }
 })
 
@@ -171,6 +181,7 @@ function resetForm() {
   r_password.value = ""
   image.value = ""
 }
+
 function next_step() {
   if (validateStep()) {
     actual_step.value++
@@ -184,13 +195,15 @@ function previous_step() {
 }
 
 async function submit() {
-  if (validateStep(actual_step)) {
-    alert("Registrazione completata!")
-    const response = await api.create_account(name.value, surname.value, password.value, email.value, file, username.value, birthday.value, login.value)
-    if (response.success) {
-      actual_step++
-      router.push("/")
-    }
+  for (let i = 0; i < 3; i++) {
+    if (!validateStep(i)) return 
+  }
+  
+  alert("Registrazione completata!")
+  const response = await api.create_account(name.value, surname.value, password.value, email.value, file, username.value, birthday.value, login.value)
+  if (response.success) {
+    actual_step++
+    router.push("/")
   }
 }
 
@@ -209,16 +222,40 @@ function validateStep() {
   inputs.forEach((input) => {
     if (!input.value) {
       isValid = false
+
+      input.classList.add("border")
+      input.classList.add("border-red-500")
+
+      setTimeout(() => {
+        input.classList.remove("border")
+        input.classList.remove("border-red-500")
+      }, 2000)
     }
   })
 
   if (actual_step.value === 1) {
     if (!isDisabled && password.value !== r_password.value) {
       isValid = false
+
+      input_password.value.classList.add("border")
       input_password.value.classList.add("border-red-500")
+      input_r_password.value.classList.add("border")
+      input_r_password.value.classList.add("border-red-500")
+
+      setTimeout(() => {
+        input_password.value.classList.remove("border")
+        input_password.value.classList.remove("border-red-500")
+        input_r_password.value.classList.remove("border")
+        input_r_password.value.classList.remove("border-red-500")
+      }, 2000)
     }
   }
 
   return isValid
+}
+
+function goToStep(step) {
+  actual_step.value = step
+  showStep()
 }
 </script>
