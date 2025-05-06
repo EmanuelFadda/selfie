@@ -24,7 +24,7 @@
           </div>
           <GoogleSignIn />
           <!-- Login Button -->
-          <button @click="login" type="button" class="mt-16 w-full rounded-xl bg-white py-3 text-center  font-semibold focus:outline sm:mt-10 dark:bg-neutral-800">Accedi</button>
+          <button @click="login" type="button" class="mt-16 w-full rounded-xl bg-white py-3 text-center font-semibold focus:outline sm:mt-10 dark:bg-neutral-800">Accedi</button>
           <!-- Go To Register -->
           <p class="mb-3 ml-1 mt-2 text-sm font-light">
             Non hai ancora un account?
@@ -60,6 +60,4 @@ async function login() {
     alert(response.message)
   }
 }
-
-
 </script>

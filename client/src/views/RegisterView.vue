@@ -5,7 +5,8 @@
         <img src="../assets/logo.png" class="-ml-10 mr-[14px] h-16 w-16 rounded-full" />
         <h1 class="text-4xl font-bold md:text-4xl">Selfie</h1>
       </div>
-      <div class="p-8" :class="{ 'py-6' : actual_step === 1}">
+      <div class="sm:py-6 px-8" :class="actual_step === 0 ? 'pt-4' : 'pt-10'">
+        <h1 v-if="actual_step === 0" class="mb-6 mt-4 sm:mt-0 sm:mb-4 text-2xl font-bold tracking-tight md:text-2xl">Crea il tuo account!</h1>
         <div class="mb-6">
           <div class="mb-2 grid grid-cols-3 sm:gap-14 gap-6">
             <span @click="goToStep(0)" class="inline-block rounded-full px-2 py-1 text-sm bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20 text-center" id="step1">Info Utente</span>
@@ -46,9 +47,14 @@
             <!-- not required credentials -->
             <label for="image" class="mb-2 block font-medium">Immagine profilo</label>
             <input type="file" ref="input_image" @change="get_image()" name="image" id="image" class="mb-1.5 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" />
-            <p class="mb-4 ml-1 text-sm font-light">*se non inserita, ne viene usata una di default</p>
-            <div class="flex justify-center">
-              <img v-if="image" :src="image" class="mt-2 h-32 w-32 object-cover" />
+            <p class="mb-4 ml-1 text-sm font-light">*se non inserita, verrà usata un immagine default</p>
+            <h2 class="mt-8 ml-0.5 text-lg font-semibold">Ecco il tuo profilo:</h2>
+            <div class="mt-4 sm:mb-6 flex items-center space-x-4 pl-2">
+              <img :src="image" alt="Immagine profilo" class="text-sm h-24 w-24 rounded-full border-2 border-slate-200 dark:border-neutral-600 text-center object-cover" />
+              <div class="flex-none">
+                <h2 class="text-2xl font-semibold text-neutral-900 dark:text-slate-50">{{ namesurname }}</h2>
+                <h5 class="text-neutral-600 dark:text-neutral-400"> Visualizza profilo</h5>
+              </div>
             </div>
           </div>
 
@@ -59,18 +65,18 @@
 
           <!-- bottoni -->
           <div class="flex" :class=" actual_step === 0 ? 'justify-end mt-10 sm:mt-0' : 'justify-between mt-6 sm:-mt-6'">
-            <button ref="prevBtn" @click="previous_step()" type="button" class="flex items-center focus:shadow-outline rounded-xl bg-gray-300 py-3 pr-4 text-gray-800 hover:bg-gray-400 focus:outline-none">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="size-[22px] ml-1.5 mr-0.5">
+            <button ref="prevBtn" @click="previous_step()" type="button" class="flex items-center font-medium focus:shadow-outline rounded-xl bg-gray-300 py-2.5 pr-4 text-gray-800 hover:bg-gray-400 focus:outline-none">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-5 ml-1.5 mr-0.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
               </svg>
               Indietro
             </button>
-            <button ref="nextBtn" @click="next_step()" type="button" class="flex items-center focus:shadow-outline rounded-xl bg-green-500 py-3 pl-4 text-white hover:bg-green-600 focus:outline-none">Avanti
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="size-[22px] ml-0.5 mr-1.5">
+            <button ref="nextBtn" @click="next_step()" type="button" class="flex items-center font-medium focus:shadow-outline rounded-xl bg-green-500 py-2.5 pl-4 text-white hover:bg-green-600 focus:outline-none">Avanti
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-5 ml-0.5 mr-1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
               </svg>
             </button>
-            <button ref="submitBtn" type="submit" class="focus:shadow-outline hidden rounded-xl bg-green-500 px-4 text-white hover:bg-green-600 focus:outline-none">Registrati</button>
+            <button ref="submitBtn" type="submit" class="focus:shadow-outline hidden rounded-xl bg-green-500 px-4 text-white hover:bg-green-600 focus:outline-none font-semibold">Registrati</button>
           </div>
         </form>
       </div>
@@ -109,6 +115,8 @@ const username = ref("")
 const image = ref("")
 let file = null
 const login = ref("")
+
+const namesurname = ref("")
 
 let isDisabled = 0
 
@@ -182,8 +190,17 @@ function resetForm() {
   image.value = ""
 }
 
+function truncateNameSurname() {
+  namesurname.value = `${name.value} ${surname.value}`
+
+  if (`${name.value} ${surname.value}`.length > 18) {
+    namesurname.value = `${name.value} ${surname.value}`.substring(0, 16) + "..."
+  }
+}
+
 function next_step() {
   if (validateStep()) {
+    if (actual_step.value === 0) truncateNameSurname()
     actual_step.value++
     showStep()
   }
@@ -256,6 +273,15 @@ function validateStep() {
 
 function goToStep(step) {
   actual_step.value = step
+  truncateNameSurname()
   showStep()
 }
 </script>
+
+<style scoped>
+::-webkit-scrollbar {
+  height: 0px;
+  width: 0px;
+  background: transparent;
+}
+</style>
