@@ -5,7 +5,7 @@ const body_parser = require("body-parser")
 const cors = require("cors")
 const multer=require("multer")
 
-const file_size=500*1024 //500kb
+const file_size=5000*1024 //2MB
 const upload=multer(
   {
     storage:multer.memoryStorage(),
