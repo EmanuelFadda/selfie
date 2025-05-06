@@ -50,10 +50,10 @@
             <p class="mb-4 ml-1 text-sm font-light">*se non inserita, verrà usata un immagine default</p>
             <h2 class="mt-8 ml-0.5 text-lg font-semibold">Ecco il tuo profilo:</h2>
             <div class="mt-4 sm:mb-6 flex items-center space-x-4 pl-2">
-              <img :src="image" alt="Immagine profilo" class="text-sm h-24 w-24 rounded-full border-2 border-slate-200 dark:border-neutral-600 text-center object-cover" />
+              <img :src="image" alt="Immagine profilo" class="text-sm h-20 w-20 sm:h-24 sm:w-24  rounded-full border-2 border-slate-200 dark:border-neutral-600 text-center object-cover" />
               <div class="flex-none">
-                <h2 class="text-2xl font-semibold text-neutral-900 dark:text-slate-50">{{ namesurname }}</h2>
-                <h5 class="text-neutral-600 dark:text-neutral-400"> Visualizza profilo</h5>
+                <h2 class="text-xl sm:text-2xl font-semibold text-neutral-900 dark:text-slate-50">{{ namesurname }}</h2>
+                <h5 class="text-sm sm:text-basetext-neutral-600 dark:text-neutral-400"> Visualizza profilo</h5>
               </div>
             </div>
           </div>
