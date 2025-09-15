@@ -24,7 +24,7 @@
             <input v-model="name" name="name" id="name" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci il nome" required />
             <label for="surname" class="mb-2 block font-medium">Cognome</label>
             <input v-model="surname" name="surname" id="surname" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci il cognome" required />
-            <label for="birthday" class="mb-2 block font-medium">Compleanno</label>
+            <label for="birthday" class="mb-2 block font-medium">Data di nascita</label>
             <input v-model="birthday" type="date" name="birthday" id="birthday" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" required />
           </div>
 
