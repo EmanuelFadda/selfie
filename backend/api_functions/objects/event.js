@@ -28,6 +28,7 @@ async function edit_event(client, req, res) {
     "events.$.scheduled": req.body.new_scheduled,
     "events.$.duration": req.body.new_duration,
     "events.$.modified":req.body.new_modified,
+    "events.$.color":req.body.new_color,
     "events.$.repeat.type": req.body.new_type_rep,
     "events.$.repeat.start_date": req.body.new_start,
     "events.$.repeat.finish_date": req.body.new_finish,
