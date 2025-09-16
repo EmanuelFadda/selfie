@@ -6,8 +6,9 @@ import { createPinia } from "pinia"
 import router from "./router"
 import "./assets/tailwind.css"
 
+
+
 // Vuetify
-import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 
 // Icone mdi

@@ -109,10 +109,11 @@
 <script setup>
 import Navbar from "@/components/Navbar.vue"
 import { VCalendar } from "vuetify/lib/labs/VCalendar";
-import { VApp, VMain, VBtn, VIcon, VToolbar, VSheet } from 'vuetify/components'
+import { VBtn, VIcon, VToolbar, VSheet } from 'vuetify/components'
 
 const classColor = "text-sky-400 dark:text-sky-500"
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted,ref } from 'vue'
+//import 'vuetify/styles'
 
   const calendar = ref()
 
@@ -131,9 +132,23 @@ import { onMounted, ref } from 'vue'
   const selectedOpen = ref(false)
   const events = ref([])
 
+  let vuetifyStyle=null
+  
   onMounted(() => {
     calendar.value.checkChange()
+    // creo il tag <link> per vuetify/styles
+    vuetifyStyle = document.createElement("link")
+    vuetifyStyle.rel = "stylesheet"
+    vuetifyStyle.href = "https://cdn.jsdelivr.net/npm/vuetify@3.10.0/dist/vuetify.min.css"
+    document.head.appendChild(vuetifyStyle)
   })
+
+onUnmounted(() => {
+  // rimuovo il CSS quando esco dalla view
+  if (vuetifyStyle && vuetifyStyle.parentNode) {
+    vuetifyStyle.parentNode.removeChild(vuetifyStyle)
+  }
+})
 
   function viewDay (nativeEvent, { date }) {
     focus.value = date
