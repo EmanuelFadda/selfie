@@ -5,8 +5,6 @@ import { createPinia } from "pinia"
 import router from "./router"
 import "./assets/tailwind.css"
 
-
-import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/labs/VCalendar'
 import * as directives from 'vuetify/directives'
