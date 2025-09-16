@@ -103,10 +103,10 @@ function get_new_note(title,created,modified, content, tag) {
   return new_note;
 }
 
-function get_new_activity(name,expiration,created,modified,color,id_tomato) {
+function get_new_activity(title,expiration,created,modified,color,id_tomato) {
   let new_activity = {
     id: new ObjectId().toString(),
-    name: name,
+    title: title,
     expiration: expiration,
     created: created,
     modified:modified,

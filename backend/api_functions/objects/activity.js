@@ -9,7 +9,7 @@ async function get_activities(client, req, res) {
 
 async function create_activity(client, req, res) {
   let b=req.body
-  let new_activity = get_new_activity(b.name, b.expiration,b.created,b.modified,b.color,b.id_tomato)
+  let new_activity = get_new_activity(b.title, b.expiration,b.created,b.modified,b.color,b.id_tomato)
   create_object(client, req, res, { activities: new_activity }, name_obj)
 }
 async function delete_activity(client, req, res) {
@@ -21,7 +21,7 @@ async function delete_activity(client, req, res) {
 async function edit_activity(client, req, res) {
   let id = req.body.id
   let set_obj = {
-    "activities.$.name": req.body.new_name,
+    "activities.$.title": req.body.new_title,
     "activities.$.expiration": req.body.new_expiration,
     "activities.$.modified":req.body.new_modified,
     "activities.$.color":req.body.new_color,
