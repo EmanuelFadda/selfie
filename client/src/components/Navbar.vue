@@ -48,9 +48,11 @@
 
 <script setup>
 defineOptions({ name: "Navbar" })
+import { useMainStore } from "@/store"
 import router from "@/router"
 import { ref } from "vue"
 
+const store = useMainStore()
 const back = ref(null)
 const pageTitle = ref(null)
 const settings = ref(false)
@@ -72,7 +74,7 @@ const goBack = () => {
   pageTitle.value.classList.add("animate-page-title")
   
   setTimeout(() => {
-    router.go(-1)
+    router.push(`/${store.user.username}`)
   }, 650)
 }
 </script>
