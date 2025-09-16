@@ -9,16 +9,7 @@ function get_db_collection(client) {
   return collection;
 }
 
-function get_new_user(
-  name,
-  surname,
-  username,
-  email,
-  image,
-  password,
-  birthday,
-  login
-) {
+function get_new_user(name,surname,username,email,image,password,birthday,login) {
   let default_tags = [];
   for (let i = 0; i < defaults.TAGS_NAMES.length; i++) {
     default_tags[i] = get_new_tag(
@@ -28,11 +19,15 @@ function get_new_user(
   }
   let default_note = get_new_note(
     defaults.NOTE_TITLE,
+    get_time_now(),
+    get_time_now(),
     defaults.NOTE_CONTENT,
     defaults.NOTE_TAG
   );
   let default_tomato = get_new_tomato(
     defaults.TOMATO_NAME,
+    get_time_now(),
+    get_time_now(),
     defaults.TOMATO_REP,
     defaults.TOMATO_TIME,
     defaults.TOMATO_SHORT_BREAK,
@@ -62,16 +57,7 @@ function get_new_user(
   return new_user;
 }
 
-function get_new_credentials(
-  name,
-  surname,
-  username,
-  email,
-  image,
-  password,
-  birthday,
-  login
-) {
+function get_new_credentials(name,surname,username,email,image,password,birthday,login) {
   let credentials = {
     name: name,
     surname: surname,
@@ -104,45 +90,39 @@ function get_new_tag(name, color) {
   };
   return new_tag;
 }
-function get_time_now() {
-  return new Date(Date.now());
-}
 
-function get_new_note(title, content, tag) {
-  today = get_time_now();
+function get_new_note(title,created,modified, content, tag) {
   let new_note = {
     id: new ObjectId().toString(),
     title: title,
-    date_creation: today,
-    date_last_modifiy: today,
+    created: created,
+    modified: modified,
     content: content,
     tag: tag,
   };
   return new_note;
 }
 
-function get_new_activity(name, expiration) {
-  today = get_time_now();
+function get_new_activity(name,expiration,created,modified,color,id_tomato) {
   let new_activity = {
     id: new ObjectId().toString(),
     name: name,
     expiration: expiration,
-    created: today,
+    created: created,
+    modified:modified,
+    color: color,
+    id_tomato: id_tomato,  //id pomodoro a cui è associato
     done: false,
   };
   return new_activity;
 }
 
-function get_new_tomato(
-  name,
-  rep_tomato,
-  time_tomato,
-  short_break,
-  long_break
-) {
+function get_new_tomato(name,created,modified,rep_tomato,time_tomato,short_break,long_break) {
   new_tomato = {
     id: new ObjectId().toString(),
     name: name,
+    created:created,
+    modified:modified,
     rep_tomato: rep_tomato,
     time: {
       tomato: time_tomato,
@@ -153,12 +133,15 @@ function get_new_tomato(
   return new_tomato;
 }
 
-function get_new_event(title, type_rep, start, finish) {
-  today = get_time_now();
+function get_new_event(title, created, modified, scheduled, duration, color, type_rep, start, finish) {
   let new_event = {
     id: new ObjectId().toString(),
     title: title,
-    created: today,
+    created: created,
+    modified:modified,
+    scheduled: scheduled, //ora di inzio
+    duration: duration,   // durata dell'evento
+    color: color,
     repeat: {
       type: type_rep,
       start_date: start,
@@ -200,6 +183,9 @@ function verify_session(header) {
   return id_user;
 }
 
+function get_time_now() {
+  return new Date(Date.now());
+}
 function get_new_image(base64, mimetype) {
   return `data:${mimetype};base64,${base64}`;
 }

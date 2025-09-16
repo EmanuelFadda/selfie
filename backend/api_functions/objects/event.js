@@ -8,7 +8,8 @@ async function get_events(client, req, res) {
 }
 
 async function create_event(client, req, res) {
-  new_event = get_new_event(req.body.title, req.body.repeat_type, req.body.repeat_start_date, req.body.repeat_finish_date)
+  b=req.body
+  new_event = get_new_event(b.title , b.created , b.modified , b.scheduled , b.duration , b.color, b.repeat_type, b.repeat_start_date, b.repeat_finish_date)
   create_object(client, req, res, { events: new_event }, name_obj)
 }
 
@@ -24,10 +25,14 @@ async function edit_event(client, req, res) {
 
   let set_obj = {
     "events.$.title": req.body.new_title,
+    "events.$.scheduled": req.body.new_scheduled,
+    "events.$.duration": req.body.new_duration,
+    "events.$.modified":req.body.new_modified,
     "events.$.repeat.type": req.body.new_type_rep,
     "events.$.repeat.start_date": req.body.new_start,
     "events.$.repeat.finish_date": req.body.new_finish,
   }
+  
   let identifier = { key: "events.id", value: id }
   edit_object(client, req, res, set_obj, name_obj, identifier)
 }

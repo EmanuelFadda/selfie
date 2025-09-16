@@ -31,8 +31,6 @@ async function login(client, req, res) {
   }
 }
 
-
-
 // funzione generalizzata per la ricerca dell'account
 async function search_account(client,login_credentials){
   // connecting with db
@@ -43,8 +41,6 @@ async function search_account(client,login_credentials){
   user = result[0];
   return user
 }
-
-
 
 async function create_account(client, req, res) {
   // ricordarsi cosa passare al server in immagine

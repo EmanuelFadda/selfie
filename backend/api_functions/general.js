@@ -10,10 +10,8 @@ async function create_object(client, req, res, push_obj, name_obj) {
 
     // si creano gli oggetti per la creazione della query
     let object_id_user = ObjectId.createFromHexString(id_user)
-
     // modifiche al database
     await collection.updateOne({ _id: object_id_user }, { $push: push_obj })
-
     // invio del risultato
     msg = get_query_response(true, null, `${name_obj} was created`)
     res.send(msg)

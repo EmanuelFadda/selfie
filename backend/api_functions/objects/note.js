@@ -3,7 +3,8 @@ const { create_object, edit_object, delete_object, get_objects } = require("../g
 const name_obj="Note"
 
 async function create_note(client, req, res) {
-  new_note = get_new_note(req.body.title, req.body.content, req.body.tag)
+  let b=req.body
+  new_note = get_new_note(b.title, b.created, b.modified, b.content, b.tag)
   create_object(client, req, res, { notes: new_note }, name_obj)
 }
 async function delete_note(client, req, res) {
@@ -16,12 +17,13 @@ async function edit_note(client, req, res) {
   let id = req.body.id
   let set_obj = {
     "notes.$.title": req.body.new_title,
+    "notes.$.modified": req.body.new_modified,
     "notes.$.content": req.body.new_content,
     "notes.$.tag": req.body.new_tag,
-    "notes.$.date_last_modify": get_time_now(),
   }
-
+  
   let identifier = { key: "notes.id", value: id }
+  console.log(identifier)
   edit_object(client, req, res, set_obj, name_obj, identifier)
 }
 async function get_notes(client, req, res) {
