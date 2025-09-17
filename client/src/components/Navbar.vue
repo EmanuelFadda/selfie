@@ -23,10 +23,18 @@
 
     <!-- Dropdown menu -->
     <div v-if="myDropdown.exist && dropdownactive" id="dropdown" class="absolute z-30 top-14 right-16">
-        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+        <ul class="text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
           <li v-for="(item, index) in dropdownItems" @click="item.function">
-            <a href="#" :class="[index == 0 ? 'rounded-t-md border-b-0': index == dropdownItems.length - 1 ? 'rounded-b-md' : 'border-b-0' ]" class="flex items-center border-2  border-neutral-700 bg-white p-2 pb-[5px] pt-[5px] text-base text-neutral-700 hover:bg-neutral-700 hover:text-slate-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-stone-200 hover:dark:bg-white hover:dark:text-neutral-800">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="lg:size-7 mr-[5px] size-[22px]">
+            <a href="#" @click="item.handleClick" :class="[index == 0 ? 'rounded-t-md' : 'border-t-0' ], [item.selected ? 'bg-neutral-700 text-slate-50 dark:bg-white dark:text-neutral-800' : 'bg-white text-neutral-700  dark:border-neutral-700 dark:bg-neutral-800 dark:text-stone-200 ' ]" class="flex items-center border-2 border-b-0 border-neutral-700 p-2 pb-[5px] pt-[5px] text-base">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="lg:size-7 mr-[6px] size-[20px]">
+                <path v-for="path in item.paths" stroke-linecap="round" stroke-linejoin="round" :d="path"/>
+              </svg>
+              {{ item.title }}
+            </a>
+          </li>
+          <li v-for="(item, index) in dropdownOrder" @click="item.function">
+            <a href="#" @click="item.handleClick" :class="[index == 0 ? 'border-b-0' : 'border-t-0 rounded-b-md'], [item.selected ? 'bg-neutral-700 text-slate-50 dark:bg-white dark:text-neutral-800' : 'bg-white text-neutral-700  dark:border-neutral-700 dark:bg-neutral-800 dark:text-stone-200 ' ]" class="flex items-center border-2 border-neutral-700 p-2 pb-[5px] pt-[5px] text-base">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="lg:size-7 mr-[6px] size-[20px]">
                 <path v-for="path in item.paths" stroke-linecap="round" stroke-linejoin="round" :d="path"/>
               </svg>
               {{ item.title }}
@@ -94,6 +102,7 @@ const props = defineProps({
   myButton: { type: Object, default: {exist: false}},
   myDropdown: { type: Object, default: {exist: false}},
   dropdownItems: { type: Array, default: [] },
+  dropdownOrder: { type: Array, default: [] },
   image: String,
 })
 
