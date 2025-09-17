@@ -1,5 +1,5 @@
 <template>
-  <Navbar viewTitle="Note" :titleColor="classColor" :backButton="true" :myButton="myButton"></Navbar>
+  <Navbar viewTitle="Note" :titleColor="classColor" :backButton="true" :myButton="myButton" :backRoute="`/${store.user.username}/notes`"></Navbar>
 
   <div class="ml-5 mr-5 h-[calc(100vh-108px)] rounded-2xl lg:h-[calc(100vh-132px)] dark:bg-neutral-800">
     <!-- Title -->
@@ -52,9 +52,9 @@ const myButton = {
   paths: ["m4.5 12.75 6 6 9-13.5"],
   function: async () => {
     if (currentNote.value.id === "new") {
-      await api.createNote(currentNote.value.title, currentNote.value.content, selected.value)
+      await api.createNote(currentNote.value.title, currentNote.value.content, selected.value, currentNote.value.created, new Date().toISOString())
     } else {
-      await api.editNote(currentNote.value.id, currentNote.value.title, currentNote.value.content, selected.value)
+      await api.editNote(currentNote.value.id, currentNote.value.title, currentNote.value.content, selected.value, new Date().toISOString())
     }
 
     const response = await api.getNotes()
@@ -72,6 +72,8 @@ onMounted(async () => {
       title: "",
       content: "",
       tag: "",
+      created: new Date().toISOString(),
+      modified: new Date().toISOString(),
     }
   } else {
     const response = await api.getNotes()

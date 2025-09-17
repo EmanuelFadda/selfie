@@ -10,9 +10,20 @@ async function getNotes() {
   }
 }
 
-async function createNote(title, content, tag) {
+async function getNote(id) {
   try {
-    const response = await AXIOS.post("/create_note", { title, content, tag })
+    const response = await AXIOS.get("/get_note", { params: { id }})
+    return response.data
+  } catch (error) {
+    console.error("Get note error:", error)
+    throw error
+  }
+}
+
+async function createNote(title, content, tag, created) {
+  const modified = created
+  try {
+    const response = await AXIOS.post("/create_note", { title, content, tag, created, modified })
     return response.data
   } catch (error) {
     console.error("Create note error:", error)
@@ -20,9 +31,9 @@ async function createNote(title, content, tag) {
   }
 }
 
-async function editNote(id, new_title, new_content, new_tag) {
+async function editNote(id, new_title, new_content, new_tag, new_modified) {
   try {
-    const response = await AXIOS.post("/edit_note", { id, new_title, new_content, new_tag })
+    const response = await AXIOS.post("/edit_note", { id, new_title, new_content, new_tag, new_modified })
     return response.data
   } catch (error) {
     console.error("Edit note error:", error)
@@ -42,6 +53,7 @@ async function deleteNote(id) {
 
 export default {
   getNotes,
+  getNote,
   createNote,
   editNote,
   deleteNote,

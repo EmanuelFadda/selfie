@@ -14,6 +14,38 @@
       <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
     </svg>
 
+    <!-- Dropdown button -->
+    <button v-if="myDropdown.exist" @click="dropdownactive = !dropdownactive" id="dropdownDefaultButton" class="absolute right-14 lg:right-16" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="size-6 lg:size-7">
+        <path v-for="path in myDropdown.paths" stroke-linecap="round" stroke-linejoin="round" :d="path"/>
+      </svg>
+    </button>
+
+    <!-- Dropdown menu -->
+    <div v-if="myDropdown.exist && dropdownactive" id="dropdown" class="absolute z-30 top-14 right-16">
+        <ul class="text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+          <li v-for="(item, index) in dropdownItems" @click="item.function">
+            <a href="#" @click="item.handleClick" :class="[index == 0 ? 'rounded-t-md' : 'border-t-0' ], [item.selected ? 'bg-neutral-700 text-slate-50 dark:bg-white dark:text-neutral-800' : 'bg-white text-neutral-700  dark:border-neutral-700 dark:bg-neutral-800 dark:text-stone-200 ' ]" class="flex items-center border-2 border-b-0 border-neutral-700 p-2 pb-[5px] pt-[5px] text-base">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="lg:size-7 mr-[6px] size-[20px]">
+                <path v-for="path in item.paths" stroke-linecap="round" stroke-linejoin="round" :d="path"/>
+              </svg>
+              {{ item.title }}
+            </a>
+          </li>
+          <li v-for="(item, index) in dropdownOrder" @click="item.function">
+            <a href="#" @click="item.handleClick" :class="[index == 0 ? 'border-b-0' : 'border-t-0 rounded-b-md'], [item.selected ? 'bg-neutral-700 text-slate-50 dark:bg-white dark:text-neutral-800' : 'bg-white text-neutral-700  dark:border-neutral-700 dark:bg-neutral-800 dark:text-stone-200 ' ]" class="flex items-center border-2 border-neutral-700 p-2 pb-[5px] pt-[5px] text-base">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="lg:size-7 mr-[6px] size-[20px]">
+                <path v-for="path in item.paths" stroke-linecap="round" stroke-linejoin="round" :d="path"/>
+              </svg>
+              {{ item.title }}
+            </a>
+          </li>
+        </ul>
+    </div>
+
+    <div v-if="dropdownactive" @click="dropdownactive = false" class="fixed inset-0 z-20"></div>
+
+
     <!-- Add -->
     <svg v-if="myButton.exist" @click="myButton.function" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="absolute right-5 size-7 lg:size-8" ref="mybutton">
       <path v-for="path in myButton.paths" stroke-linecap="round" stroke-linejoin="round" :d="path" />
@@ -57,15 +89,20 @@ const back = ref(null)
 const pageTitle = ref(null)
 const settings = ref(false)
 const mybutton = ref(null)
+const dropdownactive = ref(false)
 
 const props = defineProps({
   name: String,
   surname: String,
   viewTitle: String,
   backButton: Boolean,
+  backRoute: { type: String, default: "" },
   titleColor: { type: String, default: "" },
   settingsArray: { type: Array, default: [] },
   myButton: { type: Object, default: {exist: false}},
+  myDropdown: { type: Object, default: {exist: false}},
+  dropdownItems: { type: Array, default: [] },
+  dropdownOrder: { type: Array, default: [] },
   image: String,
 })
 
@@ -74,7 +111,7 @@ const goBack = () => {
   pageTitle.value.classList.add("animate-page-title")
   
   setTimeout(() => {
-    router.push(`/${store.user.username}`)
+    router.push(props.backRoute !== "" ? props.backRoute : `/${store.user.username}`)
   }, 650)
 }
 </script>

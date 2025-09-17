@@ -24,12 +24,20 @@
             </svg>
             Esporta
           </a>
+          <a href="#" @click="getInfo" class="flex items-center border-2 border-b-0 border-neutral-700 bg-white p-2 pb-[5px] pt-[5px] text-base text-neutral-700 hover:bg-neutral-700 hover:text-slate-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-stone-200 hover:dark:bg-white hover:dark:text-neutral-800" role="menuitem" tabindex="-1" id="menu-item-0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="mr-[5px] size-[22px]">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+            </svg>
+            Info
+          </a>
           <a href="#" @click="deleteNote" class="flex items-center rounded-b-md border-2 border-neutral-700 bg-white p-2 pb-[5px] pt-[5px] text-base text-neutral-700 hover:bg-neutral-700 hover:text-slate-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-stone-200 hover:dark:bg-white hover:dark:text-neutral-800" role="menuitem" tabindex="-1" id="menu-item-0">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="mr-[5px] size-[22px]">
               <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
             </svg>
             Elimina
           </a>
+
+          <NoteInfoModal :state="state" title="Info Nota" :message="`Data di creazione: ${formatDate(created)} \nUltima modifica: ${formatDate(modified)}`" :cancelFunction="() => {excludeClick = true; state[0] = false}"></NoteInfoModal>
         </div>
       </div>
     </div>
@@ -62,6 +70,7 @@ import router from "@/router"
 import { useRoute } from "vue-router"
 import { useMainStore } from "@/store"
 import api from "@/api"
+import NoteInfoModal from "@/components/NoteInfoModal.vue"
 
 defineOptions({
   name: "NotePreview"
@@ -72,8 +81,9 @@ const props = defineProps({
   title: String,
   content: String,
   tag: String,
-  data_creation: Date,
-  date_last_modify: Date,
+  state: Array,
+  created: String,
+  modified: String,
 })
 
 const store = useMainStore()
@@ -101,6 +111,18 @@ onMounted(async () => {
   tagColor.value = props.tag.length === 0 ? "" : store.tags.filter(tag => tag.name === props.tag).map(tag => colorsMap[tag.color])
 })
 
+function formatDate(dateString) {
+  if (!dateString) return ""
+  const date = new Date(dateString)
+  return date.toLocaleDateString("it-IT", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  })
+}
+
 function openNote() {
   if (!excludeClick.value) {
     store.currentNote = store.notes.filter(note => note.id == props.id)[0]
@@ -126,10 +148,18 @@ function exportNote() {
   URL.revokeObjectURL(url)
 }
 
-async function duplicateNote(){
+function getInfo() {
   excludeClick.value = true
 
-  await api.createNote(props.title, props.content, props.tag)
+  props.state[0] = true
+}
+
+async function duplicateNote(){
+  console.log(store.notes)
+
+  excludeClick.value = true
+
+  await api.createNote(props.title, props.content, props.tag, new Date().toISOString(), new Date().toISOString())
 
   const response = await api.getNotes()
   const notes = response.content.notes
