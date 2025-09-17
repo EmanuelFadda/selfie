@@ -275,8 +275,8 @@ async function updateRange ({ start, end }) {
           _events.push(event)
           // 0=not repeat , 1=day, 2=week, 3=month, 4=year
           if(e.repeat.type!=0){
-            //let y=getNextDate(x_date,e.repeat.type)  
-            //x_date=y
+            let y=getNextDate(x_date,e.repeat.type)  
+            x_date=y
           }else{
             break;
           }
