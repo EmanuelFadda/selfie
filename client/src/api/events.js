@@ -10,9 +10,10 @@ async function getEvents() {
   }
 }
 
-async function createEvent(title,repeat_type,repeat_start_date,repeat_finish_date) {
+
+async function createEvent(title,created,modified,scheduled,duration,color, repeat_type,repeat_start_date,repeat_finish_date) {
   try {
-    const response = await AXIOS.post("/create_event", { title, repeat_type,repeat_start_date,repeat_finish_date })
+    const response = await AXIOS.post("/create_event", { title, created, modified, scheduled, duration, color, repeat_type,repeat_start_date,repeat_finish_date })
     return response.data
   } catch (error) {
     console.error("Create event error:", error)
@@ -20,9 +21,11 @@ async function createEvent(title,repeat_type,repeat_start_date,repeat_finish_dat
   }
 }
 
-async function editEvent(id,new_title, new_type_rep, new_start,new_finish) {
+
+
+async function editEvent(id,new_title,new_scheduled,new_duration,new_modified , new_color,new_type_rep, new_start,new_finish) {
   try {
-    const response = await AXIOS.post("/edit_event", { id, new_title, new_type_rep,new_start,new_finish })
+    const response = await AXIOS.post("/edit_event", { id, new_title, new_scheduled, new_duration, new_modified , new_color, new_type_rep,new_start,new_finish })
     return response.data
   } catch (error) {
     console.error("Edit event error:", error)

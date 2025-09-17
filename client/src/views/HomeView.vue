@@ -21,12 +21,14 @@ import api from "@/api"
 
 const store = useMainStore()
 
+
 const settingsArray = ref([])
 const layout = ref([])
 const content = ref({})
 
 onMounted(async () => {
   const response_credentials = await api.getCredentials()
+  
 
   if (!response_credentials.success) {
     console.log("Error fetching account data")

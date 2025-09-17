@@ -2,6 +2,8 @@ import user from "./user"
 import notes from "./notes"
 import tags from "./tags"
 import tomatoes from "./tomatoes"
+import activities from "./activities"
+import events from "./events"
 
 class API {
   constructor() {
@@ -10,6 +12,8 @@ class API {
       ...notes,
       ...tags,
       ...tomatoes,
+      ...activities,
+      ...events
     })
   }
 }
