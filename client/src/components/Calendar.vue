@@ -49,16 +49,13 @@
     </v-menu>
   </v-toolbar>
 
-
-  <!-- date picker ... -->
-
-
 </v-sheet>
 
 
 <v-sheet>
   <!-- calendario -->
   <v-calendar
+    theme="dark" 
     ref="calendar"
     v-model="focus"
     :event-color="getEventColor"
@@ -72,49 +69,88 @@
   ></v-calendar>
 
   <!-- modal che esce quando clicchi l'evento -->
-  <v-menu
-    v-model="selectedOpen"
-    :activator="selectedElement"
-    :close-on-content-click="false"
-    location="end"
+  <!-- Modal evento -->
+<!-- Modal evento -->
+<v-dialog v-model="selectedOpen" max-width="500px">
+  <v-card
+    class="dark:bg-neutral-800 border border-neutral-700 rounded-2xl shadow-lg text-neutral-200"
   >
-    <v-card color="grey-lighten-4" min-width="350px" flat>
-      <v-toolbar :color="selectedEvent.color" dark>
-        <v-btn icon>
-          <v-icon>mdi-pencil</v-icon>
-        </v-btn>
-        <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
-        <v-btn icon>
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
-      </v-toolbar>
-      <v-card-text>
-        <span v-html="selectedEvent.details"></span>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn
-          color="secondary"
-          variant="text"
-          @click="selectedOpen = false"
-        >
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-menu>
+    <v-toolbar
+      :color="selectedEvent?.color || 'blue'"
+      dark
+      class="rounded-t-2xl"
+      density="comfortable"
+    >
+      <v-toolbar-title class="text-lg font-semibold">
+        {{ selectedEvent?.name || 'Evento' }}
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon variant="text" @click="selectedOpen = false">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </v-toolbar>
+
+    <v-card-text class="p-4 text-neutral-300 space-y-1">
+      <template v-if="selectedEvent">
+        <div v-if="selectedEvent.id"><span class="font-semibold">ID:</span> {{ selectedEvent.id }}</div>
+        <div v-if="selectedEvent.type"><span class="font-semibold">Tipo:</span> {{ selectedEvent.type }}</div>
+        <div v-if="selectedEvent.created"><span class="font-semibold">Creato:</span> {{ new Date(selectedEvent.created).toLocaleString() }}</div>
+        <div v-if="selectedEvent.modified"><span class="font-semibold">Modificato:</span> {{ new Date(selectedEvent.modified).toLocaleString() }}</div>
+        <div v-if="selectedEvent.start"><span class="font-semibold">Inizio:</span> {{ new Date(selectedEvent.start).toLocaleString() }}</div>
+        <div v-if="selectedEvent.end"><span class="font-semibold">Fine:</span> {{ new Date(selectedEvent.end).toLocaleString() }}</div>
+        <div v-if="selectedEvent.duration"><span class="font-semibold">Durata:</span> {{ selectedEvent.duration }} minuti</div>
+        <div v-if="selectedEvent.color">
+          <span class="font-semibold">Colore:</span>
+          <span :style="{ backgroundColor: selectedEvent.color }" class="inline-block w-4 h-4 rounded-full ml-1 align-middle"></span>
+        </div>
+        <div v-if="selectedEvent.timed !== undefined"><span class="font-semibold">Timed:</span> {{ selectedEvent.timed ? 'Sì' : 'No' }}</div>
+        <div v-if="selectedEvent.repeat">
+          <span class="font-semibold">Ripetizione:</span> {{ selectedEvent.repeat.type }} ({{ selectedEvent.repeat.start_date }} → {{ selectedEvent.repeat.finish_date }})
+        </div>
+        <div v-if="selectedEvent.id_tomato"><span class="font-semibold">ID Tomato:</span> {{ selectedEvent.id_tomato }}</div>
+        <div v-if="selectedEvent.done !== undefined"><span class="font-semibold">Completato:</span> {{ selectedEvent.done ? 'Sì' : 'No' }}</div>
+      </template>
+      <p v-else class="italic text-neutral-500">Nessun dettaglio disponibile</p>
+    </v-card-text>
+
+    <v-card-actions class="flex justify-end px-4 pb-3">
+      <v-btn
+        variant="text"
+        class="text-blue-400 hover:bg-neutral-700 rounded-xl"
+        @click="editEvent(selectedEvent)"
+        :disabled="!selectedEvent"
+      >
+        <v-icon start>mdi-pencil</v-icon> Modifica
+      </v-btn>
+      <v-btn
+        variant="text"
+        class="text-red-400 hover:bg-neutral-700 rounded-xl"
+        @click="deleteEvent(selectedEvent)"
+        :disabled="!selectedEvent"
+      >
+        <v-icon start>mdi-delete</v-icon> Elimina
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
+
 </v-sheet>
 
 </template>
 
 <script setup>
 import { VCalendar } from "vuetify/lib/labs/VCalendar";
-import { VBtn, VIcon, VToolbar, VSheet } from 'vuetify/components'
+import { VBtn, VIcon, VToolbar, VSheet, VDialog,VCardActions } from 'vuetify/components'
 import { nextTick } from "vue";
 import { VIconBtn } from 'vuetify/labs/VIconBtn'
 import { onMounted, onUnmounted,ref } from 'vue'
 import api from "@/api"
+import router from "@/router";
+import { useRoute } from 'vue-router';
+
+
+const route = useRoute()
 
 const store=useMainStore()
 import { useMainStore } from "@/store";
@@ -122,7 +158,7 @@ import { useMainStore } from "@/store";
 const calendar = ref()
 const focus = ref('')
 const type = ref('week')
-const selectedEvent = ref({})
+const selectedEvent = ref(null)
 const selectedElement = ref(null)
 const selectedOpen = ref(false)
 let events = ref([])
@@ -226,7 +262,6 @@ async function refresh_calendar(){
   let response_events= await api.getEvents()
 
   store.activities= (response_activities.success) ? response_activities.content.activities : null
-  console.log(store.activities)
   
   store.events= (response_events.success) ? response_events.content.events : null
 
@@ -292,9 +327,7 @@ async function updateRange ({ start, end }) {
   //  PROBLEMA NELLA CONCEZIONE DEGLI ORARI: IL RANGE START-END CONTROLLA ALLE 2:00:O0
   // NOI VOGLIAMO IL RANGE
 
-  console.log(1, start_date,end_date)
    if(store.activities!=null){
-      console.log("aaaaaaaa")
       store.activities.forEach(a => {
         let activityStartDate=new Date(a.expiration)  //string -> Date 
         if(activityStartDate>=start_date && activityStartDate<=end_date){
@@ -310,7 +343,6 @@ async function updateRange ({ start, end }) {
             id_tomato:a.id_tomato,
             done: a.done
           }
-          console.log(2,activity.start,activity.end)
           all_items.push(activity)
         }
       });
@@ -326,6 +358,18 @@ async function updateRange ({ start, end }) {
 
   */
 
+}
+
+function editEvent(x){
+  store.editCalendarObj=x.type
+  console.log(2,store.editCalendarObj)
+  console.log("oggetto id",x.id)
+  router.push(`${route.path}/${x.id}`)
+
+}
+
+function deleteEvent(event){
+  //robo di sicurezza per eliminare 
 }
 
 // per far capire alla view successiva che tipo di oggetto sto modificando -> store.editCalendarObj="event" ||  "activity"

@@ -34,6 +34,7 @@ import {
   VCard,
   VCardText,
   VCardActions,
+  VDialog,
 } from 'vuetify/components'
 
 // Vuetify Labs
@@ -60,13 +61,16 @@ const vuetify = createVuetify({
     VCardText,
     VCardActions,
     VCalendar,
+    VDialog 
   },
   directives: {}, // se in futuro usi v-ripple, v-scroll ecc.
   icons: {
     defaultSet: 'mdi',
     aliases,
     sets: { mdi },
-  },
+  },theme:{
+    defaultTheme:'dark'
+  }
 })
 
 // App Vue

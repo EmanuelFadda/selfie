@@ -6,28 +6,43 @@
 
     <!-- Content -->
     <div class="relative ml-[18px] mr-[18px] pt-5">
-        <!-- switch per capire se è evento oppure attività
-        
-        BISOGNA MODIFICARE NEL CASO NON SIA UN ADD MA UNA MODIFICA, RENDERE LO SWITCH FISSO
-        
-    -->
-        <div class="flex justify-center">
-            <span
-                @click="isEvent = true"
-                class="inline-flex items-center rounded-s-lg px-4 py-1 text-sm font-medium border-2 border-e-0 cursor-pointer"
-                :class="isEvent ? 'bg-blue-500 text-blue-300 dark:text-blue-400 border-blue-500' : 'bg-neutral-800 text-neutral-300 border-neutral-700'"
-            >
-                Evento
-            </span>
-            <span
-                @click="isEvent = false"
-                class="inline-flex items-center rounded-e-lg px-4 py-1 text-sm font-medium border-2 border-s-0 cursor-pointer"
-                :class="!isEvent ? 'bg-blue-500 text-blue-300 dark:text-blue-400 border-blue-500' : 'bg-neutral-800 text-neutral-300 border-neutral-700'"
-            >
-                Attività
-            </span>
-        </div>
 
+      <div v-if="store.editCalendarObj=='event'" class="flex justify-center">
+        <span
+          class="inline-flex items-center rounded-lg px-4 py-1 text-sm font-medium border-2 cursor-default
+                bg-blue-500 text-blue-300 dark:text-blue-400 border-blue-500"
+        >
+          Evento
+          <span class="ml-2 text-neutral-100 dark:text-neutral-300">#{{ selectedEvent.id }}</span>
+        </span>
+      </div>
+
+      <div v-else-if="store.editCalendarObj=='activity'" class="flex justify-center">
+        <span
+          class="inline-flex items-center rounded-lg px-4 py-1 text-sm font-medium border-2 cursor-default
+                bg-blue-500 text-blue-300 dark:text-blue-400 border-blue-500"
+        >
+          Attività
+          <span class="ml-2 text-neutral-100 dark:text-neutral-300">#{{ selectedEvent.id }}</span>
+        </span>
+      </div>
+
+      <div v-else class="flex justify-center">
+        <span
+          @click="isEvent = true"
+          class="inline-flex items-center rounded-s-lg px-4 py-1 text-sm font-medium border-2 border-e-0 cursor-pointer"
+          :class="isEvent ? 'bg-blue-500 text-blue-300 dark:text-blue-400 border-blue-500' : 'bg-neutral-800 text-neutral-300 border-neutral-700'"
+        >
+          Evento
+        </span>
+        <span
+          @click="isEvent = false"
+          class="inline-flex items-center rounded-e-lg px-4 py-1 text-sm font-medium border-2 border-s-0 cursor-pointer"
+          :class="!isEvent ? 'bg-blue-500 text-blue-300 dark:text-blue-400 border-blue-500' : 'bg-neutral-800 text-neutral-300 border-neutral-700'"
+        >
+          Attività
+        </span>
+      </div>
 
         <div v-if="isEvent">
             <!-- evento -->
@@ -107,30 +122,6 @@
 
 <script setup>
 
-/*
-
-{
-evento
-
-    title: title,
-    scheduled: scheduled, //ora di inzio
-    duration: duration,   // durata dell'evento
-    color: color,
-    repeat: {
-      type: type_rep,
-      start_date: start,
-      finish_date: finish,
-    
-
-attività:
-
-    title: title,
-    expiration: expiration,
-    color: color,
-  };
-*/ 
-
-
 import Navbar from "@/components/Navbar.vue"
 import { useMainStore } from "@/store"
 import { useRoute } from "vue-router"
@@ -198,13 +189,12 @@ const aggiungiCalendario = {
 
         // dall'input datetime dobbiamo ricavare orario,durata e giorni
 
-        // inizio e fine della ripetizione 
+        // inizio e fine dell'evento 
         const repeat_start_date=formEvent.value.start_datetime.split("T")[0];
-        const repeat_end_date= formEvent.value.repeat_type==0 ? repeat_start_date : formEvent.value.end_datetime.split("T")[0]
-        
+        const repeat_end_date= formEvent.value.repeat_type==0 ? repeat_start_date : formEvent.value.end_repeat_date.split("T")[0]
+ 
         // orario
         const scheduled = formEvent.value.start_datetime.split("T")[1];
-
 
 
         //durata in minuti 
@@ -258,12 +248,12 @@ const aggiungiCalendario = {
 }
 
 onUnmounted(()=>{
-    store.editCalendarObj=null
-
+  store.editCalendarObj=null
 })
 
 
 onMounted(async () => {
+  console.log("mounted")
   if (route.params.id === "new") {
     // caso in cui devi creare un evento
 
@@ -285,9 +275,10 @@ onMounted(async () => {
 
   } else {      
     // caso in cui ne devi modificare uno: verifichi se sia un evento o un'attività
-    if(store.editCalendarObj="event"){
+    console.log("calendario o evento",store.editCalendarObj)
+    if(store.editCalendarObj=="event"){
         const e = store.events.find(e => e.id === route.params.id);
-
+        console.log("evento da modificare",e)
         // bisogna ottenere il tempo di fine 
         let start,end=getStartEndDate(new Date(e.repeat.start_date),e.scheduled,e.duration)
         formEvent.value={
@@ -295,11 +286,13 @@ onMounted(async () => {
             start_datetime:start,
             end_datetime:end,
             color:e.color,
-            repeat_type:0,
+            repeat_type:e.repeat.type,
             repeat_end_date
         }
-    }else if(store.editCalendarObj="activity"){
+    }else if(store.editCalendarObj=="activity"){
+
         const a = store.activities.find(a => a.id === route.params.id);
+        console.log("attività da modificare",a)
 
         formActivity.value={
           title:a.title,
