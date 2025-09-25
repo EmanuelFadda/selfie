@@ -22,6 +22,7 @@ const classColor = "text-amber-300 dark:text-amber-400"
 const store = useMainStore()
 const route = useRoute()
 
+// bottone che ti porta all'aggiunta dell'elemento
 const myButton = {
   exist: true,
   paths: ["M12 4.5v15m7.5-7.5h-15"],

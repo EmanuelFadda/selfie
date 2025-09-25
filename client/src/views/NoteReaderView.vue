@@ -1,5 +1,5 @@
 <template>
-  <Navbar viewTitle="Note" :titleColor="classColor" :backButton="true" :myButton="myButton" :backRoute="`/${store.user.username}/notes`"></Navbar>
+  <Navbar viewTitle="Note" :titleColor="classColor" :backButton="true" :myButton="myButton" :backRoute="`/${store.user.username}/note`"></Navbar>
 
   <div class="ml-5 mr-5 h-[calc(100vh-108px)] rounded-2xl lg:h-[calc(100vh-132px)] dark:bg-neutral-800">
     <!-- Title -->
@@ -47,6 +47,7 @@ const selected = ref("")
 const tagFilter = ref([])
 const currentNote = ref({})
 
+// bottone che ti permette sia di aggiungere se siamo "/username/new" oppure la crea "/username/idNota"
 const myButton = {
   exist: true,
   paths: ["m4.5 12.75 6 6 9-13.5"],
@@ -57,6 +58,7 @@ const myButton = {
       await api.editNote(currentNote.value.id, currentNote.value.title, currentNote.value.content, selected.value, new Date().toISOString())
     }
 
+    //refresh
     const response = await api.getNotes()
     const notes = response.content.notes
     store.notes = notes

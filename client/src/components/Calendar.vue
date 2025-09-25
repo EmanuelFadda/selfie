@@ -1,7 +1,27 @@
 <template>
-<v-sheet height="25">
-  <v-toolbar class="" height="25">
-    <v-icon-btn icon="mdi-calendar"
+
+<v-sheet>
+  <v-toolbar >
+    <v-btn
+      color="grey-darken-2"
+      variant="text"
+      icon
+      @click="prev"
+    >
+      <v-icon> mdi-chevron-left </v-icon>
+    </v-btn>
+    <v-btn
+      color="grey-darken-2"
+      variant="text"
+      icon
+      @click="next"
+    >
+      <v-icon > mdi-chevron-right </v-icon>
+    </v-btn>
+    <v-toolbar-title v-if="calendar">
+        {{ calendar.title }} 
+    </v-toolbar-title>
+        <v-icon-btn icon="mdi-calendar"
       class="border-0"
       color="grey-darken-2"
       variant="outlined"
@@ -27,31 +47,6 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    
-  </v-toolbar>
-</v-sheet>
-
-<v-sheet>
-  <v-toolbar >
-    <v-btn
-      color="grey-darken-2"
-      variant="text"
-      icon
-      @click="prev"
-    >
-      <v-icon> mdi-chevron-left </v-icon>
-    </v-btn>
-    <v-btn
-      color="grey-darken-2"
-      variant="text"
-      icon
-      @click="next"
-    >
-      <v-icon > mdi-chevron-right </v-icon>
-    </v-btn>
-    <v-toolbar-title v-if="calendar">
-        {{ calendar.title }} 
-    </v-toolbar-title>
   </v-toolbar>
 
 
@@ -61,57 +56,54 @@
 </v-sheet>
 
 
-<v-sheet height="500">
+<v-sheet>
+  <!-- calendario -->
+  <v-calendar
+    ref="calendar"
+    v-model="focus"
+    :event-color="getEventColor"
+    :events="events"
+    :type="type"
+    color="primary"
+    @change="updateRange"
+    @click:date="viewDay"
+    @click:event="showEvent"
+    @click:more="viewDay"
+  ></v-calendar>
 
-            <!-- calendario -->
-          <v-calendar
-            ref="calendar"
-            v-model="focus"
-            :event-color="getEventColor"
-            :events="events"
-            :type="type"
-            color="primary"
-            @change="updateRange"
-            @click:date="viewDay"
-            @click:event="showEvent"
-            @click:more="viewDay"
-          ></v-calendar>
-
-            <!-- modal che esce quando clicchi l'evento -->
-          <v-menu
-            v-model="selectedOpen"
-            :activator="selectedElement"
-            :close-on-content-click="false"
-            location="end"
-          >
-            <v-card color="grey-lighten-4" min-width="350px" flat>
-              <v-toolbar :color="selectedEvent.color" dark>
-                <v-btn icon>
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
-                <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
-                <v-btn icon>
-                  <v-icon>mdi-heart</v-icon>
-                </v-btn>
-                <v-btn icon>
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </v-toolbar>
-              <v-card-text>
-                <span v-html="selectedEvent.details"></span>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn
-                  color="secondary"
-                  variant="text"
-                  @click="selectedOpen = false"
-                >
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-menu>
-
-
+  <!-- modal che esce quando clicchi l'evento -->
+  <v-menu
+    v-model="selectedOpen"
+    :activator="selectedElement"
+    :close-on-content-click="false"
+    location="end"
+  >
+    <v-card color="grey-lighten-4" min-width="350px" flat>
+      <v-toolbar :color="selectedEvent.color" dark>
+        <v-btn icon>
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+        <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+        <v-btn icon>
+          <v-icon>mdi-heart</v-icon>
+        </v-btn>
+        <v-btn icon>
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-card-text>
+        <span v-html="selectedEvent.details"></span>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn
+          color="secondary"
+          variant="text"
+          @click="selectedOpen = false"
+        >
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-menu>
 </v-sheet>
 
 </template>
@@ -124,7 +116,18 @@ import { VIconBtn } from 'vuetify/labs/VIconBtn'
 import { onMounted, onUnmounted,ref } from 'vue'
 import api from "@/api"
 
+const store=useMainStore()
+import { useMainStore } from "@/store";
+
 const calendar = ref()
+const focus = ref('')
+const type = ref('week')
+const selectedEvent = ref({})
+const selectedElement = ref(null)
+const selectedOpen = ref(false)
+let events = ref([])
+let vuetifyStyle=null
+
 
 const typeToLabel = {
   month: 'Month',
@@ -132,22 +135,7 @@ const typeToLabel = {
   day: 'Day'
 }
 
-const focus = ref('')
-const type = ref('month')
-const selectedEvent = ref({})
-const selectedElement = ref(null)
-const selectedOpen = ref(false)
-let events = ref([])
-let vuetifyStyle=null
 
-let response_activities
-let response_events
-
-// ottiene tutti gli eventi e le attività dell'utente dal database
-async function refresh_calendar(){
-  response_activities= await api.getActivities()
-  response_events= await api.getEvents()
-}
 
 onMounted(async () => {
   calendar.value.checkChange()
@@ -230,32 +218,36 @@ function getNextDate(x,repeat_type){
   return x
 }
 
-function calendarObjToUTCDate(obj) {
-  return new Date(Date.UTC(
-    obj.year,
-    obj.month - 1, // nei costruttori JS i mesi partono da 0
-    obj.day,
-    obj.hour || 0,
-    obj.minute || 0
-  ))
+
+
+// ottiene tutti gli eventi e le attività dell'utente dal database
+async function refresh_calendar(){
+  let response_activities= await api.getActivities()
+  let response_events= await api.getEvents()
+
+  store.activities= (response_activities.success) ? response_activities.content.activities : null
+  console.log(store.activities)
+  
+  store.events= (response_events.success) ? response_events.content.events : null
+
 }
 
-
 async function updateRange ({ start, end }) {
+
   events.value=[]
   console.log("before",events.value)
-
+  await refresh_calendar()
   let all_items=[] 
    
   await nextTick() 
   let start_date = new Date(start.year, start.month - 1, start.day, 0, 0, 0, 0) //obj -> Date
   let end_date = new Date(end.year, end.month - 1, end.day, 23, 59, 59, 999)
-  await  refresh_calendar()
+
 
   // eventi
-  if(response_events.success){
+  if(store.events!=null){
 
-    response_events.content.events.forEach(e => {
+    store.events.forEach(e => {
 
       // devo controllare questa variabile
       let eventStartDate=new Date(e.repeat.start_date)  //string -> Date 
@@ -265,12 +257,11 @@ async function updateRange ({ start, end }) {
       //  PROBLEMA DO DUPLICAZIONE DI EVENTI 
       if(isInRange){
         let x_date=eventStartDate // Date
-        let counter=0
         while(x_date<=end_date && x_date<=eventEndDate){
           let h=getStartEndDate(x_date,e.scheduled,e.duration) 
           let event={
-            id:`${e.id}-${counter}`,
-            id_db: e.id,
+            type:"event",
+            id:e.id,
             name: e.title,
             created: e.created,
             modified: e.modified,
@@ -281,7 +272,6 @@ async function updateRange ({ start, end }) {
             timed: true,
             repeat:e.repeat
           }
-          counter++ 
           // RICORDA: DA GESTIRE IL CASO IN CUI L'ATTIVITA' SIA TUTTO IL GIORNO 
           all_items.push(event)
           // 0=not repeat , 1=day, 2=week, 3=month, 4=year
@@ -303,25 +293,20 @@ async function updateRange ({ start, end }) {
   // NOI VOGLIAMO IL RANGE
 
   console.log(1, start_date,end_date)
-   if(response_activities.success){
-      response_activities.content.activities.forEach(a => {
+   if(store.activities!=null){
+      console.log("aaaaaaaa")
+      store.activities.forEach(a => {
         let activityStartDate=new Date(a.expiration)  //string -> Date 
         if(activityStartDate>=start_date && activityStartDate<=end_date){
 
           let activity={
+            type:"activity",
             id: a.id,
-            id_db: a.id,
             name: a.title,
             created: a.created,
             modified: a.modified,
             start: activityStartDate,
-            end: new Date(
-              activityStartDate.getFullYear(),
-              activityStartDate.getMonth(),
-              activityStartDate.getDate(),
-              23,59,59,59), 
             color: a.color,  
-            timed: false,  
             id_tomato:a.id_tomato,
             done: a.done
           }
@@ -331,9 +316,10 @@ async function updateRange ({ start, end }) {
       });
 
    }
-
-    events.value = [...all_items]
-
+ 
+   console.log(all_items)
+   events.value = [...all_items]
+   
 
 
   /*
@@ -342,4 +328,6 @@ async function updateRange ({ start, end }) {
 
 }
 
+// per far capire alla view successiva che tipo di oggetto sto modificando -> store.editCalendarObj="event" ||  "activity"
 </script>
+

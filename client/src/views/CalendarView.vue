@@ -8,10 +8,16 @@
 <script setup>
 import Calendar from '@/components/Calendar.vue';
 import Navbar from '@/components/Navbar.vue';
-
+import { useMainStore } from "@/store"
 const classColor = "text-blue-300 dark:text-blue-400"
+import router from '@/router';
+import { useRoute } from 'vue-router';
 
 
+const route = useRoute()
+
+
+// bottone della navbar che porta alla creazione degli elementi
 const myButton = {
   exist: true,
   paths: ["M12 4.5v15m7.5-7.5h-15"],
@@ -19,5 +25,7 @@ const myButton = {
     router.push(`${route.path}/new`)
   },
 }
+
+
 </script>
  
