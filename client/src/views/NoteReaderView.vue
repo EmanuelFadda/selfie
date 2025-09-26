@@ -53,10 +53,12 @@ const myButton = {
   paths: ["m4.5 12.75 6 6 9-13.5"],
   function: async () => {
     if (currentNote.value.id === "new") {
-      await api.createNote(currentNote.value.title, currentNote.value.content, selected.value, currentNote.value.created, new Date().toISOString())
+      await api.createNote(currentNote.value.title, currentNote.value.content, selected.value, currentNote.value.created, store.getVirtualNow())
     } else {
-      await api.editNote(currentNote.value.id, currentNote.value.title, currentNote.value.content, selected.value, new Date().toISOString())
+      await api.editNote(currentNote.value.id, currentNote.value.title, currentNote.value.content, selected.value, store.getVirtualNow())
     }
+
+    await api.setMenuContentNotes({id: currentNote.value.id, title: currentNote.value.title, content: currentNote.value.content})
 
     //refresh
     const response = await api.getNotes()
@@ -74,8 +76,8 @@ onMounted(async () => {
       title: "",
       content: "",
       tag: "",
-      created: new Date().toISOString(),
-      modified: new Date().toISOString(),
+      created: store.getVirtualNow(),
+      modified: store.getVirtualNow(),
     }
   } else {
     const response = await api.getNotes()

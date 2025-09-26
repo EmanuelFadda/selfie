@@ -20,16 +20,6 @@ async function getCredentials() {
   }
 }
 
-async function getMenu() {
-  try {
-    const response = await AXIOS.get("/get_menu")
-    return response.data
-  } catch (error) {
-    console.error("Get menu error:", error)
-    throw error
-  }
-}
-
 async function create_account(name, surname, password, email, image, username, birthday, login) {
   try {
     const response = await AXIOS.post("/create_account", 
@@ -49,6 +39,5 @@ async function create_account(name, surname, password, email, image, username, b
 export default {
   login,
   getCredentials,
-  getMenu,
   create_account,
 }

@@ -4,6 +4,7 @@ import tags from "./tags"
 import tomatoes from "./tomatoes"
 import activities from "./activities"
 import events from "./events"
+import menu from "./menu"
 
 class API {
   constructor() {
@@ -13,7 +14,8 @@ class API {
       ...tags,
       ...tomatoes,
       ...activities,
-      ...events
+      ...events,
+      ...menu,
     })
   }
 }
