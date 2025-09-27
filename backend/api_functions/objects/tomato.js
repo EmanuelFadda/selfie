@@ -16,7 +16,6 @@ async function delete_tomato(client, req, res) {
   let pull_obj = {}
   let id = req.body.id
   pull_obj["tomato_sessions"] = { id: id }
-  console.log(pull_obj)
   delete_object(client, req, res, pull_obj, name_obj)
 }
 async function edit_tomato(client, req, res) {
