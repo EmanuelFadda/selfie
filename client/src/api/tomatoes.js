@@ -12,10 +12,11 @@ async function getTomatoes() {
 
 async function createTomato(name, done, rep_tomato, time_tomato, time_short_break, time_long_break) {
   try {
-    const response = await AXIOS.post("/create_tomato", {name, done, rep_tomato, time_tomato, time_short_break, time_long_break})
+    const skip = null
+    const response = await AXIOS.post("/create_tomato", {name, skip, skip, done, rep_tomato, time_tomato, time_short_break, time_long_break})
     return response.data
   } catch (error) {
-    console.error("Create note error: ", error)
+    console.error("Create tomato error: ", error)
     throw error
   }
 }
@@ -25,7 +26,7 @@ async function editTomato(id, new_done, new_name, new_rep_tomato, new_time_tomat
     const response = await AXIOS.post("/edit_tomato", {id, new_name, new_done, new_rep_tomato, new_time_tomato, new_short_break, new_long_break})
     return response.data
   } catch (error) { 
-    console.error("Edit note error: ", error)
+    console.error("Edit tomato error: ", error)
     throw error
   }
 }
@@ -35,7 +36,7 @@ async function deleteTomato(id) {
     const response = await AXIOS.delete("/delete_tomato", {data: {id}})
     return response.data
   } catch (error) {
-    console.error("Delete note error: ", error)
+    console.error("Delete tomato error: ", error)
     throw error
   }
 }
@@ -45,7 +46,7 @@ async function getTomato() {
     const response = await AXIOS.get("/get_tomato")
     return response.data
   } catch (error) {
-    console.error("Get notes error: ", error)
+    console.error("Get tomato error: ", error)
     throw error
   }
 }

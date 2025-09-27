@@ -4,7 +4,6 @@ import LoginView from "@/views/LoginView.vue"
 import CalendarView from "@/views/CalendarView.vue"
 import CreditsView from "@/views/CreditsView.vue"
 import EditLayoutView from "@/views/EditLayoutView.vue"
-import CalendarNotificationsView from "@/views/CalendarNotificationsView.vue"
 import RegisterView from "@/views/RegisterView.vue"
 import NotesView from "@/views/NotesView.vue"
 import TomatoView from "@/views/TomatoView.vue"
@@ -12,6 +11,8 @@ import NoteReaderView from "@/views/NoteReaderView.vue"
 import EditTagsView from "@/views/EditTagsView.vue"
 import CallbackView from "@/views/CallbackView.vue"
 import CalendarReaderView from "@/views/CalendarReaderView.vue"
+import CreateTomatoView from "@/views/CreateTomatoView.vue"
+
 const routes = [
   {
     path: "/",
@@ -49,11 +50,6 @@ const routes = [
     component: EditTagsView,
   },
   {
-    path: "/:username/calendar/notifications",
-    name: "calendarNotifications",
-    component: CalendarNotificationsView,
-  },
-  {
     path: "/:username/notes",
     name: "notes",
     component: NotesView,
@@ -67,6 +63,11 @@ const routes = [
     path: "/:username/tomato",
     name: "tomato",
     component: TomatoView,
+  },
+  {
+    path: "/:username/tomato/:id",
+    name: "tomatoEdit",
+    component: CreateTomatoView,
   },
   {
     path:"/callback",
