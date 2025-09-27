@@ -19,7 +19,6 @@ async function delete_activity(client, req, res) {
   delete_object(client, req, res, pull_obj, name_obj)
 }
 
-// DEVI CONFRONTARE I PARAMETRI PER INSERIRLI IN EVENTS
 async function edit_activity(client, req, res) {
   let id = req.body.id
   let set_obj = {
