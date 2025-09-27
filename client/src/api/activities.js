@@ -19,10 +19,21 @@ async function createActivity(title,expiration,created,modified,color,id_tomato)
     throw error
   }
 }
+/*
 
-async function editActivity(id,new_title,new_scheduled,new_duration,new_modified , new_color,new_type_rep, new_start,new_finish) {
+  let set_obj = {
+    "activities.$.title": req.body.new_title,
+    "activities.$.expiration": req.body.new_expiration,
+    "activities.$.modified":req.body.new_modified,
+    "activities.$.color":req.body.new_color,
+    "activities.$.id_tomato": req.body.new_id_tomato,
+    "activities.$.done": req.body.new_done,
+  }
+*/
+async function editActivity(id,new_title,new_expiration,new_modified , new_color,new_id_tomato, new_done) {
   try {
-    const response = await AXIOS.post("/edit_event", { id,new_title,new_scheduled,new_duration,new_modified , new_color,new_type_rep, new_start,new_finish})
+    console.log("nell'api:",id,new_title,new_expiration,new_modified , new_color,new_id_tomato, new_done)
+    const response = await AXIOS.post("/edit_activity", { id,new_title,new_expiration,new_modified , new_color,new_id_tomato,new_done})
     return response.data
   } catch (error) {
     console.error("Edit activity error:", error)

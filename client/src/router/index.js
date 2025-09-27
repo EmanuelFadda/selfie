@@ -73,9 +73,9 @@ const routes = [
     name: "callback",
     component: CallbackView,
   },
-  {
+  { 
     path: "/:username/calendar/:id",
-    name: "calendarReder",
+    name: "calendarReader",
     component: CalendarReaderView,
   },
 ]

@@ -8,6 +8,8 @@ export const useMainStore = defineStore("main", {
     },
     user: {},
     notes: [],
+    activities:[],
+    events:[],
     tagFilter: [],
     tags: [],
     colorsMap: {
@@ -22,6 +24,7 @@ export const useMainStore = defineStore("main", {
     },
     selectedDateTime: "",
     currentDateTime: "",
+    editCalendarObj:"",
   }),
   actions: {
     updateDateTime() {
@@ -57,6 +60,7 @@ export const useMainStore = defineStore("main", {
         return new Date(this.selectedDateTime).toISOString()
       }
       return new Date().toISOString()
-    }
+    },
+    
   }
 })

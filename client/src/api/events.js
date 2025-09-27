@@ -22,7 +22,16 @@ async function createEvent(title,created,modified,scheduled,duration,color, repe
 }
 
 
-
+/*
+    "events.$.title": req.body.new_title,
+    "events.$.scheduled": req.body.new_scheduled,
+    "events.$.duration": req.body.new_duration,
+    "events.$.modified":req.body.new_modified,
+    "events.$.color":req.body.new_color,
+    "events.$.repeat.type": req.body.new_type_rep,
+    "events.$.repeat.start_date": req.body.new_start,
+    "events.$.repeat.finish_date": req.body.new_finish,
+*/
 async function editEvent(id,new_title,new_scheduled,new_duration,new_modified , new_color,new_type_rep, new_start,new_finish) {
   try {
     const response = await AXIOS.post("/edit_event", { id, new_title, new_scheduled, new_duration, new_modified , new_color, new_type_rep,new_start,new_finish })
@@ -34,6 +43,7 @@ async function editEvent(id,new_title,new_scheduled,new_duration,new_modified , 
 }
 
 async function deleteEvent(id) {
+  console.log(2000)
   try {
     const response = await AXIOS.delete("/delete_event",  {id})
     return response.data

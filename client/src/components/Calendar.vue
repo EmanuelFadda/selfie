@@ -68,8 +68,7 @@
     @click:more="viewDay"
   ></v-calendar>
 
-  <!-- modal che esce quando clicchi l'evento -->
-  <!-- Modal evento -->
+
 <!-- Modal evento -->
 <v-dialog v-model="selectedOpen" max-width="500px">
   <v-card
@@ -85,7 +84,7 @@
         {{ selectedEvent?.name || 'Evento' }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon variant="text" @click="selectedOpen = false">
+      <v-btn icon variant="text" @click="selectedOpen = false; selectetEvent=false">
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-toolbar>
@@ -148,12 +147,12 @@ import { onMounted, onUnmounted,ref } from 'vue'
 import api from "@/api"
 import router from "@/router";
 import { useRoute } from 'vue-router';
+import { useMainStore } from "@/store";
 
 
 const route = useRoute()
-
+ 
 const store=useMainStore()
-import { useMainStore } from "@/store";
 
 const calendar = ref()
 const focus = ref('')
@@ -164,15 +163,11 @@ const selectedOpen = ref(false)
 let events = ref([])
 let vuetifyStyle=null
 
-
 const typeToLabel = {
   month: 'Month',
   week: 'Week',
   day: 'Day'
 }
-
-
-
 onMounted(async () => {
   calendar.value.checkChange()
   // creo il tag <link> per vuetify/styles
@@ -182,14 +177,12 @@ onMounted(async () => {
   document.head.appendChild(vuetifyStyle)
 
 })
-
 onUnmounted(() => {
   // rimuovo il CSS quando esco dalla view
   if (vuetifyStyle && vuetifyStyle.parentNode) {
     vuetifyStyle.parentNode.removeChild(vuetifyStyle)
   }
 })
-
 function viewDay (nativeEvent, { date }) {
   focus.value = date
   type.value = 'day'
@@ -212,6 +205,7 @@ function showEvent (nativeEvent, { event }) {
     selectedElement.value = nativeEvent.target
     requestAnimationFrame(() => requestAnimationFrame(() => selectedOpen.value = true))
   }
+
   if (selectedOpen.value) {
     selectedOpen.value = false
     requestAnimationFrame(() => requestAnimationFrame(() => open()))
@@ -240,7 +234,6 @@ function getStartEndDate(data, scheduled, durataMinuti) {
   return { start, end };
 }
 
-
 function getNextDate(x,repeat_type){
   if (repeat_type == 1) {
     x.setDate(x.getDate() + 1)
@@ -254,17 +247,12 @@ function getNextDate(x,repeat_type){
   return x
 }
 
-
-
 // ottiene tutti gli eventi e le attività dell'utente dal database
 async function refresh_calendar(){
   let response_activities= await api.getActivities()
   let response_events= await api.getEvents()
-
   store.activities= (response_activities.success) ? response_activities.content.activities : null
-  
   store.events= (response_events.success) ? response_events.content.events : null
-
 }
 
 async function updateRange ({ start, end }) {
@@ -360,18 +348,47 @@ async function updateRange ({ start, end }) {
 
 }
 
-function editEvent(x){
-  store.editCalendarObj=x.type
-  console.log(2,store.editCalendarObj)
-  console.log("oggetto id",x.id)
-  router.push(`${route.path}/${x.id}`)
+function editEvent(){
+  let event=selectedEvent.value
+  
+  if(event && event.id){
+    store.editCalendarObj=event.type
+    console.log("stato editCalendarObj in calendarVue",store.editCalendarObj)
+    router.push({
+      name: "calendarReader",
+      params: {
+        username: route.params.username, 
+        id: event.id
+      }})
 
+    // fino a qui ci passa
+    console.log("fino a qui ci arriva")
+  }else{
+    console.log("not a valid event")
+  }
 }
 
-function deleteEvent(event){
+async function deleteEvent(){
   //robo di sicurezza per eliminare 
-}
+  let event=selectedEvent.value
+  if(event && event.id){
+    console.log(event.type)
+    let response=null
 
-// per far capire alla view successiva che tipo di oggetto sto modificando -> store.editCalendarObj="event" ||  "activity"
+    if(event.type=="event"){
+      response=await api.deleteEvent(event.id) 
+    }else if(event.type=="activity"){
+      response= await api.deleteActivity(event.id)
+    }else{
+      console.log("not a valid object")
+    }
+    await refresh_calendar()
+
+  }else{
+    console.log("not a valid object")
+  }
+  selectedOpen.value=false
+
+}
 </script>
 
