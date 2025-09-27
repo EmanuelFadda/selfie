@@ -1,8 +1,8 @@
 <template>
-  <Navbar viewTitle="Note" :titleColor="classColor" :backButton="true" :myButton="myButton" :backRoute="`/${store.user.username}/note`"></Navbar>
+  <Navbar viewTitle="Note" :titleColor="classColor" :backButton="true" :myButton="myButton" :backRoute="`/${username}/notes`"></Navbar>
 
   <div class="ml-5 mr-5 h-[calc(100vh-108px)] rounded-2xl lg:h-[calc(100vh-132px)] dark:bg-neutral-800">
-    <!-- Title -->
+    <!-- Title --> 
     <div class="relative ml-[18px] mr-[18px] pt-5">
       <input name="title" id="title" class="peer block w-full appearance-none rounded-xl border-2 border-neutral-700 bg-neutral-800 p-2.5 pl-3.5 pr-3.5 text-xl font-semibold outline-0" placeholder="" v-model="currentNote.title" />
       <label for="title" class="pear-focus:text-neutral-300 absolute start-1 top-2 z-10 mt-2.5 origin-[0] -translate-y-3 translate-x-1.5 scale-75 transform rounded-xl bg-neutral-800 px-2 text-xl font-medium duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-3 peer-focus:translate-x-1.5 peer-focus:scale-75 peer-focus:px-2">Titolo</label>
@@ -41,6 +41,7 @@ import api from "@/api"
 const store = useMainStore()
 const route = useRoute()
 
+const username = store.user.username
 const colorsMap = store.colorsMap
 const classColor = "text-amber-300 dark:text-amber-400"
 const selected = ref("")
