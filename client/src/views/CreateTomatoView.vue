@@ -44,15 +44,19 @@
         <input type="number" v-model.number="customStudyTime" min="1" class="py-0.5 w-20 rounded-xl border-2 border-neutral-700 bg-neutral-800 p-2 text-lg" />
         <button @click="calculateOptions" class="bg-red-500 py-0.5 px-1 rounded-xl">Calcola opzioni</button>
       </div>
-      <div v-if="options.length > 0">
-        <p class="mt-5">Opzioni migliori:</p>
-        <ul class="mt-3 space-y-1.5">
-          <li v-for="(opt, index) in options" :key="index">
-            <button @click="selectOption(opt, index)" :class="['w-full text-base text-left border-2 rounded-xl border-neutral-700 p-2 hover:bg-neutral-700', selectedOptionIndex === index ? 'bg-red-600/30' : '']">
-              Pomodoro: {{ opt.pomodoro }}/{{ opt.shortBreak }}<span v-if="opt.longBreak !== undefined">/{{ opt.longBreak }} min</span> ({{ opt.sessions }} sessioni) <span class="font-semibold">Studio -> {{ opt.totalStudyTime }} min, Totale -> {{ opt.totalTimeWithBreaks }} min</span>
-            </button>
-          </li>
-        </ul>
+      <div v-if="options.length > 0" class="mt-5">
+        <p>Opzioni migliori:</p>
+        <div class="max-h-[calc(100vh-428px)] overflow-y-auto mt-3">
+          <ul class="space-y-1.5">
+            <li v-for="(opt, index) in options" :key="index">
+              <button @click="selectOption(opt, index)"
+                :class="['w-full text-base text-left border-2 rounded-xl border-neutral-700 p-2 hover:bg-neutral-700', selectedOptionIndex === index ? 'bg-red-600/30' : '']">
+                Pomodoro: {{ opt.pomodoro }}/{{ opt.shortBreak }}<span v-if="opt.longBreak !== undefined">/{{ opt.longBreak }} min</span> ({{ opt.sessions }} sessioni) 
+                <span class="font-semibold">Studio -> {{ opt.totalStudyTime }} min, Totale -> {{ opt.totalTimeWithBreaks }} min</span>
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -114,7 +118,7 @@ function calculateOptions() {
   }
 
   results.sort((a, b) => a.totalTimeWithBreaks - b.totalTimeWithBreaks)
-  options.value = results.slice(0, 4)
+  options.value = results.slice(0, 5)
   selectedOptionIndex.value = null
 }
 
