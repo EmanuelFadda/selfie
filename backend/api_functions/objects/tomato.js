@@ -9,7 +9,7 @@ async function get_tomatoes(client, req, res) {
 
 async function create_tomato(client, req, res) {
   let b=req.body
-  new_tomato = get_new_tomato(b.name,b.created,b.modified, b.rep_tomato, b.time_tomato, b.time_short_break, b.time_long_break)
+  new_tomato = get_new_tomato(b.name,b.created,b.modified, b.done, b.rep_tomato, b.time_tomato, b.time_short_break, b.time_long_break)
   create_object(client, req, res, { tomato_sessions: new_tomato }, "Tomato")
 }
 async function delete_tomato(client, req, res) {
@@ -23,6 +23,7 @@ async function edit_tomato(client, req, res) {
   let set_obj = {
     "tomato_sessions.$.name": req.body.new_name,
     "tomato_sessions.$.modified":req.body.new_modified,
+    "tomato_sessions.$.done": req.body.new_done,
     "tomato_sessions.$.rep_tomato": req.body.new_rep_tomato,
     "tomato_sessions.$.time.tomato": req.body.new_time_tomato,
     "tomato_sessions.$.time.short_break": req.body.new_short_break,

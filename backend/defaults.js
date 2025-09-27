@@ -15,7 +15,8 @@ const NOTE_TAG = "Study"
 
 // about default tomato
 const TOMATO_NAME = "Standard"
-const TOMATO_REP = 3
+const TOMATO_DONE = 0
+const TOMATO_REP = 4
 const TOMATO_TIME = 15
 const TOMATO_SHORT_BREAK = 5
 const TOMATO_LONG_BREAK = 15
@@ -31,6 +32,7 @@ module.exports = {
   NOTE_TITLE,
   NOTE_TAG,
   TOMATO_NAME,
+  TOMATO_DONE,
   TOMATO_REP,
   TOMATO_SHORT_BREAK,
   TOMATO_TIME,

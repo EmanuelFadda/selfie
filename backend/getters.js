@@ -30,6 +30,7 @@ function get_new_user(name,surname,username,email,image,password,birthday,login)
     get_time_now(),
     defaults.TOMATO_REP,
     defaults.TOMATO_TIME,
+    defaults.TOMATO_DONE,
     defaults.TOMATO_SHORT_BREAK,
     defaults.TOMATO_LONG_BREAK
   );
@@ -66,7 +67,7 @@ function get_new_credentials(name,surname,username,email,image,password,birthday
     image: image,
     password: password,
     birthday: birthday,
-    login: login, // modo in cui si fa l'accesso , 0= selfie , 1=google
+    login: login, // modo in cui si fa l'accesso , 0 = selfie , 1 = google
   };
   return credentials;
 }
@@ -117,13 +118,14 @@ function get_new_activity(title,expiration,created,modified,color,id_tomato) {
   return new_activity;
 }
 
-function get_new_tomato(name,created,modified,rep_tomato,time_tomato,short_break,long_break) {
+function get_new_tomato(name,created,modified,done,rep_tomato,time_tomato,short_break,long_break) {
   new_tomato = {
     id: new ObjectId().toString(),
     name: name,
     created:created,
     modified:modified,
     rep_tomato: rep_tomato,
+    done: done,
     time: {
       tomato: time_tomato,
       short_break: short_break,
