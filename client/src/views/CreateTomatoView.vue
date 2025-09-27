@@ -39,17 +39,17 @@
       </div>
     </div>
     <div v-else class="ml-[18px] mr-[18px] pt-6 text-lg font-semibold">
-      <p>Inserisci il tempo totale di studio (minuti):</p>
+      <p class="relative justify-self-center">Inserisci i minuti di studio:</p>
       <div class="flex items-center justify-center gap-x-2 mt-3">
         <input type="number" v-model.number="customStudyTime" min="1" class="py-0.5 w-20 rounded-xl border-2 border-neutral-700 bg-neutral-800 p-2 text-lg" />
         <button @click="calculateOptions" class="bg-red-500 py-0.5 px-1 rounded-xl">Calcola opzioni</button>
       </div>
       <div v-if="options.length > 0">
         <p class="mt-5">Opzioni migliori:</p>
-        <ul class="mt-2 space-y-1">
+        <ul class="mt-3 space-y-1.5">
           <li v-for="(opt, index) in options" :key="index">
-            <button @click="selectOption(opt, index)" :class="['w-full text-base text-left border-2 border-neutral-700 rounded p-2 hover:bg-neutral-700', selectedOptionIndex === index ? 'bg-red-600/30' : '']">
-              Tempo: {{ opt.pomodoro }}/{{ opt.shortBreak }}<span v-if="opt.longBreak !== undefined">/{{ opt.longBreak }} min</span>, Sessioni: {{ opt.sessions }}, <span class="font-semibold">Tempo totale: {{ opt.totalTimeWithBreaks }} min</span>
+            <button @click="selectOption(opt, index)" :class="['w-full text-base text-left border-2 rounded-xl border-neutral-700 p-2 hover:bg-neutral-700', selectedOptionIndex === index ? 'bg-red-600/30' : '']">
+              Pomodoro: {{ opt.pomodoro }}/{{ opt.shortBreak }}<span v-if="opt.longBreak !== undefined">/{{ opt.longBreak }} min</span> ({{ opt.sessions }} sessioni) <span class="font-semibold">Studio -> {{ opt.totalStudyTime }} min, Totale -> {{ opt.totalTimeWithBreaks }} min</span>
             </button>
           </li>
         </ul>
@@ -84,7 +84,7 @@ function calculateOptions() {
   let results = []
 
   for (let pomodoro of pomodoroOptions) {
-    const minSessions = Math.max(3, Math.ceil(customStudyTime.value / pomodoro))
+    const minSessions = customStudyTime.value > 90 ? 4 : Math.max(3, Math.ceil(customStudyTime.value / pomodoro))
     const maxSessions = minSessions + 2
 
     for (let sessions = minSessions; sessions <= maxSessions; sessions++) {
