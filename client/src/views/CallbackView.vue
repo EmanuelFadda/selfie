@@ -42,8 +42,7 @@ async function google_login(decode) {
   }
 
   const response = await api.login(object_query)
-  console.log(object_query)
-  console.log(response)
+ 
   if (response.content != null) {
     localStorage.setItem("token", response.content)
 

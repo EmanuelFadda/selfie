@@ -47,7 +47,6 @@ onMounted(async () => {
   const response_menu = await api.getMenu()
 
   if (!response_menu.success) {
-    console.log("Error fetching menu data")
     router.push("/")
   }
 
@@ -55,8 +54,6 @@ onMounted(async () => {
 
   store.menu.content = menu_data.content
   content.value = store.menu.content
-
-  console.log(content.value.notes.title)
 
   const items = {
     calendar: { id: 0, title: "Calendario", route: `/${store.user.username}/calendar`, componentType: "RouterLink", lightBgColor: "bg-sky-400", darkBgColor: "dark:bg-sky-500", lightBordColor: "border-sky-400", darkBordColor: "dark:border-sky-500", content: "Qui ci verranno messi eventi e attività" },

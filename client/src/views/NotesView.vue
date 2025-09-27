@@ -120,10 +120,6 @@ onMounted(async () => {
   let notes = notes_response.content.notes
   notes = notes.map(note => ({ ...note, infoStatus: [false] }))
   store.notes = notes
-
-  console.log(store.notes[0])
-  console.log(notes[0])
-  console.log(store.notes[0].infoStatus)
 })
 
 watch(

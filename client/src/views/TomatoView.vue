@@ -55,7 +55,6 @@ const classBreakTomato = ref([
 
 onMounted(async () => {
   const tomatoes_response = await api.getTomatoes()
-  console.log(tomatoes_response)
   const tomato_sessions = tomatoes_response.content.tomato_sessions
   store.tomato_sessions = tomato_sessions
   
