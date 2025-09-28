@@ -49,22 +49,27 @@
     </v-toolbar>
 
     <v-sheet class="flex-grow-1 d-flex" style="min-height: 0;">
-      <v-calendar
-        ref="calendar"
-        class="flex-grow-1"
-        style="height: 100%;"
-        theme="dark"
-        v-model="focus"
-        :event-color="getEventColor"
-        :events="events"
-        :type="type"
-        color="primary"
-        @change="updateRange"
-        @click:date="viewDay"
-        @click:event="showEvent"
-        @click:more="viewDay"
-        :key="calendarKey"
-      />
+    <v-calendar
+      locale="it"
+      ref="calendar"
+      class="flex-grow-1"
+      style="height: 100%;"
+      theme="dark"
+      v-model="focus"
+      :event-color="getEventColor"
+      :events="events"
+      :type="type"
+      color="primary"
+      :weekdays="[1,2,3,4,5,6,0]"    
+      :first-day-of-week="1"          
+      @change="updateRange"
+      @click:date="viewDay"
+      @click:event="showEvent"
+      @click:more="viewDay"
+      :key="calendarKey"
+      :show-current-time="true"
+    />
+
     </v-sheet>
 
     <!-- il dialog può restare qui o dentro lo stesso v-sheet, non influisce sull'altezza -->
@@ -140,7 +145,7 @@ const store=useMainStore()
 
 const calendar = ref()
 const focus = ref('')
-const type = ref('week')
+const type = ref('month')
 const selectedEvent = ref(null)
 const selectedElement = ref(null)
 const selectedOpen = ref(false)
@@ -201,38 +206,22 @@ function showEvent (nativeEvent, { event }) {
   nativeEvent.stopPropagation()
 }
 
-function getStartEndDate(data, scheduled, durataMinuti) {
-  // scheduled atteso come "HH:MM"
-  const [hour, minute] = scheduled.split(':').map(Number);
-
-  // creo la data di inizio in UTC
-  const start = new Date(Date.UTC(
-    data.getFullYear(),
-    data.getMonth(), // già 0-based
-    data.getDate(),
-    hour,
-    minute
-  ));
-
-  // aggiungo la durata in minuti
-  const end = new Date(start.getTime() + durataMinuti * 60 * 1000);
-
+function getStartEndDate(date, scheduled, durationMinutes) {
+  const [hour, minute] = scheduled.split(":").map(Number);
+  const start = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute);
+  const end = new Date(start.getTime() + durationMinutes * 60000);
   return { start, end };
 }
 
-function getNextDate(x,repeat_type){
-  if (repeat_type == 1) {
-    x.setDate(x.getDate() + 1)
-  } else if (repeat_type == 2) {
-    x.setDate(x.getDate() + 7)
-  } else if (repeat_type == 3) {
-    x.setMonth(x.getMonth() + 1)
-  } else if (repeat_type == 4) {
-    x.setFullYear(x.getFullYear() + 1)              
-  }
-  return x
-}
 
+function getNextDate(date, repeatType) {
+  const newDate = new Date(date); // copia per evitare side-effect
+  if (repeatType === 1) newDate.setDate(newDate.getDate() + 1);
+  else if (repeatType === 2) newDate.setDate(newDate.getDate() + 7);
+  else if (repeatType === 3) newDate.setMonth(newDate.getMonth() + 1);
+  else if (repeatType === 4) newDate.setFullYear(newDate.getFullYear() + 1);
+  return newDate;
+}
 // ottiene tutti gli eventi e le attività dell'utente dal database
 async function refresh_calendar(){
   let response_activities= await api.getActivities()

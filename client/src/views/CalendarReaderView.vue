@@ -159,13 +159,13 @@ function getStartEndDate(data, scheduled, durataMinuti) {
   const [hour, minute] = scheduled.split(':').map(Number);
 
   // creo la data di inizio in UTC
-  const start = new Date(Date.UTC(
+  const start = new Date(
     data.getFullYear(),
     data.getMonth(), // già 0-based
     data.getDate(),
     hour,
     minute
-  ));
+  );
 
   // aggiungo la durata in minuti
   const end = new Date(start.getTime() + durataMinuti * 60 * 1000);
