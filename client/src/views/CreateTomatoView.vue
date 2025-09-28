@@ -132,12 +132,12 @@ function selectOption(opt, index) {
 
 const classMode = ref([
   [
-    "bg-red-400/10 text-red-400 border-red-400/20 dark:bg-red-400/10 dark:text-red-400 dark:border-red-400/20",
-    "bg-gray-50 text-gray-600 border-gray-500/10 dark:bg-gray-400/10 dark:text-gray-400 dark:border-gray-400/20"
+    "bg-red-400/10 text-red-400 border-red-400/20",
+    "bg-gray-400/10 text-gray-400 border-gray-400/20"
   ],
   [
-    "bg-gray-50 text-gray-600 border-gray-500/10 dark:bg-gray-400/10 dark:text-gray-400 dark:border-gray-400/20",
-    "bg-red-400/10 text-red-400 border-red-400/20 dark:bg-red-400/10 dark:text-red-400 dark:border-red-400/20"
+    "bg-gray-400/10 text-gray-400 border-gray-400/20",
+    "bg-red-400/10 text-red-400 border-red-400/20"
   ]
 ])
 

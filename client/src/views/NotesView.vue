@@ -18,7 +18,7 @@ import { useMainStore } from "@/store"
 import api from "@/api"
 import { watch, reactive } from "vue"
 
-const classColor = "text-amber-300 dark:text-amber-400"
+const classColor = "text-amber-400"
 const store = useMainStore()
 const route = useRoute()
 

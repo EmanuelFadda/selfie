@@ -38,7 +38,7 @@
         <div class="pt-2.5 px-2 mx-2 border-neutral-600 border-t-2 " v-for="(session, index) in store.tomato_sessions" :key="session.id">
           <div class="flex gap-x-2 items-center">
             <p class="font-bold text-xl mb-0.5">{{ session.name }}</p>
-            <button @click="selectSession(index)" :class="index === activeSessionIndex ? 'inline-flex items-center rounded-2xl my-1 px-3 py-0.5 text-xs font-semibold border-2 border-red-400 bg-red-400/10 text-red-400 dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-400' : 'inline-flex items-center rounded-2xl my-1 px-3 py-0.5 text-xs font-semibold border-2 border-gray-400 bg-gray-200/10 text-gray-600 dark:border-gray-600 dark:bg-gray-400/10 dark:text-gray-400'">
+            <button @click="selectSession(index)" :class="index === activeSessionIndex ? 'inline-flex items-center rounded-2xl my-1 px-3 py-0.5 text-xs font-semibold border-2 border-red-400/20 bg-red-400/10 text-red-400' : 'inline-flex items-center rounded-2xl my-1 px-3 py-0.5 text-xs font-semibold border-2 border-gray-600 bg-gray-400/10 text-gray-400'">
               {{ index === activeSessionIndex ? "Attivo" : "Seleziona" }}
             </button>
             <button class="ml-auto" @click="deleteTomato(session.id)">
@@ -84,22 +84,22 @@ const myButton = {
   },
 }
 
-const classColor = "text-red-400 dark:text-red-500"
+const classColor = "text-red-500"
 const classBreakTomato = ref([
   [
-    "bg-red-400/10 text-red-400 border-red-400/20 dark:bg-red-400/10 dark:text-red-400 dark:border-red-400/20",
-    "bg-gray-50 text-gray-600 border-gray-500/10 dark:bg-gray-400/10 dark:text-gray-400 dark:border-gray-400/20",
-    "bg-gray-50 text-gray-600 border-gray-500/10 dark:bg-gray-400/10 dark:text-gray-400 dark:border-gray-400/20"
+    "bg-red-400/10 text-red-400 border-red-400/20",
+    "bg-gray-400/10 text-gray-400 border-gray-400/20",
+    "bg-gray-400/10 text-gray-400 border-gray-400/20"
   ],
   [
-    "bg-gray-50 text-gray-600 border-gray-500/10 dark:bg-gray-400/10 dark:text-gray-400 dark:border-gray-400/20",
-    "bg-red-400/10 text-red-400 border-red-400/20 dark:bg-red-400/10 dark:text-red-400 dark:border-red-400/20",
-    "bg-gray-50 text-gray-600 border-gray-500/10 dark:bg-gray-400/10 dark:text-gray-400 dark:border-gray-400/20"
+    "bg-gray-400/10 text-gray-400 border-gray-400/20",
+    "bg-red-400/10 text-red-400 border-red-400/20",
+    "bg-gray-400/10 text-gray-400 border-gray-400/20"
   ],
   [
-    "bg-gray-50 text-gray-600 border-gray-500/10 dark:bg-gray-400/10 dark:text-gray-400 dark:border-gray-400/20",
-    "bg-gray-50 text-gray-600 border-gray-500/10 dark:bg-gray-400/10 dark:text-gray-400 dark:border-gray-400/20",
-    "bg-red-400/10 text-red-400 border-red-400/20 dark:bg-red-400/10 dark:text-red-400 dark:border-red-400/20"
+    "bg-gray-400/10 text-gray-400 border-gray-400/20",
+    "bg-gray-400/10 text-gray-400 border-gray-400/20",
+    "bg-red-400/10 text-red-400 border-red-400/20"
   ]
 ])
 

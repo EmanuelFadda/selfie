@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-h-screen w-screen items-center justify-center">
-    <div class="form-shadow dark:form-shadow w-full rounded-xl max-sm:min-h-screen sm:max-w-md">
+    <div class="form-shadow w-full rounded-xl max-sm:min-h-screen sm:max-w-md">
       <div class="mb-2 mt-24 flex items-center justify-center sm:mt-10">
         <img src="../assets/logo.png" class="-ml-10 mr-[14px] h-16 w-16 rounded-full" />
         <h1 class="text-4xl font-bold md:text-4xl">Selfie</h1>
@@ -9,9 +9,9 @@
         <h1 v-if="actual_step === 0" class="mb-6 mt-4 sm:mt-0 sm:mb-4 text-2xl font-bold tracking-tight md:text-2xl">Crea il tuo account!</h1>
         <div class="mb-6">
           <div class="mb-2 grid grid-cols-3 sm:gap-14 gap-6">
-            <span @click="goToStep(0)" class="inline-block rounded-full px-2 py-1 text-sm bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20 text-center" id="step1">Info Utente</span>
-            <span @click="goToStep(1)" :class="{ 'opacity-50': actual_step < 1 }" class="inline-block rounded-full px-2 py-1 text-sm bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20 text-center" id="step2">Credenziali</span>
-            <span @click="goToStep(2)" :class="{ 'opacity-50': actual_step < 2 }" class="inline-block rounded-full px-2 py-1 text-sm bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20 text-center" id="step3">Immagine</span>
+            <span @click="goToStep(0)" class="inline-block rounded-full px-2 py-1 text-sm bg-green-500/10 text-green-400 ring-green-500/20 text-center" id="step1">Info Utente</span>
+            <span @click="goToStep(1)" :class="{ 'opacity-50': actual_step < 1 }" class="inline-block rounded-full px-2 py-1 text-sm bg-green-500/10 text-green-400 ring-green-500/20 text-center" id="step2">Credenziali</span>
+            <span @click="goToStep(2)" :class="{ 'opacity-50': actual_step < 2 }" class="inline-block rounded-full px-2 py-1 text-sm bg-green-500/10 text-green-400 ring-green-500/20 text-center" id="step3">Immagine</span>
           </div>
           <div class="flex h-2 overflow-hidden rounded bg-green-500/10 text-xs">
             <div ref="progress_bar" :style="{ width: `${(actual_step + 1) * 33 + (actual_step === 2 ? 1 : 0)}%` }" class="flex flex-col justify-center whitespace-nowrap bg-green-400 text-center text-white shadow-none transition-all duration-500 ease-in-out"></div>
@@ -21,39 +21,39 @@
           <div v-if="actual_step === 0" ref="step_1" class="step">
             <!-- personal information -->
             <label for="name" class="mb-2 block font-medium">Nome</label>
-            <input v-model="name" name="name" id="name" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci il nome" required />
+            <input v-model="name" name="name" id="name" class="mb-4 block w-full rounded-xl p-3.5 focus:outline  bg-neutral-800 focus:outline-slate-50" placeholder="Inserisci il nome" required />
             <label for="surname" class="mb-2 block font-medium">Cognome</label>
-            <input v-model="surname" name="surname" id="surname" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci il cognome" required />
+            <input v-model="surname" name="surname" id="surname" class="mb-4 block w-full rounded-xl p-3.5 focus:outline bg-neutral-800 focus:outline-slate-50" placeholder="Inserisci il cognome" required />
             <label for="birthday" class="mb-2 block font-medium">Data di nascita</label>
-            <input v-model="birthday" type="date" name="birthday" id="birthday" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" required />
+            <input v-model="birthday" type="date" name="birthday" id="birthday" class="mb-4 block w-full rounded-xl p-3.5 focus:outline bg-neutral-800 focus:outline-slate-50" required />
           </div>
 
           <div v-if="actual_step === 1" ref="step_2" class="step">
             <!-- account information -->
             <label for="email" class="mb-2 block ">Email</label>
-            <input :disabled="isDisabled" v-model="email" type="email" name="email" id="email" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci l'email" required />
+            <input :disabled="isDisabled" v-model="email" type="email" name="email" id="email" class="mb-4 block w-full rounded-xl p-3.5 focus:outline bg-neutral-800 focus:outline-slate-50" placeholder="Inserisci l'email" required />
 
             <label for="username" class="mb-2 block font-medium">Username</label>
-            <input :disabled="isDisabled" v-model="username" ref="input_username" type="username" name="username" id="username" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci l'username" required />
+            <input :disabled="isDisabled" v-model="username" ref="input_username" type="username" name="username" id="username" class="mb-4 block w-full rounded-xl p-3.5 focus:outline bg-neutral-800 focus:outline-slate-50" placeholder="Inserisci l'username" required />
             
             <label for="password" class="mb-2 block font-medium">Password</label>
-            <input :disabled="isDisabled" v-model="password" ref="input_password" type="password" name="password" id="password" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Inserisci la password" required />
+            <input :disabled="isDisabled" v-model="password" ref="input_password" type="password" name="password" id="password" class="mb-4 block w-full rounded-xl p-3.5 focus:outline bg-neutral-800 focus:outline-slate-50" placeholder="Inserisci la password" required />
 
             <label for="r_password" class="mb-2 block font-medium">Ripeti la password</label>
-            <input :disabled="isDisabled" v-model="r_password" ref="input_r_password" type="password" name="r_password" id="r_password" class="mb-4 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" placeholder="Riscrivi la password" required />
+            <input :disabled="isDisabled" v-model="r_password" ref="input_r_password" type="password" name="r_password" id="r_password" class="mb-4 block w-full rounded-xl p-3.5 focus:outline bg-neutral-800 focus:outline-slate-50" placeholder="Riscrivi la password" required />
           </div>
 
           <div v-if="actual_step === 2" ref="step_3" class="step">
             <!-- not required credentials -->
             <label for="image" class="mb-2 block font-medium">Immagine profilo</label>
-            <input type="file" ref="input_image" @change="get_image()" name="image" id="image" class="mb-1.5 block w-full rounded-xl p-3.5 focus:outline focus:outline-neutral-800 dark:bg-neutral-800 dark:focus:outline-slate-50" />
+            <input type="file" ref="input_image" @change="get_image()" name="image" id="image" class="mb-1.5 block w-full rounded-xl p-3.5 focus:outline bg-neutral-800 focus:outline-slate-50" />
             <p class="mb-4 ml-1 text-sm font-light">*se non inserita, verrà usata un immagine default</p>
             <h2 class="mt-8 ml-0.5 text-lg font-semibold">Ecco il tuo profilo:</h2>
             <div class="mt-4 sm:mb-6 flex items-center space-x-4 pl-2">
-              <img :src="image" alt="Immagine profilo" class="text-sm h-20 w-20 sm:h-24 sm:w-24  rounded-full border-2 border-slate-200 dark:border-neutral-600 text-center object-cover" />
+              <img :src="image" alt="Immagine profilo" class="text-sm h-20 w-20 sm:h-24 sm:w-24  rounded-full border-2 border-neutral-600 text-center object-cover" />
               <div class="flex-none">
-                <h2 class="text-xl sm:text-2xl font-semibold text-neutral-900 dark:text-slate-50">{{ namesurname }}</h2>
-                <h5 class="text-sm sm:text-basetext-neutral-600 dark:text-neutral-400"> Visualizza profilo</h5>
+                <h2 class="text-xl sm:text-2xl font-semibold text-slate-50">{{ namesurname }}</h2>
+                <h5 class="text-sm sm:text-base text-neutral-400"> Visualizza profilo</h5>
               </div>
             </div>
           </div>

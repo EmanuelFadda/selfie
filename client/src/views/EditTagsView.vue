@@ -15,7 +15,7 @@
       <div v-if="addTag" class="border-b border-neutral-600 py-3 pl-2.5">
         <div class="flex items-center justify-between">
           <!-- Tag -->
-          <span class="my-2 lg:ml-3 inline-flex min-h-6 min-w-5 select-none items-center rounded-lg px-2 py-1 text-xs font-medium ring-1 ring-inset" :class="newTagColor.length !== 1 ? 'bg-white text-black ring-black dark:bg-gray-200/10 dark:text-gray-200 dark:ring-gray-200/10' : newTagColor[0][1]">{{ newTagName }}</span>
+          <span class="my-2 lg:ml-3 inline-flex min-h-6 min-w-5 select-none items-center rounded-lg px-2 py-1 text-xs font-medium ring-1 ring-inset" :class="newTagColor.length !== 1 ? 'bg-gray-200/10 text-gray-200 ring-gray-200/10' : newTagColor[0][1]">{{ newTagName }}</span>
 
           <!-- Buttons -->
           <div class="flex">
@@ -33,14 +33,14 @@
         <div class="relative mb-2 mr-5 lg:ml-3 lg:mr-8 mt-2 grid grid-cols-2 items-center gap-x-3 lg:gap-x-4 gap-y-2">
           <!-- Input field for tag's name -->
           <div class="relative -mt-4 pt-6">
-            <label for="newtag" class="pear-focus:text-neutral-300 absolute start-1 top-2 z-10 mt-3 origin-[0] -translate-y-1.5 scale-75 transform rounded-xl bg-white dark:bg-neutral-800 px-2 font-medium duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100">Nome</label>
-            <input name="newtag" id="newtag" class="peer block w-full appearance-none rounded-xl border-2 dark:border-neutral-700 dark:bg-neutral-800 px-2.5 py-3 font-semibold outline-0" placeholder="" v-model="newTagName" />
+            <label for="newtag" class="pear-focus:text-neutral-300 absolute start-1 top-2 z-10 mt-3 origin-[0] -translate-y-1.5 scale-75 transform rounded-xl bg-neutral-800 px-2 font-medium duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100">Nome</label>
+            <input name="newtag" id="newtag" class="peer block w-full appearance-none rounded-xl border-2 border-neutral-700 bg-neutral-800 px-2.5 py-3 font-semibold outline-0" placeholder="" v-model="newTagName" />
           </div>
 
           <!-- Input field for tag's colors -->
           <div class="relative -mt-4 pt-6">
-            <div class="absolute start-1 top-2 z-10 mt-3 origin-[0] -translate-y-1.5 scale-75 rounded-xl bg-white dark:bg-neutral-800 px-2 font-medium dark:text-neutral-300">Colore</div>
-            <div name="tag" id="tag" class="flex h-[52px] w-full space-x-2 overflow-x-auto whitespace-nowrap rounded-xl border-2 dark:border-neutral-700 dark:bg-neutral-800 p-3 pl-3.5 pr-3.5 text-xl font-semibold">
+            <div class="absolute start-1 top-2 z-10 mt-3 origin-[0] -translate-y-1.5 scale-75 rounded-xl bg-neutral-800 px-2 font-medium text-neutral-300">Colore</div>
+            <div name="tag" id="tag" class="flex h-[52px] w-full space-x-2 overflow-x-auto whitespace-nowrap rounded-xl border-2 border-neutral-700 bg-neutral-800 p-3 pl-3.5 pr-3.5 text-xl font-semibold">
               <span v-for="color in newTagColor" class="relative inline-flex items-center rounded-lg px-2 py-1 text-xs font-medium ring-1 ring-inset" :class="color[1]" @click="filterNewTagColor(color[0])">
                 {{ color[0] }}
                 <svg v-if="newTagColor.length === 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="-mr-[2px] ml-1 size-3">
@@ -56,7 +56,7 @@
       <div v-for="(tag, index) in mappedTags" class="border-b border-neutral-600 py-3 pl-2.5">
         <div class="flex items-center justify-between">
           <!-- Tag -->
-          <span class="my-2 lg:ml-3 inline-flex min-h-6 min-w-5 select-none items-center rounded-lg px-2 py-1 text-xs font-medium ring-1 ring-inset" :class="tag.colorsFilter.length !== 1 ? 'dark:bg-gray-200/10 dark:text-gray-200 dark:ring-gray-200/10' : tag.colorsFilter[0][1]">{{ tag.name }}</span>
+          <span class="my-2 lg:ml-3 inline-flex min-h-6 min-w-5 select-none items-center rounded-lg px-2 py-1 text-xs font-medium ring-1 ring-inset" :class="tag.colorsFilter.length !== 1 ? 'bg-gray-200/10 text-gray-200 ring-gray-200/10' : tag.colorsFilter[0][1]">{{ tag.name }}</span>
 
           <!-- Buttons -->
           <div class="flex">
@@ -82,14 +82,14 @@
         <div v-if="mappedTags[index].edit" class="relative mb-2 mr-5 mt-2 lg:ml-3 lg:mr-8 grid grid-cols-2 items-center gap-x-3 lg:gap-x-4 gap-y-2">
           <!-- Input field for tag' name -->
           <div class="relative -mt-4 pt-6">
-            <label :for="'name-' + index" class="pear-focus:text-neutral-300 absolute start-1 top-2 z-10 mt-3 origin-[0] -translate-y-1.5 scale-75 transform rounded-xl bg-white dark:bg-neutral-800 px-2 font-medium duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100">Nome</label>
-            <input :name="'name-' + index" :id="'name-' + index" class="peer block w-full appearance-none rounded-xl border-2 dark:border-neutral-700 dark:bg-neutral-800 px-2.5 py-3 font-semibold outline-0" placeholder="" v-model="tag.name" />
+            <label :for="'name-' + index" class="pear-focus:text-neutral-300 absolute start-1 top-2 z-10 mt-3 origin-[0] -translate-y-1.5 scale-75 transform rounded-xl bg-neutral-800 px-2 font-medium duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100">Nome</label>
+            <input :name="'name-' + index" :id="'name-' + index" class="peer block w-full appearance-none rounded-xl border-2 border-neutral-700 bg-neutral-800 px-2.5 py-3 font-semibold outline-0" placeholder="" v-model="tag.name" />
           </div>
 
           <!-- Input field for tag' colors -->
           <div class="relative -mt-4 pt-6">
-            <div class="absolute start-1 top-2 z-10 mt-3 origin-[0] -translate-y-1.5 scale-75 rounded-xl bg-white dark:bg-neutral-800 px-2 font-medium dark:text-neutral-300">Colore</div>
-            <div name="tag" id="tag" class="flex h-[52px] w-full space-x-2 overflow-x-auto whitespace-nowrap rounded-xl border-2 dark:border-neutral-700 dark:bg-neutral-800 p-3 pl-3.5 pr-3.5 text-xl font-semibold">
+            <div class="absolute start-1 top-2 z-10 mt-3 origin-[0] -translate-y-1.5 scale-75 rounded-xl bg-neutral-800 px-2 font-medium text-neutral-300">Colore</div>
+            <div name="tag" id="tag" class="flex h-[52px] w-full space-x-2 overflow-x-auto whitespace-nowrap rounded-xl border-2 border-neutral-700 bg-neutral-800 p-3 pl-3.5 pr-3.5 text-xl font-semibold">
               <span v-for="color in tag.colorsFilter" @click="handleColor(index, color[0])" :id="'tag-' + index" class="relative inline-flex items-center rounded-lg px-2 py-1 text-xs font-medium ring-1 ring-inset" :class="color[1]">
                 {{ color[0] }}
                 <svg v-if="tag.colorsFilter.length === 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="-mr-[2px] ml-1 size-3">

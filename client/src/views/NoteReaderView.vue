@@ -1,7 +1,7 @@
 <template>
   <Navbar viewTitle="Note" :titleColor="classColor" :backButton="true" :myButton="myButton" :backRoute="`/${username}/notes`"></Navbar>
 
-  <div class="ml-5 mr-5 h-[calc(100vh-108px)] rounded-2xl lg:h-[calc(100vh-132px)] dark:bg-neutral-800">
+  <div class="ml-5 mr-5 h-[calc(100vh-108px)] rounded-2xl lg:h-[calc(100vh-132px)] bg-neutral-800">
     <!-- Title --> 
     <div class="relative ml-[18px] mr-[18px] pt-5">
       <input name="title" id="title" class="peer block w-full appearance-none rounded-xl border-2 border-neutral-700 bg-neutral-800 p-2.5 pl-3.5 pr-3.5 text-xl font-semibold outline-0" placeholder="" v-model="currentNote.title" />
@@ -18,7 +18,7 @@
     <div class="relative ml-[18px] mr-[18px] pt-5">
       <div class="absolute start-1 top-2 z-10 mt-2.5 origin-[0] -translate-y-3 translate-x-1.5 scale-75 rounded-xl bg-neutral-800 px-2 text-xl font-medium text-neutral-300">Tag</div>
       <div name="tag" id="tag" class="flex h-[52px] space-x-2 w-full rounded-xl border-2 border-neutral-700 bg-neutral-800 p-3 pl-3.5 pr-3.5 text-xl font-semibold overflow-x-auto whitespace-nowrap">
-        <span v-for="(tag, index) in tagFilter" :id="'tag-' + index" class="relative inline-flex items-center rounded-lg px-2 py-1 text-xs font-medium ring-1 ring-inset" @click="selectBadge(tag.name)" :class="selected === tag.name ? tag.color : 'dark:bg-gray-200/10 dark:text-gray-200 dark:ring-gray-200/10 '">
+        <span v-for="(tag, index) in tagFilter" :id="'tag-' + index" class="relative inline-flex items-center rounded-lg px-2 py-1 text-xs font-medium ring-1 ring-inset" @click="selectBadge(tag.name)" :class="selected === tag.name ? tag.color : 'bg-gray-200/10 text-gray-200 ring-gray-200/10 '">
           {{ tag.name }}
           <svg v-if="selected === tag.name" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-3 ml-1 -mr-[2px]">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -43,7 +43,7 @@ const route = useRoute()
 
 const username = store.user.username
 const colorsMap = store.colorsMap
-const classColor = "text-amber-300 dark:text-amber-400"
+const classColor = "text-amber-400"
 const selected = ref("")
 const tagFilter = ref([])
 const currentNote = ref({})

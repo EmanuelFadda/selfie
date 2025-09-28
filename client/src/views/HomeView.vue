@@ -4,8 +4,8 @@
 
     <!-- Anteprima oggetti delle note e pomodoro (default piccole) -->
     <div class="ml-5 mr-5 grid h-[calc(100vh-108px)] grid-cols-2 grid-rows-2 gap-4 lg:ml-28 lg:mr-28 lg:h-[calc(100vh-132px)] lg:grid-cols-3 lg:gap-6 xl:gap-7 2xl:gap-8 2xl:ml-36 2xl:mr-36">
-      <HomeTopItem v-for="(item, index) in layout.slice(0, 1)" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :content="item.content" class="row-span-2 flex flex-auto flex-col max-sm:col-span-2 lg:col-span-2"></HomeTopItem>
-      <HomeBottomItem v-for="(item, index) in layout.slice(1)" :key="index" :title="item.title" :componentType="item.componentType" :lightBgColor="item.lightBgColor" :darkBgColor="item.darkBgColor" :lightBordColor="item.lightBordColor" :darkBordColor="item.darkBordColor" :route="item.route" :contentTitle="item.contentTitle" :content="item.content"></HomeBottomItem>
+      <HomeTopItem v-for="(item, index) in layout.slice(0, 1)" :key="index" :title="item.title" :componentType="item.componentType"  :bgColor="item.bgColor" :bordColor="item.bordColor" :route="item.route" :content="item.content" class="row-span-2 flex flex-auto flex-col max-sm:col-span-2 lg:col-span-2"></HomeTopItem>
+      <HomeBottomItem v-for="(item, index) in layout.slice(1)" :key="index" :title="item.title" :componentType="item.componentType"  :bgColor="item.bgColor" :bordColor="item.bordColor" :route="item.route" :contentTitle="item.contentTitle" :content="item.content"></HomeBottomItem>
     </div>
   </div>
 </template>
@@ -56,9 +56,9 @@ onMounted(async () => {
   content.value = store.menu.content
 
   const items = {
-    calendar: { id: 0, title: "Calendario", route: `/${store.user.username}/calendar`, componentType: "RouterLink", lightBgColor: "bg-sky-400", darkBgColor: "dark:bg-sky-500", lightBordColor: "border-sky-400", darkBordColor: "dark:border-sky-500", content: "Qui ci verranno messi eventi e attività" },
-    notes: { id: 1, title: "Note", route: `/${store.user.username}/notes`, componentType: "RouterLink", lightBgColor: "bg-amber-300", darkBgColor: "dark:bg-amber-400", lightBordColor: "border-amber-300", darkBordColor: "dark:border-amber-400", contentTitle: content.value.notes.title, content: content.value.notes.content},
-    tomato: { id: 2, title: "Pomodoro", route: `/${store.user.username}/tomato`, componentType: "RouterLink", lightBgColor: "bg-red-400", darkBgColor: "dark:bg-red-500", lightBordColor: "border-red-400", darkBordColor: "dark:border-red-500", content: "Studia tanto con i pomodori!" },
+    calendar: { id: 0, title: "Calendario", route: `/${store.user.username}/calendar`, componentType: "RouterLink", bgColor: "bg-sky-500", bordColor: "border-sky-500", content: "Qui ci verranno messi eventi e attività" },
+    notes: { id: 1, title: "Note", route: `/${store.user.username}/notes`, componentType: "RouterLink", bgColor: "bg-amber-400", bordColor: "border-amber-400", contentTitle: content.value.notes.title, content: content.value.notes.content},
+    tomato: { id: 2, title: "Pomodoro", route: `/${store.user.username}/tomato`, componentType: "RouterLink", bgColor: "bg-red-500", bordColor: "border-red-500", content: "Studia tanto con i pomodori!" },
   }
 
   store.menu.layout = menu_data.layout.map((item) => items[item])

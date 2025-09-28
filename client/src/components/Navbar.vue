@@ -1,5 +1,5 @@
 <template>
-  <nav class="max-lg:mb-1 flex items-center p-6 dark:bg-neutral-900">
+  <nav class="max-lg:mb-1 flex items-center p-6 bg-neutral-900">
     <!-- Navigate back arrow -->
     <svg v-if="backButton" @click="goBack" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mr-4 -ml-1 size-6 lg:size-7" ref="back">
       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
@@ -39,9 +39,9 @@
 
     <!-- Dropdown menu -->
     <div v-if="myDropdown.exist && dropdownactive" id="dropdown" class="absolute z-30 top-14 right-16">
-        <ul class="text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+        <ul class="text-gray-200" aria-labelledby="dropdownDefaultButton">
           <li v-for="(item, index) in dropdownItems" @click="item.function">
-            <a href="#" @click="item.handleClick" :class="[index == 0 ? 'rounded-t-md' : 'border-t-0' ], [item.selected ? 'bg-neutral-700 text-slate-50 dark:bg-white dark:text-neutral-800' : 'bg-white text-neutral-700  dark:border-neutral-700 dark:bg-neutral-800 dark:text-stone-200 ' ]" class="flex items-center border-2 border-b-0 border-neutral-700 p-2 pb-[5px] pt-[5px] text-base">
+            <a href="#" @click="item.handleClick" :class="[index == 0 ? 'rounded-t-md' : 'border-t-0' ], [item.selected ? 'bg-white text-neutral-800' : 'border-neutral-700 bg-neutral-800 text-stone-200 ' ]" class="flex items-center border-2 border-b-0 border-neutral-700 p-2 pb-[5px] pt-[5px] text-base">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="lg:size-7 mr-[6px] size-[20px]">
                 <path v-for="path in item.paths" stroke-linecap="round" stroke-linejoin="round" :d="path"/>
               </svg>
@@ -49,7 +49,7 @@
             </a>
           </li>
           <li v-for="(item, index) in dropdownOrder" @click="item.function">
-            <a href="#" @click="item.handleClick" :class="[index == 0 ? 'border-b-0' : 'border-t-0 rounded-b-md'], [item.selected ? 'bg-neutral-700 text-slate-50 dark:bg-white dark:text-neutral-800' : 'bg-white text-neutral-700  dark:border-neutral-700 dark:bg-neutral-800 dark:text-stone-200 ' ]" class="flex items-center border-2 border-neutral-700 p-2 pb-[5px] pt-[5px] text-base">
+            <a href="#" @click="item.handleClick" :class="[index == 0 ? 'border-b-0' : 'border-t-0 rounded-b-md'], [item.selected ? 'bg-white text-neutral-800' : 'border-neutral-700 bg-neutral-800 text-stone-200 ' ]" class="flex items-center border-2 border-neutral-700 p-2 pb-[5px] pt-[5px] text-base">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="lg:size-7 mr-[6px] size-[20px]">
                 <path v-for="path in item.paths" stroke-linecap="round" stroke-linejoin="round" :d="path"/>
               </svg>
@@ -71,19 +71,19 @@
   <div v-if="settings" @click="settings = false" class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300"></div>
 
   <!-- Scrollable settings menu -->
-  <div :class="settings ? 'translate-x-0' : 'translate-x-full'" class="fixed right-0 top-0 h-full w-[85%] bg-slate-100 shadow-lg transition-transform duration-[400ms] sm:w-[300px] dark:bg-neutral-800">
+  <div :class="settings ? 'translate-x-0' : 'translate-x-full'" class="fixed right-0 top-0 h-full w-[85%] shadow-lg transition-transform duration-[400ms] sm:w-[300px] bg-neutral-800">
     <!-- Menu content -->
     <div class="mt-6 flex items-center space-x-2 pl-2">
-      <img :src="image" alt="Immagine profilo" class="h-[52px] w-[52px] rounded-full border-2 border-slate-200 dark:border-neutral-600 object-cover" />
+      <img :src="image" alt="Immagine profilo" class="h-[52px] w-[52px] rounded-full border-2 border-neutral-600 object-cover" />
       <div class="flex-none">
-        <h2 class="text-lg font-semibold text-neutral-900 dark:text-slate-50">{{ name + " " + surname }}</h2>
-        <h5 class="text-sm text-neutral-600 dark:text-neutral-400">Visualizza profilo</h5>
+        <h2 class="text-lg font-semibold text-slate-50">{{ name + " " + surname }}</h2>
+        <h5 class="text-sm text-neutral-400">Visualizza profilo</h5>
       </div>
     </div>
 
     <!-- Options list -->
     <div class="mt-3 pl-2.5">
-      <RouterLink v-for="(setting, index) in settingsArray" :key="index" :to="setting.route" class="flex items-center border-b border-slate-300 py-3 pl-2.5 text-lg dark:border-neutral-600">
+      <RouterLink v-for="(setting, index) in settingsArray" :key="index" :to="setting.route" class="flex items-center border-b py-3 pl-2.5 text-lg border-neutral-600">
         <svg v-if="setting.icon.length > 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="mr-3 size-6">
           <path v-for="path in setting.icon":d="path" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
