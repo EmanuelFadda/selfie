@@ -48,7 +48,7 @@ const password = ref("")
 async function login() {
   
   const object_query = {
-    "credentials.username": username.value ,
+    "credentials.username": username.value,
     "credentials.password": password.value
   }
 

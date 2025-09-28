@@ -66,6 +66,9 @@ onMounted(async () => {
       bordColor: "border-sky-500", 
       eventTitle: content.value.events.title, 
       eventContent: (() => {
+        if (!content.value.events || !content.value.events.repeat || !content.value.events.repeat.start_date || !content.value.events.scheduled || !content.value.events.duration) {
+          return "Non c'e ancora nessun evento programmato"
+        }
         const startDate = content.value.events.repeat.start_date // YYYY-MM-DD
         const scheduled = content.value.events.scheduled // "HH-MM"
         const duration = content.value.events.duration // in minutes
@@ -90,15 +93,36 @@ onMounted(async () => {
       })(),
       activityTitle: content.value.activities.title, 
       activityContent: (() => {
+        if (!content.value.activities || !content.value.activities.expiration) {
+          return "Non c'e ancora nessuna attività"
+        }
         // expiration is in YYYY-MM-DD
         const exp = content.value.activities.expiration
-        if (!exp) return "Data di scadenza: "
+        if (!exp) return "Non c'e ancora nessuna attività"
         const [yyyy, mm, dd] = exp.split('-')
         return `Data di scadenza: ${dd}-${mm}-${yyyy}`
       })(),
     },
-    notes: { id: 1, title: "Note", route: `/${store.user.username}/notes`, componentType: "RouterLink", bgColor: "bg-amber-400", bordColor: "border-amber-400", contentTitle: content.value.notes.title, content: content.value.notes.content},
-    tomato: { id: 2, title: "Pomodoro", route: `/${store.user.username}/tomato`, componentType: "RouterLink", bgColor: "bg-red-500", bordColor: "border-red-500", contentTitle: content.value.tomato_sessions.name, content: `Completate: ${content.value.tomato_sessions.done}/${content.value.tomato_sessions.rep_tomato} sessioni`},
+    notes: { 
+      id: 1, 
+      title: "Note", 
+      route: `/${store.user.username}/notes`, 
+      componentType: "RouterLink", 
+      bgColor: "bg-amber-400", 
+      bordColor: "border-amber-400", 
+      contentTitle: content.value.notes ? content.value.notes.title : "Nessuna nota disponibile", 
+      content: content.value.notes ? content.value.notes.content : "Nessuna nota disponibile"
+    },
+    tomato: { 
+      id: 2, 
+      title: "Pomodoro", 
+      route: `/${store.user.username}/tomato`, 
+      componentType: "RouterLink", 
+      bgColor: "bg-red-500", 
+      bordColor: "border-red-500", 
+      contentTitle: content.value.tomato_sessions ? content.value.tomato_sessions.name : "Nessun pomodoro disponibile", 
+      content: content.value.tomato_sessions ? `Completate: ${content.value.tomato_sessions.done}/${content.value.tomato_sessions.rep_tomato} sessioni` : "Nessun pomodoro disponibile"
+    },
   }
 
   store.menu.layout = menu_data.layout.map((item) => items[item])
