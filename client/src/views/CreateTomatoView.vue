@@ -147,8 +147,6 @@ const myButton = {
   function: async () => {
     await api.createTomato(newTomato.value.name, newTomato.value.done, newTomato.value.rep_tomato, newTomato.value.time.tomato, newTomato.value.time.short_break, newTomato.value.time.long_break)
 
-    await api.setMenuContentTomatoes({name: newTomato.value.name, rep_tomato: newTomato.value.rep_tomato, done: newTomato.value.done})
-
     const response = await api.getTomatoes()
     const tomatoes = response.data
     store.tomato_sessions = tomatoes

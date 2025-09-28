@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div class="fixed inset-x-0 top-0 z-20 bg-neutral-900">
       <Navbar viewTitle="Pomodoro" :titleColor="classColor" :backButton="true" :myButton="myButton"></Navbar>
       <div class="flex flex-col items-center justify-center ml-5 mr-5 lg:ml-28 lg:mr-28 2xl:ml-36 2xl:mr-36">
@@ -52,6 +53,7 @@
         </div>
     </div>
     <TomatoCelebrateModal :state="showCelebrateModal" :title="celebrateTitle[0]" :message="celebrateMessage[0]" :cancelFunction="() => showCelebrateModal[0] = false"/>
+  </div>
 </template>
 
 <script setup>
@@ -184,6 +186,22 @@ async function moveToNextInterval() {
     } catch (e) {
       console.error("Failed to update tomato session:", e)
     }
+    if (store.tomato_sessions.length > 0) {
+      try {
+        const nextActive = store.tomato_sessions.find(s => (s.done || 0) < s.rep_tomato)
+        if (nextActive) {
+          await api.setMenuContentTomatoes({
+            name: nextActive.name,
+            rep_tomato: nextActive.rep_tomato,
+            done: nextActive.done,
+            short_break: nextActive.time.short_break,
+            long_break: nextActive.time.long_break
+          })
+        }
+      } catch (e) {
+        console.error("Failed to set menu content tomatoes:", e)
+      }
+    }
     if (session.done >= session.rep_tomato) {
       celebrateTitle.value[0] = "Sessione completata!"
       celebrateMessage.value[0] = `Hai completato tutte le ripetizioni per "${session.name}". Ottimo lavoro!`
@@ -224,7 +242,6 @@ async function moveToNextInterval() {
   } else {
     breakSwitch.value = 0
     restartCurrentInterval()
-    timer.start()
   }
 }
 
