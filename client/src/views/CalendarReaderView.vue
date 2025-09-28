@@ -126,7 +126,7 @@ import Navbar from "@/components/Navbar.vue"
 import { useMainStore } from "@/store"
 import { useRoute } from "vue-router"
 import router from "@/router"
-import { ref, onMounted, onUnmounted, onBeforeMount } from "vue"
+import { ref, onMounted, onUnmounted} from "vue"
 import api from "@/api"
 
 const store = useMainStore()
@@ -136,7 +136,6 @@ const classColor = "text-blue-300 dark:text-blue-400"
 const isEvent=ref(true)
 const formEvent=ref({})
 const formActivity= ref({})
-const selectedEvent = ref(null)
 
 
 function getDateTimeString(date=new Date()) {
@@ -175,7 +174,6 @@ function getStartEndDate(data, scheduled, durataMinuti) {
 }
 
 function fromFormToApiDates(){
-  console.log(formEvent.value)
   const repeat_start_date=formEvent.value.start_datetime.split("T")[0];
   const repeat_end_date= formEvent.value.repeat_type==0 ? repeat_start_date : formEvent.value.repeat_end_date.split("T")[0]
 
@@ -198,25 +196,13 @@ const aggiungiCalendario = {
   function: async () => { 
     if (route.params.id === "new") {
       if(isEvent.value==true){
-        alert("isEvent",isEvent.value)
         // si crea un evento
         // title,created,modified,scheduled,duration,color, repeat_type,repeat_start_date,repeat_finish_date
 
         // dall'input datetime dobbiamo ricavare orario,durata e giorni
 
         let {scheduled,diffMinutes,repeat_start_date,repeat_end_date} =fromFormToApiDates()
-        console.log(scheduled,diffMinutes,repeat_start_date,repeat_end_date)
         // DA MODIFICARE LE DATE PER LA TIMEMACHINE
-        console.log([
-          formEvent.value.title,
-          getDateTimeString(),
-          getDateTimeString(),
-          scheduled,
-          diffMinutes,
-          formEvent.value.color,
-          formEvent.value.repeat_type,
-          repeat_start_date, repeat_end_date]
-        )
 
         await api.createEvent(
           formEvent.value.title,
@@ -239,17 +225,6 @@ const aggiungiCalendario = {
       if(isEvent.value==true){
         let  {scheduled,diffMinutes,repeat_start_date,repeat_end_date}=fromFormToApiDates()
         // id,new_title,n ew_scheduled, new_duration, new_modified , new_color,new_type_rep, new_start,new_finish
-        console.log("parametri dell'evento modificato",[
-          route.params.id,
-          scheduled,
-          diffMinutes, 
-          getDateTimeString(),
-          formEvent.value.color,
-          formEvent.value.repeat_type,
-          repeat_start_date, 
-          repeat_end_date]
-        )
-
         await api.editEvent(
           route.params.id,
           formEvent.value.title,
@@ -263,13 +238,6 @@ const aggiungiCalendario = {
         )
       }else{
         // id,new_title,new_expiration,new_modified , new_color,new_id_tomato, new_done
-        console.log([          route.params.id,
-          formActivity.value.title,
-          formActivity.value.expiration,
-          getDateTimeString(),
-          formActivity.value.color,
-          null,
-          false])
 
         let response=await api.editActivity(
           route.params.id,
@@ -280,7 +248,6 @@ const aggiungiCalendario = {
           null,
           false
         )
-        console.log(response)
       }
      // await api.editNote(currentNote.value.id, currentNote.value.title, currentNote.value.content, selected.value, new Date().toISOString())
     }
@@ -321,12 +288,10 @@ onMounted(() => {
     if(store.editCalendarObj=="event"){
         isEvent.value=true
         const e = store.events.find(e => e.id === route.params.id);
-        console.log("evento da modificare",e)
 
         // bisogna ottenere il tempo di fine 
         let dates=getStartEndDate(new Date(e.repeat.start_date),e.scheduled,e.duration)
         // da storage al form 
-        console.log(getDateString(new Date(e.repeat.finish_date)))
         formEvent.value={
             title: e.title,
             start_datetime:getDateTimeString(dates.start),
@@ -335,11 +300,9 @@ onMounted(() => {
             repeat_type:e.repeat.type,
             repeat_end_date:getDateString(new Date(e.repeat.finish_date))
         }
-        console.log(formEvent.value.repeat_end_date)
     }else if(store.editCalendarObj=="activity"){
         isEvent.value=false
         const a = store.activities.find(a => a.id === route.params.id);
-        console.log("attività da modificare",a)
 
         formActivity.value={
           title:a.title,

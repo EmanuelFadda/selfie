@@ -66,6 +66,7 @@
     @click:date="viewDay"
     @click:event="showEvent"
     @click:more="viewDay"
+    :key="calendarKey"
   ></v-calendar>
 
 
@@ -162,6 +163,7 @@ const selectedElement = ref(null)
 const selectedOpen = ref(false)
 let events = ref([])
 let vuetifyStyle=null
+let calendarKey=ref(0)
 
 const typeToLabel = {
   month: 'Month',
@@ -177,6 +179,7 @@ onMounted(async () => {
   document.head.appendChild(vuetifyStyle)
 
 })
+
 onUnmounted(() => {
   // rimuovo il CSS quando esco dalla view
   if (vuetifyStyle && vuetifyStyle.parentNode) {
@@ -253,6 +256,9 @@ async function refresh_calendar(){
   let response_events= await api.getEvents()
   store.activities= (response_activities.success) ? response_activities.content.activities : null
   store.events= (response_events.success) ? response_events.content.events : null
+ 
+  await api.setMenuContentActivities(store.activities)
+  await api.setMenuContentEvents(store.events)
 }
 
 async function updateRange ({ start, end }) {
@@ -262,7 +268,6 @@ async function updateRange ({ start, end }) {
   await refresh_calendar()
   let all_items=[] 
    
-  await nextTick() 
   let start_date = new Date(start.year, start.month - 1, start.day, 0, 0, 0, 0) //obj -> Date
   let end_date = new Date(end.year, end.month - 1, end.day, 23, 59, 59, 999)
 
@@ -271,7 +276,6 @@ async function updateRange ({ start, end }) {
   if(store.events!=null){
 
     store.events.forEach(e => {
-
       // devo controllare questa variabile
       let eventStartDate=new Date(e.repeat.start_date)  //string -> Date 
       let eventEndDate=new Date(e.repeat.finish_date)
@@ -295,7 +299,6 @@ async function updateRange ({ start, end }) {
             timed: true,
             repeat:e.repeat
           }
-          // RICORDA: DA GESTIRE IL CASO IN CUI L'ATTIVITA' SIA TUTTO IL GIORNO 
           all_items.push(event)
           // 0=not repeat , 1=day, 2=week, 3=month, 4=year
           if(e.repeat.type!=0){
@@ -304,12 +307,9 @@ async function updateRange ({ start, end }) {
           }else{
             break;
           }
-
-
        }
       }
     }); 
-
   }  
 
   //  PROBLEMA NELLA CONCEZIONE DEGLI ORARI: IL RANGE START-END CONTROLLA ALLE 2:00:O0
@@ -337,15 +337,10 @@ async function updateRange ({ start, end }) {
 
    }
  
-   console.log(all_items)
+   console.log(all_items) 
    events.value = [...all_items]
-   
-
-
-  /*
-
-  */
-
+   await nextTick()
+   calendar.value.checkChange()
 }
 
 function editEvent(){
@@ -371,10 +366,11 @@ function editEvent(){
 async function deleteEvent(){
   //robo di sicurezza per eliminare 
   let event=selectedEvent.value
+  console.log(event)
   if(event && event.id){
     console.log(event.type)
-    let response=null
 
+    let response=null
     if(event.type=="event"){
       response=await api.deleteEvent(event.id) 
     }else if(event.type=="activity"){
@@ -383,10 +379,12 @@ async function deleteEvent(){
       console.log("not a valid object")
     }
     await refresh_calendar()
+    calendarKey.value++
 
   }else{
     console.log("not a valid object")
   }
+
   selectedOpen.value=false
 
 }
