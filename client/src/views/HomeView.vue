@@ -4,7 +4,7 @@
 
     <!-- Anteprima oggetti delle note e pomodoro (default piccole) -->
     <div class="ml-5 mr-5 grid h-[calc(100vh-108px)] grid-cols-2 grid-rows-2 gap-4 lg:ml-28 lg:mr-28 lg:h-[calc(100vh-132px)] lg:grid-cols-3 lg:gap-6 xl:gap-7 2xl:gap-8 2xl:ml-36 2xl:mr-36">
-      <HomeTopItem v-for="(item, index) in layout.slice(0, 1)" :key="index" :title="item.title" :componentType="item.componentType"  :bgColor="item.bgColor" :bordColor="item.bordColor" :route="item.route" :content="item.content" class="row-span-2 flex flex-auto flex-col max-sm:col-span-2 lg:col-span-2"></HomeTopItem>
+      <HomeTopItem v-for="(item, index) in layout.slice(0, 1)" :key="index" :title="item.title" :componentType="item.componentType"  :bgColor="item.bgColor" :bordColor="item.bordColor" :route="item.route" :activityTitle="item.activityTitle" :activityContent="item.activityContent" :eventTitle="item.eventTitle" :eventContent="item.eventContent" class="row-span-2 flex flex-auto flex-col max-sm:col-span-2 lg:col-span-2"></HomeTopItem>
       <HomeBottomItem v-for="(item, index) in layout.slice(1)" :key="index" :title="item.title" :componentType="item.componentType"  :bgColor="item.bgColor" :bordColor="item.bordColor" :route="item.route" :contentTitle="item.contentTitle" :content="item.content"></HomeBottomItem>
     </div>
   </div>
@@ -18,6 +18,7 @@ import router from "@/router"
 import { useMainStore } from "@/store"
 import { ref, onMounted } from "vue"
 import api from "@/api"
+import activities from "@/api/activities"
 
 const store = useMainStore()
 
@@ -54,11 +55,51 @@ onMounted(async () => {
 
   store.menu.content = menu_data.content
   content.value = store.menu.content
+  console.log(content.value)
 
   const items = {
-    calendar: { id: 0, title: "Calendario", route: `/${store.user.username}/calendar`, componentType: "RouterLink", bgColor: "bg-sky-500", bordColor: "border-sky-500", content: "Qui ci verranno messi eventi e attività" },
+    calendar: { 
+      id: 0, 
+      title: "Calendario", 
+      route: `/${store.user.username}/calendar`, 
+      componentType: "RouterLink", 
+      bgColor: "bg-sky-500", 
+      bordColor: "border-sky-500", 
+      eventTitle: content.value.events.title, 
+      eventContent: (() => {
+        const startDate = content.value.events.repeat.start_date // YYYY-MM-DD
+        const scheduled = content.value.events.scheduled // "HH-MM"
+        const duration = content.value.events.duration // in minutes
+
+        // Parse start date and scheduled time
+        const [startYear, startMonth, startDay] = startDate.split('-').map(Number)
+        const [startHour, startMinute] = scheduled.split(':').map(Number)
+
+        const startDateTime = new Date(startYear, startMonth - 1, startDay, startHour, startMinute)
+
+        // Calculate end date time by adding duration minutes
+        const endDateTime = new Date(startDateTime.getTime() + duration * 60000)
+
+        // Format date time as DD-MM-YYYY HH:MM
+        const pad = (n) => n.toString().padStart(2, '0')
+
+        const formatDateTime = (dt) => {
+          return `${pad(dt.getDate())}-${pad(dt.getMonth() + 1)}-${dt.getFullYear()} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`
+        }
+
+        return `Inizio evento: ${formatDateTime(startDateTime)}\nFine evento: ${formatDateTime(endDateTime)}`
+      })(),
+      activityTitle: content.value.activities.title, 
+      activityContent: (() => {
+        // expiration is in YYYY-MM-DD
+        const exp = content.value.activities.expiration
+        if (!exp) return "Data di scadenza: "
+        const [yyyy, mm, dd] = exp.split('-')
+        return `Data di scadenza: ${dd}-${mm}-${yyyy}`
+      })(),
+    },
     notes: { id: 1, title: "Note", route: `/${store.user.username}/notes`, componentType: "RouterLink", bgColor: "bg-amber-400", bordColor: "border-amber-400", contentTitle: content.value.notes.title, content: content.value.notes.content},
-    tomato: { id: 2, title: "Pomodoro", route: `/${store.user.username}/tomato`, componentType: "RouterLink", bgColor: "bg-red-500", bordColor: "border-red-500", content: "Studia tanto con i pomodori!" },
+    tomato: { id: 2, title: "Pomodoro", route: `/${store.user.username}/tomato`, componentType: "RouterLink", bgColor: "bg-red-500", bordColor: "border-red-500", contentTitle: content.value.tomato_sessions.name, content: `Completate: ${content.value.tomato_sessions.done}/${content.value.tomato_sessions.rep_tomato} sessioni`},
   }
 
   store.menu.layout = menu_data.layout.map((item) => items[item])
