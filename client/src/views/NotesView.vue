@@ -1,12 +1,37 @@
 <template>
-  <div class="fixed inset-x-0 top-0 z-10">
-    <Navbar viewTitle="Note" :titleColor="classColor" :backButton="true" :myButton="myButton" :myDropdown="myDropdown" :dropdownItems="dropdownItems" :dropdownOrder="dropdownOrder"></Navbar>
-  </div>
-  <div class="pt-[88px] lg:pt-[92px] overflow-auto ml-5 mr-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[10px] lg:gap-4 lg:ml-28 lg:mr-28 2xl:gap-6 2xl:ml-36 2xl:mr-36">
-    <NotePreview v-for="note in store.notes" :id="note.id" :title="note.title" :content="note.content" :tag="note.tag" :created="note.created" :modified="note.modified" :state="note.infoStatus"></NotePreview>
-    <div class="h-[70px] sm:col-span-2 sm:h-[56px] lg:col-span-3"></div>
+  <div class="flex flex-col h-full">
+    <!-- Navbar fissa -->
+    <div class="fixed inset-x-0 top-0 z-10">
+      <Navbar
+        viewTitle="Note"
+        :titleColor="classColor"
+        :backButton="true"
+        :myButton="myButton"
+        :myDropdown="myDropdown"
+        :dropdownItems="dropdownItems"
+        :dropdownOrder="dropdownOrder"
+      />
+    </div>
+
+    <!-- Contenuto scrollabile -->
+    <div class="flex-1 overflow-auto pt-[88px] lg:pt-[92px]">
+      <div class="ml-5 mr-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[10px] lg:gap-4 lg:ml-28 lg:mr-28 2xl:gap-6 2xl:ml-36 2xl:mr-36">
+        <NotePreview
+          v-for="note in store.notes"
+          :id="note.id"
+          :title="note.title"
+          :content="note.content"
+          :tag="note.tag"
+          :created="note.created"
+          :modified="note.modified"
+          :state="note.infoStatus"
+        />
+        <div class="h-[70px] sm:col-span-2 sm:h-[56px] lg:col-span-3"></div>
+      </div>
+    </div>
   </div>
 </template>
+
 
 <script setup>
 import Navbar from "@/components/Navbar.vue"
