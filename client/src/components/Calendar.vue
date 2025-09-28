@@ -71,8 +71,6 @@
     />
 
     </v-sheet>
-
-    <!-- il dialog può restare qui o dentro lo stesso v-sheet, non influisce sull'altezza -->
     <v-dialog v-model="selectedOpen" max-width="500px">
       <v-card class="dark:bg-neutral-800 border border-neutral-700 rounded-2xl shadow-lg text-neutral-200">
         <v-toolbar
@@ -85,7 +83,7 @@
             {{ selectedEvent?.name || 'Evento' }}
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon variant="text" @click="selectedOpen = false; selectetEvent=false">
+          <v-btn icon variant="text" @click="selectedOpen = false; selectedEvent = null">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
@@ -108,8 +106,20 @@
               <span class="font-semibold">Ripetizione:</span> {{ selectedEvent.repeat.type }} ({{ selectedEvent.repeat.start_date }} → {{ selectedEvent.repeat.finish_date }})
             </div>
             <div v-if="selectedEvent.id_tomato"><span class="font-semibold">ID Tomato:</span> {{ selectedEvent.id_tomato }}</div>
-            <div v-if="selectedEvent.done !== undefined"><span class="font-semibold">Completato:</span> {{ selectedEvent.done ? 'Sì' : 'No' }}</div>
+
+            <!-- Checkbox per attività -->
+            <div v-if="selectedEvent.type === 'activity'">
+              <v-checkbox
+                v-model="selectedEvent.done"
+                label="Completato"
+                @change="toggleDone(selectedEvent)"
+                color="green"
+              ></v-checkbox>
+            </div>
+
+            <div v-else-if="selectedEvent.done !== undefined"><span class="font-semibold">Completato:</span> {{ selectedEvent.done ? 'Sì' : 'No' }}</div>
           </template>
+
           <p v-else class="italic text-neutral-500">Nessun dettaglio disponibile</p>
         </v-card-text>
 
@@ -123,13 +133,14 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
   </v-sheet>
 </template>
 
 
 <script setup>
 import { VCalendar } from "vuetify/lib/labs/VCalendar";
-import { VBtn, VIcon, VToolbar, VSheet, VDialog,VCardActions } from 'vuetify/components'
+import { VBtn, VIcon, VToolbar, VSheet, VDialog,VCardActions,VCheckbox} from 'vuetify/components'
 import { nextTick } from "vue";
 import { VIconBtn } from 'vuetify/labs/VIconBtn'
 import { onMounted, onUnmounted,ref } from 'vue'
@@ -235,7 +246,7 @@ async function refresh_calendar(){
   let last_activity=null
 
   // vogliamo l'attività e l'evento che è stato modificato recentemente 
-  if (store.activities.length > 0) {
+    if (store.activities.length > 0) {
     last_activity = store.activities.reduce((prev, current) => 
       new Date(current.modified) > new Date(prev.modified) ? current : prev
     );
@@ -302,13 +313,12 @@ async function updateRange ({ start, end }) {
     }); 
   }  
 
-  //  PROBLEMA NELLA CONCEZIONE DEGLI ORARI: IL RANGE START-END CONTROLLA ALLE 2:00:O0
-  // NOI VOGLIAMO IL RANGE
 
    if(store.activities!=null){
       store.activities.forEach(a => {
         let activityStartDate=new Date(a.expiration)  //string -> Date 
         if(activityStartDate>=start_date && activityStartDate<=end_date){
+          
 
           let activity={
             type:"activity",
@@ -378,5 +388,31 @@ async function deleteEvent(){
   selectedOpen.value=false
 
 }
+
+
+function getDateTimeString(date=new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+async function toggleDone(activity) {
+  if (activity && activity.id) {
+    try {
+      // devo cercarlo nello store per fare la query 
+      let a=store.activities.find(obj => obj.id === activity.id)
+      console.log(a)
+
+      await api.editActivity(a.id, a.title,a.expiration,getDateTimeString(),a.color,null, activity.done );
+      await refresh_calendar();
+    } catch (error) {
+      console.error("Errore aggiornando lo stato dell'attività:", error);
+    }
+  }
+}
+
 </script>
 
