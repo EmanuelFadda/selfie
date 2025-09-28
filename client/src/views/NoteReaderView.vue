@@ -1,4 +1,5 @@
 <template>
+  <div>
   <Navbar viewTitle="Note" :titleColor="classColor" :backButton="true" :myButton="myButton" :backRoute="`/${username}/notes`"></Navbar>
 
   <div class="ml-5 mr-5 h-[calc(100vh-108px)] rounded-2xl lg:h-[calc(100vh-132px)] bg-neutral-800">
@@ -27,6 +28,7 @@
       </div>
     </div>
 
+  </div>
   </div>
 </template>
 

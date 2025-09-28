@@ -55,7 +55,6 @@ onMounted(async () => {
 
   store.menu.content = menu_data.content
   content.value = store.menu.content
-  console.log(content.value)
 
   const items = {
     calendar: { 
