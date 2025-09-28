@@ -229,8 +229,26 @@ async function refresh_calendar(){
   store.activities= (response_activities.success) ? response_activities.content.activities : null
   store.events= (response_events.success) ? response_events.content.events : null
  
-  await api.setMenuContentActivities(store.activities)
-  await api.setMenuContentEvents(store.events)
+  // ottenere sia l'ultimo evento modificato e l'ultima attività 
+
+  let last_event=null
+  let last_activity=null
+
+  // vogliamo l'attività e l'evento che è stato modificato recentemente 
+  if (store.activities.length > 0) {
+    last_activity = store.activities.reduce((prev, current) => 
+      new Date(current.modified) > new Date(prev.modified) ? current : prev
+    );
+  }
+
+  if (store.events.length > 0) {
+    last_event = store.events.reduce((prev, current) => 
+      new Date(current.modified) > new Date(prev.modified) ? current : prev
+    );
+  }
+
+  await api.setMenuContentActivities(last_activity)
+  await api.setMenuContentEvents(last_event)
 }
 
 async function updateRange ({ start, end }) {
