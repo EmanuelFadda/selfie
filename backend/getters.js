@@ -52,9 +52,9 @@ function get_new_user(name,surname,username,email,image,password,birthday,login)
     defaults.TOMATO_NAME,
     get_time_now(),
     get_time_now(),
+    defaults.TOMATO_DONE,
     defaults.TOMATO_REP,
     defaults.TOMATO_TIME,
-    defaults.TOMATO_DONE,
     defaults.TOMATO_SHORT_BREAK,
     defaults.TOMATO_LONG_BREAK
   );
