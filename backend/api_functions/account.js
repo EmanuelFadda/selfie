@@ -47,7 +47,6 @@ async function create_account(client, req, res) {
   try {
     // connecting with db
     collection = await get_db_collection(client);
-
     let image = null;
 
     if (req.file) {

@@ -20,7 +20,7 @@ const { create_activity, delete_activity, edit_activity, get_activities, get_act
 const { create_tomato, delete_tomato, edit_tomato, get_tomatoes, get_tomato } = require("./api_functions/objects/tomato")
 const { create_event, delete_event, edit_event, get_events, get_event } = require("./api_functions/objects/event")
 const { get_credentials, set_credentials } = require("./api_functions/objects/credentials")
-const { get_menù, set_menù_content_events, set_menù_content_activities, set_menù_content_tomatoes, set_menù_layout, set_menù_content_notes } = require("./api_functions/objects/menù")
+const { get_menù, set_menù_content_events, set_menù_content_activities, set_menù_content_tomatoes, set_menù_layout, set_menù_content_notes } = require("./api_functions/objects/menu")
 
 const app = express()
 const port = 3000

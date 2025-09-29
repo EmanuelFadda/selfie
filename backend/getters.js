@@ -17,6 +17,30 @@ function get_new_user(name,surname,username,email,image,password,birthday,login)
       defaults.TAGS_COLORS[i]
     );
   }
+
+  let today=get_time_now().toISOString().split("T")[0]
+  
+  let default_activity= get_new_activity(
+    defaults.ACTIVITY_TITLE,
+    today,
+    get_time_now(),
+    get_time_now(),
+    defaults.ACTIVITY_COLOR,
+    defaults.ACTIVITY_ID_TOMATO
+  )
+
+  let default_event=get_new_event(
+    defaults.EVENT_TITLE,
+    get_time_now(),
+    get_time_now(),
+    defaults.EVENT_SCHEDULED,
+    defaults.EVENT_DURATION,
+    defaults.EVENT_COLOR,
+    defaults.EVENT_TYPE_REP,
+    today,
+    today
+  )
+
   let default_note = get_new_note(
     defaults.NOTE_TITLE,
     get_time_now(),
@@ -34,7 +58,7 @@ function get_new_user(name,surname,username,email,image,password,birthday,login)
     defaults.TOMATO_SHORT_BREAK,
     defaults.TOMATO_LONG_BREAK
   );
-  let menù = get_new_menù(defaults.LAYOUT, default_note, default_tomato);
+  let menù = get_new_menù(defaults.LAYOUT, default_activity, default_event, default_note, default_tomato);
   let credentials = get_new_credentials(
     name,
     surname,
@@ -50,11 +74,12 @@ function get_new_user(name,surname,username,email,image,password,birthday,login)
     credentials: credentials,
     menù: menù,
     notes: [default_note],
-    activities: [],
-    events: [],
+    activities: [default_activity],
+    events: [default_event],
     tags: default_tags,
     tomato_sessions: [default_tomato],
   };
+
   return new_user;
 }
 
@@ -72,14 +97,14 @@ function get_new_credentials(name,surname,username,email,image,password,birthday
   return credentials;
 }
 
-function get_new_menù(layout, default_note, default_tomato) {
+function get_new_menù(layout, default_activity, default_event, default_note, default_tomato) {
   let menù = {
     layout: layout,
     content: {
-      activities: [],
-      events: [],
-      notes: [default_note],
-      tomato_sessions: [default_tomato],
+      activities: default_activity,
+      events: default_event,
+      notes: default_note,
+      tomato_sessions: default_tomato,
     },
   };
   return menù;
