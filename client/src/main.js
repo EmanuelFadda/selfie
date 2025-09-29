@@ -5,7 +5,7 @@ import "./registerServiceWorker"
 import { createPinia } from "pinia"
 import router from "./router"
 import "./assets/tailwind.css"
-
+import * as directives from 'vuetify/directives'
 
 
 // Vuetify
@@ -35,6 +35,7 @@ import {
   VCardText,
   VCardActions,
   VDialog,
+  VSpacer
 } from 'vuetify/components'
 
 // Vuetify Labs
@@ -61,9 +62,10 @@ const vuetify = createVuetify({
     VCardText,
     VCardActions,
     VCalendar,
-    VDialog 
+    VDialog ,
+    VSpacer
   },
-  directives: {}, // se in futuro usi v-ripple, v-scroll ecc.
+  directives, 
   icons: {
     defaultSet: 'mdi',
     aliases,

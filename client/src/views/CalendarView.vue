@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-h-screen flex-col">
-    <Navbar viewTitle="Calendario" :myButton="myButton" :titleColor="classColor" :backButton="true"  :settingsArray="settingsArray"></Navbar>
+    <Navbar viewTitle="Calendario" :myButton="myButton" :titleColor="classColor" :backButton="true" ></Navbar>
     <Calendar class=""></Calendar>
   </div>
 </template>

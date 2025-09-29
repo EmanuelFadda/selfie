@@ -62,8 +62,7 @@
       color="primary"
       :weekdays="[1,2,3,4,5,6,0]"    
       :first-day-of-week="1"          
-      @change="updateRange"
-      @click:date="viewDay"
+      @change="updateRangeDebonced"
       @click:event="showEvent"
       @click:more="viewDay"
       :key="calendarKey"
@@ -140,18 +139,18 @@
 
 <script setup>
 import { VCalendar } from "vuetify/lib/labs/VCalendar";
-import { VBtn, VIcon, VToolbar, VSheet, VDialog,VCardActions,VCheckbox} from 'vuetify/components'
-import { nextTick } from "vue";
+import { VBtn, VIcon, VToolbar, VSheet, VDialog,VCardActions,VCheckbox,VSpacer} from 'vuetify/components'
 import { VIconBtn } from 'vuetify/labs/VIconBtn'
 import { onMounted, onUnmounted,ref } from 'vue'
 import api from "@/api"
 import router from "@/router";
 import { useRoute } from 'vue-router';
 import { useMainStore } from "@/store";
+import debounce from "lodash/debounce"
+
 
 
 const route = useRoute()
- 
 const store=useMainStore()
 
 const calendar = ref()
@@ -163,6 +162,7 @@ const selectedOpen = ref(false)
 let events = ref([])
 let vuetifyStyle=null
 let calendarKey=ref(0)
+const lastRange = ref({ start: null, end: null })
 
 const typeToLabel = {
   month: 'Month',
@@ -185,10 +185,16 @@ onUnmounted(() => {
     vuetifyStyle.parentNode.removeChild(vuetifyStyle)
   }
 })
-function viewDay (nativeEvent, { date }) {
+
+function viewDay(payload) {
+  // se payload è una stringa → click:date
+  // se payload è un oggetto con { date } → click:more
+  const date = typeof payload === "string" ? payload : payload.date
+
   focus.value = date
-  type.value = 'day'
+  type.value = "day" 
 }
+
 function getEventColor (event) {
   return event.color
 }
@@ -234,6 +240,7 @@ function getNextDate(date, repeatType) {
   return newDate;
 }
 // ottiene tutti gli eventi e le attività dell'utente dal database
+
 async function refresh_calendar(){
   let response_activities= await api.getActivities()
   let response_events= await api.getEvents()
@@ -262,20 +269,35 @@ async function refresh_calendar(){
   await api.setMenuContentEvents(last_event)
 }
 
-async function updateRange ({ start, end }) {
+let needUpdate=ref(false)
 
-  events.value=[]
-  console.log("before",events.value)
+async function updateRange ({ start, end }) {
+ // trasformo in stringa o timestamp per confronto rapido
+  const newStart = `${start.year}-${start.month}-${start.day}`
+  const newEnd   = `${end.year}-${end.month}-${end.day}`
+
+  if (lastRange.value.start === newStart && lastRange.value.end === newEnd && !needUpdate.value) {
+    console.log("updateRange ignorata, range già caricato")
+    return
+  }
+
+
+
+  // aggiorno cache
+  lastRange.value = { start: newStart, end: newEnd }
+
+  events.value = [] // reset
   await refresh_calendar()
-  let all_items=[] 
+
+  let all_items = []
    
   let start_date = new Date(start.year, start.month - 1, start.day, 0, 0, 0, 0) //obj -> Date
   let end_date = new Date(end.year, end.month - 1, end.day, 23, 59, 59, 999)
 
-
+  
   // eventi
   if(store.events!=null){
-
+    let counter=0
     store.events.forEach(e => {
       // devo controllare questa variabile
       let eventStartDate=new Date(e.repeat.start_date)  //string -> Date 
@@ -286,6 +308,7 @@ async function updateRange ({ start, end }) {
       if(isInRange){
         let x_date=eventStartDate // Date
         while(x_date<=end_date && x_date<=eventEndDate){
+          counter++
           let h=getStartEndDate(x_date,e.scheduled,e.duration) 
           let event={
             type:"event",
@@ -311,8 +334,9 @@ async function updateRange ({ start, end }) {
        }
       }
     }); 
-  }  
 
+  }  
+ 
 
    if(store.activities!=null){
       store.activities.forEach(a => {
@@ -338,10 +362,14 @@ async function updateRange ({ start, end }) {
    }
  
    console.log(all_items) 
-   events.value = [...all_items]
-   await nextTick()
-   calendar.value.checkChange()
+   
+   events.value = all_items
+   calendarKey.value++
+   needUpdate.value=false
+
 }
+
+const updateRangeDebonced=debounce(updateRange,300)
 
 function editEvent(){
   let event=selectedEvent.value
@@ -378,7 +406,7 @@ async function deleteEvent(){
     }else{
       console.log("not a valid object")
     }
-    await refresh_calendar()
+    needUpdate.value=true
     calendarKey.value++
 
   }else{
@@ -386,7 +414,7 @@ async function deleteEvent(){
   }
 
   selectedOpen.value=false
-
+  // qui refresh
 }
 
 
@@ -407,7 +435,8 @@ async function toggleDone(activity) {
       console.log(a)
 
       await api.editActivity(a.id, a.title,a.expiration,getDateTimeString(),a.color,null, activity.done );
-      await refresh_calendar();
+
+      needUpdate.value=true
     } catch (error) {
       console.error("Errore aggiornando lo stato dell'attività:", error);
     }
