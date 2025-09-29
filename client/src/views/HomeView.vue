@@ -64,9 +64,9 @@ onMounted(async () => {
       componentType: "RouterLink", 
       bgColor: "bg-sky-500", 
       bordColor: "border-sky-500", 
-      eventTitle: content.value.events.title, 
+      eventTitle:  content.value.events ? content.value.events.title : "Evento", 
       eventContent: (() => {
-        if (!content.value.events || !content.value.events.repeat || !content.value.events.repeat.start_date || !content.value.events.scheduled || !content.value.events.duration) {
+        if (!content.value.events || !content.value.events.repeat || !content.value.events.repeat.start_date || !content.value.events.scheduled) {
           return "Non c'e ancora nessun evento programmato"
         }
         const startDate = content.value.events.repeat.start_date // YYYY-MM-DD
@@ -91,7 +91,7 @@ onMounted(async () => {
 
         return `Inizio evento: ${formatDateTime(startDateTime)}\nFine evento: ${formatDateTime(endDateTime)}`
       })(),
-      activityTitle: content.value.activities.title, 
+      activityTitle: content.value.activities ? content.value.activities.title : "Attività", 
       activityContent: (() => {
         if (!content.value.activities || !content.value.activities.expiration) {
           return "Non c'e ancora nessuna attività"
